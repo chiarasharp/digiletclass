@@ -1,0 +1,43 @@
+.message {
+    font-weight: 600;
+    color: blue;
+}
+.baskervville-regular {
+    font-family: "Baskervville", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.baskervville-regular-italic {
+    font-family: "Baskervville", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+  
+.navbar {
+    background-color: lightslategray;
+    font-size: 1em;
+    font-family: "Baskervville", serif;
+    color: white;
+    padding: 8px 5px 8px 5px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar-brand {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.navbar-item {
+    font-variant: small-caps;
+    margin-left: 30px;
+}
+
+.body-content {
+    padding: 5px;
+    font-family: "Baskervville", serif;
+}

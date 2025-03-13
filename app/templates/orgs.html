@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Organizzazioni</h2>
+<div class="container">
+    <div class="row">
+        {% for org in orgs %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ org['id'] }} ({{ org['type'] }})</h5>
+                    
+                    {% if org['sameAs'] %}
+                        <p><strong>SameAs:</strong> <a href="{{ org['sameAs'] }}">{{ org['sameAs'] }}</a></p>
+                    {% endif %}
+
+                    {% if org['org_names'] %}
+                        <h6 class="card-subtitle mb-2 text-muted">Nomi:</h6>
+                        <ul>
+                            {% for name in org['org_names'] %}
+                                <li>{{ name['name'] }} ({{ name['lang'] }})</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if org['idnos'] %}
+                        <h6 class="card-subtitle mb-2 text-muted">Identificatori:</h6>
+                        <ul>
+                            {% for idno in org['idnos'] %}
+                                <li>{{ idno['type'] }}: {{ idno['value'] }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if org['location'] %}
+                        <h6 class="card-subtitle mb-2 text-muted">Posizione:</h6>
+                        <ul>
+                            {% if org['location']['country'] %}
+                                <li><strong>Paese:</strong> {{ org['location']['country'] }}</li>
+                            {% endif %}
+                            {% if org['location']['geo'] %}
+                                <li><strong>Coordinate Geografiche:</strong> {{ org['location']['geo'] }}</li>
+                            {% endif %}
+                            {% if org['location']['street'] and org['location']['postCode'] %}
+                                <li>
+                                    <strong>Indirizzo:</strong>
+                                        {{ org['location']['street'] }}, {{ org['location']['postCode'] }}
+                                </li>
+                            {% elif org['location']['street'] %}
+                                <li>
+                                    <strong>Indirizzo:</strong>
+                                        {{ org['location']['street'] }}
+                                </li>
+                            {% elif org['location']['postCode'] %}
+                                <li>
+                                    <strong>Indirizzo:</strong>
+                                        {{ org['location']['postCode'] }}
+                                </li>
+                            {% endif %}
+                            {% if org['location']['settlement'] %}
+                                <li><strong>Città:</strong> {{ org['location']['settlement'] }}</li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
