@@ -7,25 +7,64 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     </head>
 
     <body>
-        <div class="navbar">
-            <a href="{{ url_for('home') }}" class="navbar-brand">Home</a>
-            <a href="{{ url_for('about') }}" class="navbar-item">Il Progetto</a>
-            <a href="{{ url_for('contact') }}" class="navbar-item">Contatti</a>
+        <nav class="navbar navbar-expand-lg navbar-digiletclass">
+          <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-3 baskervville-regular" href="{{ url_for('home') }}">DigiLetClass</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">Il Progetto</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('entities') }}">Entità</a></li>
+              </ul>
+            </div>
         </div>
-
+        </nav>
         <div class="body-content">
             {% block content %}
             {% endblock %}
-            <hr/>
-            <footer>
-                <p>&copy; 2025</p>
-            </footer>
         </div>
+
+        <footer class="footer-custom bg-light pt-5 pb-4 b612-font">
+            <div class="container text-center text-md-start">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold">DigiLetClass</h6>
+                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
+                        <p>
+                            Un progetto per la digitalizzazione e lo studio delle lettere classiche. Esplora i nostri indici per scoprire le connessioni tra persone, luoghi e organizzazioni.
+                        </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold">Risorse</h6>
+                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
+                        <p><a href="#!" class="text-dark text-decoration-none">Edizione Digitale Canneti-Fiacchi</a></p>
+                        <p><a href="#!" class="text-dark text-decoration-none">Dati su Zenodo</a></p>
+                        <p><a href="{{ url_for('about') }}" class="text-dark text-decoration-none">Il Progetto</a></p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <h6 class="text-uppercase fw-bold">Finanziamenti</h6>
+                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
+                        <p>Progetto finanziato dal PNRR.</p>
+                        <img src="{{ url_for('static', filename='testata-pnrr.png') }}" alt="Logo PNRR" class="img-fluid" style="max-width: 250px;">
+                    </div>
+                </div>
+            </div>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2025 Copyright:
+                <a class="text-dark fw-bold text-decoration-none" href="#">DigiLetClass.it</a>
+            </div>
+        </footer>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

@@ -1,71 +1,119 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h2>Organizzazioni</h2>
-<div class="container">
-    <div class="row">
-        {% for org in orgs %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ org['id'] }} ({{ org['type'] }})</h5>
-                    
-                    {% if org['sameAs'] %}
-                        <p><strong>SameAs:</strong> <a href="{{ org['sameAs'] }}">{{ org['sameAs'] }}</a></p>
-                    {% endif %}
-
-                    {% if org['org_names'] %}
-                        <h6 class="card-subtitle mb-2 text-muted">Nomi:</h6>
-                        <ul>
-                            {% for name in org['org_names'] %}
-                                <li>{{ name['name'] }} ({{ name['lang'] }})</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
+<div class="main-content-compact py-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb align-items-center">
+            <li class="breadcrumb-item d-flex align-items-center">
+                <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i><a href="/entities" class="text-decoration-none" style="color:inherit;">Indici</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Organizzazioni</li>
+        </ol>
+    </nav>
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Indice delle Organizzazioni</h2>
+    <div class="container-inner">
+        <!-- Type Filter Dropdown -->
+        <div class="mb-4">
+            <label for="typeFilter" class="form-label fw-bold"><i class="bi bi-filter"></i> Filtra per tipo:</label>
+            <select id="typeFilter" class="form-select w-auto d-inline-block" onchange="filterByType()">
+                <option value="">Tutti i tipi</option>
+                {% for t in orgs | map(attribute='type') | unique | list %}
+                    <option value="{{ t }}">{{ type_map.get(t, t) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="card-container">
+            {% for org in orgs %}
+            <div class="card org-card mb-4 d-flex flex-column" data-org-index="{{ loop.index0 }}" style="cursor:pointer;">
+                <div class="card-body d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge badge-id" data-bs-toggle="tooltip" title="ID">{{ org['id'] }}</span>
+                        <span class="badge badge-type text-end">{{ type_map.get(org.type, org.type)|title }}</span>
+                    </div>
+                    <h5 class="card-title mb-3">{{ org['org_names'][0]['name'] if org['org_names'] and org['org_names'][0]['name'] else org['id'] }}</h5>
                     {% if org['idnos'] %}
-                        <h6 class="card-subtitle mb-2 text-muted">Identificatori:</h6>
-                        <ul>
-                            {% for idno in org['idnos'] %}
-                                <li>{{ idno['type'] }}: {{ idno['value'] }}</li>
-                            {% endfor %}
-                        </ul>
+                    <div class="mb-3">
+                        <div class="d-flex flex-wrap" style="gap: 0.5em;">
+                        {% for idno in org['idnos'] %}
+                            {% set val = idno['value'] %}
+                            {% set typ = idno['type']|lower %}
+                            {% set tooltip = idno['type'] ~ ': ' ~ val %}
+                            {% set base_url_map = {'gnd': 'https://d-nb.info/gnd/', 'viaf': 'https://viaf.org/viaf/', 'wikidata': 'https://www.wikidata.org/wiki/', 'isni': 'https://isni.org/isni/', 'sudoc': 'https://www.idref.fr/', 'lccn': 'https://lccn.loc.gov/', 'orcid': 'https://orcid.org/'} %}
+                            {% set base_url = base_url_map.get(typ) %}
+                            {% if val.startswith('http') %}
+                                <a href="{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ idno['type'] }}</a>
+                            {% elif base_url %}
+                                <a href="{{ base_url ~ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ idno['type']|upper }}</a>
+                            {% else %}
+                                <a href="https://www.google.com/search?q={{ typ }}+{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ idno['type'] }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
                     {% endif %}
-
-                    {% if org['location'] %}
-                        <h6 class="card-subtitle mb-2 text-muted">Posizione:</h6>
-                        <ul>
-                            {% if org['location']['country'] %}
-                                <li><strong>Paese:</strong> {{ org['location']['country'] }}</li>
-                            {% endif %}
-                            {% if org['location']['geo'] %}
-                                <li><strong>Coordinate Geografiche:</strong> {{ org['location']['geo'] }}</li>
-                            {% endif %}
-                            {% if org['location']['street'] and org['location']['postCode'] %}
-                                <li>
-                                    <strong>Indirizzo:</strong>
-                                        {{ org['location']['street'] }}, {{ org['location']['postCode'] }}
-                                </li>
-                            {% elif org['location']['street'] %}
-                                <li>
-                                    <strong>Indirizzo:</strong>
-                                        {{ org['location']['street'] }}
-                                </li>
-                            {% elif org['location']['postCode'] %}
-                                <li>
-                                    <strong>Indirizzo:</strong>
-                                        {{ org['location']['postCode'] }}
-                                </li>
-                            {% endif %}
-                            {% if org['location']['settlement'] %}
-                                <li><strong>Città:</strong> {{ org['location']['settlement'] }}</li>
-                            {% endif %}
-                        </ul>
+                    <div class="mt-auto">
+                    {% if org['location'] and org['location']['settlement'] %}
+                    <p class="card-text mb-1"><i class="bi bi-geo-alt" style="color:#800020;"></i> {{ org['location']['settlement'] }}</p>
                     {% endif %}
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
+
+<!-- Org Details Modal -->
+<div class="modal fade" id="orgModal" tabindex="-1" aria-labelledby="orgModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orgModalLabel">Dettagli Organizzazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="orgModalBody">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.orgsData = {{ orgs|tojson|safe }};
+</script>
+
+<script src="{{ url_for('static', filename='orgs.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  var orgCards = document.querySelectorAll('.org-card');
+  var orgModal = new bootstrap.Modal(document.getElementById('orgModal'));
+  orgCards.forEach(function(card) {
+      card.addEventListener('click', function() {
+          var orgIndex = this.getAttribute('data-org-index');
+          populateOrgModal(orgIndex);
+          orgModal.show();
+      });
+  });
+});
+
+function filterByType() {
+    var selected = document.getElementById('typeFilter').value;
+    var cards = document.getElementsByClassName('org-card');
+    Array.from(cards).forEach(function(card) {
+        var orgIdx = card.getAttribute('data-org-index');
+        var org = window.orgsData[orgIdx];
+        if (!selected || org.type === selected) {
+            card.style.display = 'inline-block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
 {% endblock %}

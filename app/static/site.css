@@ -1,30 +1,117 @@
-.message {
-    font-weight: 600;
-    color: blue;
+:root {
+  --primary-color: #800020;
+  --primary-color-dark: #4B0010;
+  --accent-color-light: #f3e9e1;
+  --accent-color-medium: #eaddd7;
+  --bg-color: #fdfaf6;
+  --card-bg: #ffffff;
+  --text-main: #222;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #800020;
+  --card-bg-color: #ee9b00;
+  --card-header-color: #ca6702;
+  --badge-id-bg: #bb3e03;
+  --badge-id-text: #fff;
+  --badge-type-bg: #ae2012;
+  --badge-type-text: #fff;
+  --badge-extid-bg: #9b2226;
+  --badge-extid-text: #fff;
 }
+
+body {
+  background: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'B612', Arial, sans-serif;
+}
+.navbar {
+  background: var(--primary-color-dark);
+  color: var(--text-on-primary);
+}
+.navbar a, .navbar a:visited {
+  color: var(--text-on-primary);
+}
+.navbar a:hover {
+  color: var(--accent-color-light);
+}
+.card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.card-header {
+  background: var(--accent-color-light) !important;
+  border-bottom: none !important;
+  color: var(--text-on-accent);
+}
+a, .link {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+a:hover, .link:hover {
+  color: #b3003c;
+}
+footer {
+  color: var(--primary-color);
+  background: var(--accent-color-light);
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Badges */
+.badge {
+  font-family: 'B612', Arial, sans-serif;
+  font-size: 0.8em;
+  font-weight: 700;
+  padding: 0.4em 0.7em;
+  border-radius: 0.25rem;
+}
+.badge-id {
+  background: var(--primary-color) !important;
+  color: var(--text-on-primary) !important;
+}
+.badge-type {
+  background: var(--accent-color-light) !important;
+  color: var(--text-on-accent) !important;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+}
+.badge-extid {
+  background: var(--accent-color-medium) !important;
+  color: var(--text-on-accent) !important;
+  text-decoration: none;
+}
+.badge-extid:hover {
+    opacity: 0.85;
+}
+.badge-unknown {
+  background: #e0e0e0 !important;
+  color: #800020 !important;
+}
+.badge-b612 {
+  font-family: 'B612', Arial, sans-serif !important;
+}
+.card-title {
+  font-family: 'Baskervville', serif !important;
+}
+.card-text {
+  font-family: 'B612', Arial, sans-serif !important;
+}
+
 .baskervville-regular {
     font-family: "Baskervville", serif;
     font-weight: 400;
     font-style: normal;
-  }
+}
   
 .baskervville-regular-italic {
     font-family: "Baskervville", serif;
     font-weight: 400;
     font-style: italic;
-}
-  
-.navbar {
-    background-color: lightslategray;
-    font-size: 1em;
-    font-family: "Baskervville", serif;
-    color: white;
-    padding: 8px 5px 8px 5px;
-}
-
-.navbar a {
-    text-decoration: none;
-    color: inherit;
 }
 
 .navbar-brand {
@@ -39,5 +126,164 @@
 
 .body-content {
     padding: 5px;
-    font-family: "Baskervville", serif;
+    font-family: "B612", sans-serif;
+}
+
+.main-content-compact h2.display-5 {
+    font-family: "Baskervville", serif !important;
+}
+
+.navbar-digiletclass {
+  background: var(--primary-color-dark);
+  box-shadow: 0 2px 8px #e0e0e0;
+  font-family: 'B612', Arial, sans-serif;
+}
+
+.orgs-card-modern {
+  border-radius: 1.2rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.orgs-card-modern:hover {
+  box-shadow: 0 4px 16px #bfa5b8;
+  transform: translateY(-2px) scale(1.01);
+}
+.orgs-card-modern .card-title {
+  /* font-family: 'B612', Arial, sans-serif; */
+}
+@media (max-width: 767px) {
+  .orgs-card-modern {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.orgs-card-info {
+  font-size: 1.05em;
+  font-family: 'B612', Arial, sans-serif;
+  color: var(--primary-color-dark);
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  align-items: center;
+}
+.orgs-card-info .meta-label {
+  font-weight: 600;
+  margin-right: 0.2em;
+  color: var(--primary-color);
+}
+.orgs-card-info .meta-value {
+  font-weight: 400;
+  color: var(--text-main);
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+
+.card.org-card {
+  flex: 1 1 320px;
+  min-width: 280px;
+  max-width: 32%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  break-inside: avoid;
+  height: auto;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 992px) {
+  .card.org-card {
+    max-width: 48%;
+  }
+}
+@media (max-width: 768px) {
+  .main-content-compact {
+    padding: 2vw 2vw 1vw 2vw;
+  }
+  .card.org-card {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .card-container {
+    gap: 1rem;
+  }
+}
+.card-body.d-flex.flex-column.h-100 {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@media (max-width: 992px) {
+  .card-container {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    column-count: 1;
+  }
+}
+
+.main-content-compact {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  padding: 3.5rem 3.5rem 2.5rem 3.5rem;
+}
+
+.container-inner {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.breadcrumb {
+  background: transparent;
+  font-size: 1.05em;
+  margin-bottom: 0.5rem;
+  padding-left: 0;
+}
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '>';
+  color: var(--primary-color-dark);
+  margin: 0 0.4em;
+}
+.breadcrumb-item {
+  color: var(--primary-color-dark);
+  font-weight: 500;
+}
+.breadcrumb-item.active {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.body-content {
+    flex: 1 0 auto;
+    padding-bottom: 3rem;
+}
+
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-custom {
+    flex-shrink: 0;
+}
+
+.footer-custom, .footer-custom h6, .footer-custom p, .footer-custom a {
+    font-family: 'B612', sans-serif !important;
 }

@@ -1,0 +1,115 @@
+<div class="org-modal-content b612-font">
+  {# Internal ID at the top #}
+  <div class="small text-muted mb-1">ID interno: {{ org.id }}</div>
+  {# Main Name as Title, with SameAs icon button if present #}
+  <div class="d-flex align-items-center mb-1" style="gap:0.5em;">
+    <h4 class="fw-bold mb-0 baskervville-regular" style="color:#800020; font-family: 'Baskervville', serif !important;">{{ org.org_names[0].name if org.org_names and org.org_names[0].name else org.id }}</h4>
+    {% if org.sameAs %}
+      <a href="{{ org.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2 d-inline-flex" style="border-color:#800020;color:#800020;" title="Scheda esterna">
+        <i class="bi bi-box-arrow-up-right"></i>
+      </a>
+    {% endif %}
+  </div>
+  
+  {# Subtitle: Type, City, Country with icons #}
+  <div class="mb-3" style="font-size:1.1em; color:#4B0010;">
+    {% set type_label = type_map[org.type] if org.type in type_map else org.type %}
+    <span><i class="bi bi-tag" style="color:#800020;"></i> {{ type_label }}</span>
+    {% if org.location and org.location.settlement %}
+      · <span><i class="bi bi-geo-alt" style="color:#800020;"></i> {{ org.location.settlement }}{% if org.location.country %}, {{ org.location.country }}{% endif %}</span>
+    {% elif org.location and org.location.country %}
+      · <span><i class="bi bi-geo-alt" style="color:#800020;"></i> {{ org.location.country }}</span>
+    {% endif %}
+  </div>
+  <hr class="my-2">
+
+  {# Other Names #}
+  {% if org.org_names and org.org_names|length > 1 %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Altri nomi</h6>
+      {% for name in org.org_names[1:] %}
+        <div><span class="meta-value">{{ name.name }}{% if name.lang %} <span style="color:#888;font-size:0.95em;">({{ name.lang }})</span>{% endif %}</span></div>
+      {% endfor %}
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {# Identifiers as label + value + icon #}
+  {% if org.idnos and org.idnos|length > 0 %}
+    {% set id_type_display = {
+      'gnd': 'GND',
+      'viaf': 'VIAF',
+      'wikidata': 'Wikidata',
+      'isni': 'ISNI',
+      'sudoc': 'SUDOC',
+      'lccn': 'LCCN',
+      'orcid': 'ORCID',
+      'geonames': 'GeoNames'
+    } %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Identificatori</h6>
+      <div style="display:flex; flex-direction:column; gap:0.3em;">
+        {% for idno in org.idnos %}
+          {% set label = id_type_display[idno.type|lower] if idno.type|lower in id_type_display else idno.type %}
+          {% set url = idno.value if idno.value.startswith('http') else (
+            'https://d-nb.info/gnd/' + idno.value if idno.type|lower == 'gnd' else
+            'https://viaf.org/viaf/' + idno.value if idno.type|lower == 'viaf' else
+            'https://www.wikidata.org/wiki/' + idno.value if idno.type|lower == 'wikidata' else
+            'https://isni.org/isni/' + idno.value if idno.type|lower == 'isni' else
+            'https://www.idref.fr/' + idno.value if idno.type|lower == 'sudoc' else
+            'https://lccn.loc.gov/' + idno.value if idno.type|lower == 'lccn' else
+            'https://orcid.org/' + idno.value if idno.type|lower == 'orcid' else
+            'https://www.geonames.org/' + idno.value if idno.type|lower == 'geonames' else
+            'https://www.google.com/search?q=' + idno.type|lower + '+' + idno.value
+          ) %}
+          <div>
+            <span class="meta-label">{{ label }}:</span>
+            <a href="{{ url }}" target="_blank" class="meta-value" style="text-decoration:underline;">
+              {{ idno.value }} <i class="bi bi-box-arrow-up-right" style="font-size:0.95em;color:#800020;"></i>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {# Full Address and Coordinates #}
+  {% if org.location %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Dettagli posizione</h6>
+      {% if org.location.street or org.location.postCode %}
+        <div><span class="meta-label">Indirizzo:</span> <span class="meta-value">{{ org.location.street }}{% if org.location.street and org.location.postCode %}, {% endif %}{{ org.location.postCode }}</span></div>
+      {% endif %}
+      {% if org.location.settlement %}
+        <div><span class="meta-label">Città:</span> <span class="meta-value">{{ org.location.settlement }}</span></div>
+      {% endif %}
+      {% if org.location.country %}
+        <div><span class="meta-label">Paese:</span> <span class="meta-value">{{ org.location.country }}</span></div>
+      {% endif %}
+      {% if org.location.geo %}
+        <div><span class="meta-label">Coordinate:</span> <span class="meta-value">{{ org.location.geo }}</span></div>
+      {% endif %}
+    </div>
+    <hr class="my-2">
+  {% endif %}
+</div>
+<style>
+  .b612-font, .b612-font * {
+    font-family: 'B612', Arial, sans-serif !important;
+  }
+  .baskervville-regular {
+    font-family: 'Baskervville', serif !important;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .org-modal-content .meta-label {
+    color: #800020;
+    font-weight: 600;
+    margin-right: 0.2em;
+  }
+  .org-modal-content .meta-value {
+    color: #111;
+    font-weight: 400;
+  }
+</style> 

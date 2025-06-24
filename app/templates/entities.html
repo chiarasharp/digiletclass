@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="main-content-compact py-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb align-items-center">
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+            </li>
+            <li class="breadcrumb-item active d-flex align-items-center" aria-current="page">
+                <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
+            </li>
+        </ol>
+    </nav>
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Indici</h2>
+
+<div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 entity-card shadow-sm" style="border-radius:1rem; transition: all 0.2s ease-in-out;">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <i class="bi bi-building fs-1 mb-3" style="color:var(--primary-color);"></i>
+                    <h5 class="card-title fw-bold baskervville-regular" style="font-size:1.4em;">Organizzazioni</h5>
+                    <p class="text-muted small">Enti ecclesiastici e culturali, famiglie, e altre istituzioni storiche.</p>
+                    <a href="{{ url_for('orgs') }}" class="btn btn-sm btn-primary mt-3 stretched-link" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Consulta l'indice</a>
+      </div>
+    </div>
+  </div>
+        <!-- Future entity cards here -->
+    </div>
+</div>
+
+<style>
+.entity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+}
+</style>
+{% endblock %} 
