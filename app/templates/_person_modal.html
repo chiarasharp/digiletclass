@@ -1,0 +1,136 @@
+<div class="org-modal-content b612-font">
+  <div class="small text-muted mb-1">ID interno: {{ person.id }}</div>
+  
+  <h4 class="fw-bold mb-1 baskervville-regular d-flex align-items-center" style="color:#800020;">
+    <span>
+    {% for part in person.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}
+      {{ part.text }}
+    {% endfor %}
+    {% for part in person.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}
+      <em>{{ part.text }}</em>
+    {% endfor %}
+    </span>
+    {% if person.sameAs %}
+      <a href="{{ person.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2 btn-sameas" style="white-space:nowrap;">
+        <i class="bi bi-box-arrow-up-right"></i>
+      </a>
+    {% endif %}
+  </h4>
+
+  <div class="mb-3 pt-2">
+    <div class="row">
+      {% if person.birth %}
+      <div class="col-md-4">
+        <h6 class="fw-bold" style="color:#800020;">Nascita</h6>
+        <p class="mb-1"><i class="bi bi-calendar-event"></i> {{ person.birth | format_date }}</p>
+        {% if person.birth_place %}<p><i class="bi bi-geo-alt"></i> {{ person.birth_place }}</p>{% endif %}
+      </div>
+      {% endif %}
+      {% if person.death %}
+       <div class="col-md-4">
+        <h6 class="fw-bold" style="color:#800020;">Morte</h6>
+        <p class="mb-1"><i class="bi bi-calendar-event"></i> {{ person.death | format_date }}</p>
+        {% if person.death_place %}<p><i class="bi bi-geo-alt"></i> {{ person.death_place }}</p>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <hr class="my-2">
+
+  {% if person.note %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Nota</h6>
+      <p>{{ person.note }}</p>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if person.pers_names and person.pers_names|length > 1 %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Altri nomi</h6>
+      {% for name in person.pers_names[1:] %}
+        <div>
+          <span class="meta-value">
+            {% for part in name.parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}
+              {{ part.text }}
+            {% endfor %}
+             {% for part in name.parts if part.type in ['nickname', 'pseudonym'] %}
+              <em>{{ part.text }}</em>
+            {% endfor %}
+            {% if name.lang %}<span style="color:#888;font-size:0.95em;"> ({{ name.lang }})</span>{% endif %}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% set alternative_types = ['translation', 'nickname', 'pseudonym'] %}
+  {% set all_alternative_forms = person.pers_names | map(attribute='parts') | sum(start=[]) | selectattr('type', 'in', alternative_types) | list %}
+  {% if all_alternative_forms %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Traduzioni / Forme alternative</h6>
+      <ul class="ps-3">
+        {% for part in all_alternative_forms %}
+          <li>{{ part.text }}{% if part.type %} ({{ part.type }}){% endif %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if person.idnos and person.idnos|length > 0 %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Identificatori</h6>
+      <div style="display:flex; flex-direction:column; gap:0.3em;">
+        {% for idno in person.idnos %}
+          {% set typ = idno.type|lower %}
+          {% set label = 'GeoNames' if typ == 'geonames' else idno.type|upper %}
+          {% set url = idno.value if idno.value.startswith('http') else (
+            'https://d-nb.info/gnd/' + idno.value if typ == 'gnd' else
+            'https://viaf.org/viaf/' + idno.value if typ == 'viaf' else
+            'https://www.wikidata.org/wiki/' + idno.value if typ == 'wikidata' else
+            'https://isni.org/isni/' + idno.value if typ == 'isni' else
+            'https://www.google.com/search?q=' + typ + '+' + idno.value
+          ) %}
+          <div>
+            <span class="meta-label">{{ label }}:</span>
+            <a href="{{ url }}" target="_blank" class="meta-value">
+              {{ idno.value }} <i class="bi bi-box-arrow-up-right" style="font-size:0.95em;color:#800020;"></i>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if person.occupations %}
+    <div class="mb-3">
+        <h6 class="fw-bold" style="color:#800020;">Occupazione</h6>
+        <p>{{ person.occupations|join(', ') }}</p>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if person.affiliations %}
+    <div class="mb-3">
+        <h6 class="fw-bold" style="color:#800020;">Affiliazione</h6>
+        <p>{{ person.affiliations|join(', ') }}</p>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if person.sex %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Genere</h6>
+      <p>
+        {% if person.sex == 'm' %}Maschile
+        {% elif person.sex == 'f' %}Femminile
+        {% else %}{{ person.sex }}
+        {% endif %}
+      </p>
+    </div>
+    <hr class="my-2">
+  {% endif %}
+</div> 

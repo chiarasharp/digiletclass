@@ -1,0 +1,83 @@
+<div class="org-modal-content b612-font">
+  <div class="small text-muted mb-1">ID interno: {{ place.id }}</div>
+  
+  <h4 class="fw-bold mb-1 baskervville-regular d-flex align-items-center" style="color:#800020;">
+    <span>{{ place.place_names[0].name if place.place_names else place.id }}</span>
+    {% if place.sameAs %}
+      <a href="{{ place.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2 btn-sameas" style="white-space:nowrap;">
+        <i class="bi bi-box-arrow-up-right"></i>
+      </a>
+    {% endif %}
+  </h4>
+
+  <div class="mb-3" style="font-size:1.1em; color:#4B0010;">
+    {% if place.type %}
+      <span><i class="bi bi-tag"></i> {{ type_map.get(place.type, place.type) }}</span>
+    {% endif %}
+    {% if place.location and (place.location.settlement or place.location.country) %}
+        {% if place.type %} · {% endif %}
+        <span><i class="bi bi-geo-alt"></i> 
+            {% set loc_parts = [] %}
+            {% if place.location.settlement %}{% do loc_parts.append(place.location.settlement) %}{% endif %}
+            {% if place.location.country %}{% do loc_parts.append(place.location.country) %}{% endif %}
+            {{ loc_parts | join(', ') }}
+        </span>
+    {% endif %}
+  </div>
+  <hr class="my-2">
+
+  {# Full Address and Coordinates #}
+  {% if place.location %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Dettagli posizione</h6>
+      {% if place.location.street or place.location.postCode %}
+        <div><span class="meta-label">Indirizzo:</span> <span class="meta-value">{{ place.location.street or '' }}{% if place.location.street and place.location.postCode %}, {% endif %}{{ place.location.postCode or '' }}</span></div>
+      {% endif %}
+      {% if place.location.settlement %}
+        <div><span class="meta-label">Città:</span> <span class="meta-value">{{ place.location.settlement }}</span></div>
+      {% endif %}
+      {% if place.location.country %}
+        <div><span class="meta-label">Paese:</span> <span class="meta-value">{{ place.location.country }}</span></div>
+      {% endif %}
+      {% if place.location.geo %}
+        <div><span class="meta-label">Coordinate:</span> <span class="meta-value">{{ place.location.geo }}</span></div>
+      {% endif %}
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if place.place_names and place.place_names|length > 1 %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Altri nomi</h6>
+      {% for name in place.place_names[1:] %}
+        <div><span class="meta-value">{{ name.name }}{% if name.lang %} <span style="color:#888;font-size:0.95em;">({{ name.lang }})</span>{% endif %}</span></div>
+      {% endfor %}
+    </div>
+    <hr class="my-2">
+  {% endif %}
+
+  {% if place.idnos and place.idnos|length > 0 %}
+    <div class="mb-3">
+      <h6 class="fw-bold" style="color:#800020;">Identificatori</h6>
+      <div style="display:flex; flex-direction:column; gap:0.3em;">
+        {% for idno in place.idnos %}
+          {% set label = idno.type %}
+          {% set url = idno.value if idno.value.startswith('http') else (
+            'https://d-nb.info/gnd/' + idno.value if idno.type|lower == 'gnd' else
+            'https://viaf.org/viaf/' + idno.value if idno.type|lower == 'viaf' else
+            'https://www.wikidata.org/wiki/' + idno.value if idno.type|lower == 'wikidata' else
+            'https://isni.org/isni/' + idno.value if idno.type|lower == 'isni' else
+            'https://www.geonames.org/' + idno.value if idno.type|lower == 'geonames' else
+            'https://www.google.com/search?q=' + idno.type|lower + '+' + idno.value
+          ) %}
+          <div>
+            <span class="meta-label">{{ label }}:</span>
+            <a href="{{ url }}" target="_blank" class="meta-value">
+              {{ idno.value }} <i class="bi bi-box-arrow-up-right" style="font-size:0.95em;color:#800020;"></i>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div> 

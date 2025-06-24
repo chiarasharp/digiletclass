@@ -80,17 +80,20 @@ footer {
   font-variant: small-caps;
   letter-spacing: 0.03em;
 }
-.badge-extid {
+.badge-extid, .badge-extid:visited {
   background: var(--accent-color-medium) !important;
   color: var(--text-on-accent) !important;
   text-decoration: none;
 }
 .badge-extid:hover {
     opacity: 0.85;
+    filter: brightness(90%);
 }
 .badge-unknown {
   background: #e0e0e0 !important;
   color: #800020 !important;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
 }
 .badge-b612 {
   font-family: 'B612', Arial, sans-serif !important;
@@ -183,7 +186,7 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .card.org-card {
@@ -286,4 +289,58 @@ html, body {
 
 .footer-custom, .footer-custom h6, .footer-custom p, .footer-custom a {
     font-family: 'B612', sans-serif !important;
+}
+
+.btn-sameas, .btn-sameas:visited {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+.btn-sameas:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--text-on-primary) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+  color: var(--primary-color);
+  background-color: #fff;
+  border-color: #ddd;
+}
+.pagination .page-link:hover {
+  background-color: var(--accent-color-light);
+  color: var(--primary-color-dark);
+}
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+.pagination .page-item.active .page-link:hover {
+  background-color: var(--primary-color-dark);
+  border-color: var(--primary-color-dark);
+}
+.pagination .page-item.disabled .page-link {
+  color: #999;
+  background-color: #f9f9f9;
+  border-color: #ddd;
+}
+
+.pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination .page-item {
+    margin-bottom: 0.5rem;
+}
+
+.org-modal-content a.meta-value,
+.org-modal-content a.meta-value:visited {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.org-modal-content a.meta-value:hover {
+    color: var(--primary-color-dark);
 }

@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+{% from "_card_macro.html" import render_card %}
+
+{% block content %}
+<div class="main-content-compact py-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb align-items-center">
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+            </li>
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('entities') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;">
+                    <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">
+      {% if item_type == 'places' %}
+        Indice dei Luoghi
+      {% else %}
+        Indice delle {{ title }}
+      {% endif %}
+    </h2>
+    <div class="container-inner">
+        
+        {# Type Filter for Orgs #}
+        {% if item_type == 'orgs' %}
+        <div class="mb-4">
+            <label for="typeFilter" class="form-label fw-bold"><i class="bi bi-filter"></i> Filtra per tipo:</label>
+            <select id="typeFilter" class="form-select w-auto d-inline-block" onchange="filterByType()">
+                <option value="">Tutti i tipi</option>
+                {# The filter needs the full list of organizations, not just the paginated one. #}
+                {% for t in all_items | map(attribute='type') | unique | sort %}
+                    {% if t %}
+                    <option value="{{ t }}">{{ type_map.get(t, t) }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+        <div class="card-container">
+            {% for item in items %}
+            {{ render_card(item, loop.index0, item_type, type_map) }}
+            {% endfor %}
+        </div>
+
+        {# Pagination Controls #}
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% set total_pages = (total / per_page)|round(0, 'ceil')|int %}
+                
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page-1) if page > 1 else '#'}}">Precedente</a>
+                </li>
+                
+                {% for p in pagination_window %}
+                    {% if p %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=p) }}">{{ p }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                    {% endif %}
+                {% endfor %}
+                
+                <li class="page-item {% if page >= (total / per_page)|round(0, 'ceil')|int %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page+1) if page < (total / per_page)|round(0, 'ceil')|int else '#'}}">Successivo</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Generic Entity Details Modal -->
+<div class="modal fade" id="entityModal" tabindex="-1" aria-labelledby="entityModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="entityModalLabel">Dettagli</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="entityModalBody">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.itemsData = {{ items|tojson|safe }};
+  {% if item_type == 'orgs' %}
+    window.orgsData = window.itemsData;
+  {% endif %}
+</script>
+
+<script src="{{ url_for('static', filename='entities.js') }}"></script>
+{% endblock %} 
