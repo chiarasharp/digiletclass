@@ -491,3 +491,64 @@ html, body {
   vertical-align: middle !important;
   position: static;
 }
+
+.entity-search-filter-bar {
+  background: var(--accent-color-light);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #e0e0e0;
+  gap: 1em;
+  margin-bottom: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.entity-search-filter-bar label {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-right: 0.5em;
+}
+.entity-search-filter-bar .form-select,
+.entity-search-filter-bar .form-control {
+  border-radius: 0.5em;
+  border: 1px solid var(--primary-color);
+  min-width: 160px;
+  font-size: 1em;
+  box-shadow: none;
+}
+.entity-search-filter-bar .form-control:focus,
+.entity-search-filter-bar .form-select:focus {
+  border-color: var(--primary-color-dark);
+  box-shadow: 0 0 0 0.1rem var(--primary-color-dark, #80002033);
+}
+.entity-search-filter-bar .btn-primary {
+  background: var(--primary-color);
+  border: none;
+  border-radius: 0.5em;
+  font-weight: 600;
+  padding: 0.5em 1.5em;
+  transition: background 0.2s;
+}
+.entity-search-filter-bar .btn-primary:hover {
+  background: var(--primary-color-dark);
+}
+@media (max-width: 600px) {
+  .entity-search-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7em;
+  }
+  .entity-search-filter-bar .form-select,
+  .entity-search-filter-bar .form-control {
+    min-width: 0;
+    width: 100%;
+  }
+  .entity-search-filter-bar .btn-primary {
+    width: 100%;
+  }
+}
+
+.card .bi-geo-alt {
+  color: #800020;
+  margin-right: 0.3em;
+}

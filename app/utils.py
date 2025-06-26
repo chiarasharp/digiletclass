@@ -194,3 +194,21 @@ def format_year(iso_date_str):
         return f"{year} d.C."
 
     return year
+
+def filter_entities_by_search(entities, entity_type, search_query):
+    """
+    Filter entities by search_query for the given entity_type.
+    - orgs: search in org_names[].name
+    - people: search in pers_names[].parts[].text
+    - places: search in place_names[].name
+    """
+    if not search_query:
+        return entities
+    sq = search_query.strip().lower()
+    if entity_type == 'orgs':
+        return [org for org in entities if any(sq in (name['name'] or '').lower() for name in org.get('org_names', []))]
+    elif entity_type == 'places':
+        return [p for p in entities if any(sq in (name['name'] or '').lower() for name in p.get('place_names', []))]
+    elif entity_type == 'people':
+        return [person for person in entities if any(sq in (part['text'] or '').lower() for name in person.get('pers_names', []) for part in name.get('parts', []))]
+    return entities

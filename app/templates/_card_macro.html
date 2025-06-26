@@ -62,7 +62,7 @@
         {# --- Card Body Details --- #}
         <div class="card-details mt-auto">
             {% if item_type == 'orgs' and item.location and item.location.settlement %}
-                <p class="card-text mb-1"><i class="bi bi-geo-alt" style="color:#800020; margin-right: 0.3em;"></i> {{ item.location.settlement }}</p>
+                <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.settlement }}</p>
             {% elif item_type == 'people' %}
                 {% if item.birth or item.death %}
                     <p class="card-text mb-1">
@@ -70,8 +70,13 @@
                         {{ item.birth | year }} &ndash; {{ item.death | year }}
                     </p>
                 {% endif %}
-            {% elif item_type == 'places' and item.location and item.location.settlement %}
-                 <p class="card-text mb-1"><i class="bi bi-geo-alt" style="color:#800020; margin-right: 0.3em;"></i> {{ item.location.settlement }}</p>
+            {% elif item_type == 'places' and item.location %}
+                {% if item.location.settlement %}
+                    <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.settlement }}</p>
+                {% endif %}
+                {% if item.location.country %}
+                    <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.country }}</p>
+                {% endif %}
             {% endif %}
         </div>
     </div>

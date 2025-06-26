@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template, request, abort
 from datetime import datetime
-from .utils import parse_orgs, parse_people, parse_places
+from .utils import parse_orgs, parse_people, parse_places, filter_entities_by_search
 from . import app
 from flask import redirect, url_for
 from flask_paginate import Pagination, get_page_parameter
@@ -63,7 +63,12 @@ TYPE_MAP = {
         'peninsula': 'Penisola',
         'cape': 'Capo',
         'plain': 'Pianura',
-        'desert': 'Deserto'
+        'desert': 'Deserto',
+        'ancient-settlement': 'Insediamento antico',
+        'monastic-site': 'Sito monastico',
+        'ancient-region': 'Regione antica',
+        'historic-region': 'Regione storica',
+        'stream': 'Torrente'
     }
 }
 
@@ -124,6 +129,7 @@ def entities_list(entity_type):
     all_data = sorted(all_data, key=lambda x: x.get('name', '').lower())
 
     selected_type = request.args.get('type', 'all')
+    search_query = request.args.get('search', '')
     filtered_data = all_data
 
     # Always define org_types and place_types
@@ -134,10 +140,46 @@ def entities_list(entity_type):
         org_types = sorted(list(set(org.get('type', 'none') for org in all_data)))
         if selected_type != 'all':
             filtered_data = [org for org in all_data if org.get('type', 'none') == selected_type]
+        filtered_data = filter_entities_by_search(filtered_data, 'orgs', search_query)
+        # Advanced filters
+        country = request.args.get('country', '').strip().upper()
+        settlement = request.args.get('settlement', '').strip().lower()
+        if country:
+            filtered_data = [org for org in filtered_data if org.get('location') and org['location'].get('country', '').upper() == country]
+        if settlement:
+            filtered_data = [org for org in filtered_data if org.get('location') and org['location'].get('settlement', '').lower() == settlement]
     elif entity_type == 'places':
         place_types = sorted(list(set(p.get('type', 'none') for p in all_data)))
         if selected_type != 'all':
             filtered_data = [p for p in all_data if p.get('type', 'none') == selected_type]
+        filtered_data = filter_entities_by_search(filtered_data, 'places', search_query)
+        # Advanced filters
+        country = request.args.get('country', '').strip().upper()
+        settlement = request.args.get('settlement', '').strip().lower()
+        if country:
+            filtered_data = [p for p in filtered_data if p.get('location') and p['location'].get('country', '').upper() == country]
+        if settlement:
+            filtered_data = [p for p in filtered_data if p.get('location') and p['location'].get('settlement', '').lower() == settlement]
+    elif entity_type == 'people':
+        filtered_data = filter_entities_by_search(filtered_data, 'people', search_query)
+        # Advanced filters
+        sex = request.args.get('sex', '').strip().lower()
+        birth_from = request.args.get('birth_from', '').strip()
+        birth_to = request.args.get('birth_to', '').strip()
+        if sex:
+            filtered_data = [person for person in filtered_data if person.get('sex', '').lower() == sex]
+        if birth_from:
+            try:
+                birth_from_year = int(birth_from)
+                filtered_data = [person for person in filtered_data if person.get('birth') and person['birth'][:4].isdigit() and int(person['birth'][:4]) >= birth_from_year]
+            except ValueError:
+                pass
+        if birth_to:
+            try:
+                birth_to_year = int(birth_to)
+                filtered_data = [person for person in filtered_data if person.get('birth') and person['birth'][:4].isdigit() and int(person['birth'][:4]) <= birth_to_year]
+            except ValueError:
+                pass
 
     # Pagination for all entity types (old logic)
     page = request.args.get('page', 1, type=int)

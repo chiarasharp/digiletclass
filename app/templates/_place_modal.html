@@ -59,7 +59,7 @@
     <div class="entity-modal-section">
       <span class="entity-modal-section-title">Identificatori</span>
       {% for idno in place.idnos %}
-        {% set label = idno.type %}
+        {% set label = 'GeoNames' if idno.type|lower == 'geonames' else idno.type %}
         {% set url = idno.value if idno.value.startswith('http') else (
           'https://d-nb.info/gnd/' + idno.value if idno.type|lower == 'gnd' else
           'https://viaf.org/viaf/' + idno.value if idno.type|lower == 'viaf' else

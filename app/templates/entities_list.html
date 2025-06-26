@@ -24,30 +24,89 @@
       {% endif %}
     </h2>
     <div class="container-inner">
-        
-        {# Type Filter for Orgs #}
-        {% if item_type == 'orgs' %}
-        <div class="mb-4 d-flex align-items-center">
-            <label for="typeFilter" class="form-label fw-bold me-2 mb-0"><i class="bi bi-filter"></i> Filtra per tipo:</label>
-            <select id="typeFilter" class="form-select org-type-select w-auto" onchange="location = this.value;">
-                <option value="{{ url_for('entities_list', entity_type='orgs', type='all', page=1) }}">Tutti i tipi</option>
-                
-                {# Special handling to show 'Sconosciuto' (none) right after 'All' #}
-                {% if 'none' in org_types %}
-                    <option value="{{ url_for('entities_list', entity_type='orgs', type='none', page=1) }}" {% if selected_type == 'none' %}selected{% endif %}>
-                        Sconosciuto
-                    </option>
-                {% endif %}
-
-                {# Sort and display other types #}
-                {% for org_type in org_types | sort %}
-                    {% if org_type != 'none' %}
-                        <option value="{{ url_for('entities_list', entity_type='orgs', type=org_type, page=1) }}" {% if org_type == selected_type %}selected{% endif %}>
-                            {{ type_map.get(org_type, org_type) | capitalize }}
-                        </option>
+        <!-- Unified Search & Filter Bar -->
+        <form method="get" class="entity-search-filter-bar mb-4 d-flex flex-wrap align-items-center p-3" style="gap:1em; background:var(--accent-color-light); border-radius:1rem; box-shadow:0 2px 8px #e0e0e0;" aria-label="Filtri e ricerca">
+            {% if item_type == 'orgs' %}
+                <label for="typeFilter" class="form-label fw-bold mb-0 me-2" style="color:var(--primary-color);"><i class="bi bi-filter" aria-hidden="true"></i> <span>Tipo:</span></label>
+                <select id="typeFilter" name="type" class="form-select org-type-select w-auto me-2" style="min-width:160px;" onchange="this.form.submit()" aria-label="Filtra per tipo">
+                    <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
+                    {% if 'none' in org_types %}
+                        <option value="none" {% if selected_type == 'none' %}selected{% endif %}>Sconosciuto</option>
                     {% endif %}
-                {% endfor %}
-            </select>
+                    {% for org_type in org_types | sort %}
+                        {% if org_type != 'none' %}
+                            <option value="{{ org_type }}" {% if org_type == selected_type %}selected{% endif %}>{{ type_map.get(org_type, org_type) | capitalize }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% elif item_type == 'places' %}
+                <label for="placeTypeFilter" class="form-label fw-bold mb-0 me-2" style="color:var(--primary-color);"><i class="bi bi-filter" aria-hidden="true"></i> <span>Tipo:</span></label>
+                <select id="placeTypeFilter" name="type" class="form-select w-auto me-2" style="min-width:160px;" onchange="this.form.submit()" aria-label="Filtra per tipo">
+                    <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
+                    {% for place_type in place_types|sort %}
+                        <option value="{{ place_type }}" {% if place_type == selected_type %}selected{% endif %}>
+                            {% if type_map.get(place_type) %}
+                                {{ type_map.get(place_type, place_type) | capitalize }}
+                            {% else %}
+                                <em>{{ place_type }}</em>
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            <label for="searchInput" class="visually-hidden">Cerca</label>
+            <input type="text" id="searchInput" name="search" class="form-control" placeholder="Cerca..." value="{{ request.args.get('search', '') }}" style="max-width:300px; border-radius:0.5em; border:1px solid var(--primary-color);" aria-label="Cerca">
+            <button type="submit" class="btn btn-primary" style="background:var(--primary-color); border:none; border-radius:0.5em;" aria-label="Cerca">Cerca</button>
+            <a href="{{ url_for('entities_list', entity_type=item_type) }}" class="btn btn-outline-secondary ms-2" style="border-radius:0.5em;" aria-label="Reset filtri e ricerca">Reset</a>
+            <button class="btn btn-link ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters" style="color:var(--primary-color); font-weight:600; text-decoration:underline;" aria-label="Mostra filtri avanzati">Filtri avanzati</button>
+        
+            <div class="collapse w-100 mt-3" id="advancedFilters">
+                <div class="row w-100 g-2">
+                    {% if item_type == 'orgs' %}
+                        <div class="col-md-4">
+                            <label for="orgCountry" class="form-label">Nazione</label>
+                            <input type="text" name="country" id="orgCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="orgSettlement" class="form-label">Città/Località</label>
+                            <input type="text" name="settlement" id="orgSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
+                        </div>
+                    {% elif item_type == 'people' %}
+                        <div class="col-md-3">
+                            <label for="sex" class="form-label">Sesso</label>
+                            <select name="sex" id="sex" class="form-select" aria-label="Filtra per sesso">
+                                <option value="">Tutti</option>
+                                <option value="m" {% if request.args.get('sex') == 'm' %}selected{% endif %}>Maschio</option>
+                                <option value="f" {% if request.args.get('sex') == 'f' %}selected{% endif %}>Femmina</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="birth_from" class="form-label">Nato dopo (anno)</label>
+                            <input type="number" name="birth_from" id="birth_from" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_from', '') }}" aria-label="Nato dopo l'anno">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="birth_to" class="form-label">Nato prima (anno)</label>
+                            <input type="number" name="birth_to" id="birth_to" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_to', '') }}" aria-label="Nato prima dell'anno">
+                        </div>
+                    {% elif item_type == 'places' %}
+                        <div class="col-md-4">
+                            <label for="placeCountry" class="form-label">Nazione</label>
+                            <input type="text" name="country" id="placeCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="placeSettlement" class="form-label">Città/Località</label>
+                            <input type="text" name="settlement" id="placeSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+
+        {# Show number of results only if a filter or search is active #}
+        {% set has_filter = request.args.get('search') or request.args.get('type', 'all') != 'all' or request.args.get('country') or request.args.get('settlement') or request.args.get('sex') or request.args.get('birth_from') or request.args.get('birth_to') %}
+        {% if has_filter %}
+        <div class="mb-3" aria-live="polite">
+            <span class="fw-bold">{{ total }}</span> risultati trovati
         </div>
         {% endif %}
 
