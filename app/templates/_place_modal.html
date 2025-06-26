@@ -1,22 +1,22 @@
-<div class="org-modal-content b612-font">
+<div class="entity-modal">
   <div class="small text-muted mb-1">ID interno: {{ place.id }}</div>
-  
-  <h4 class="fw-bold mb-1 baskervville-regular d-flex align-items-center" style="color:#800020;">
+
+  <div class="entity-modal-title">
     <span>{{ place.place_names[0].name if place.place_names else place.id }}</span>
     {% if place.sameAs %}
-      <a href="{{ place.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2 btn-sameas" style="white-space:nowrap;">
-        <i class="bi bi-box-arrow-up-right"></i>
+      <a href="{{ place.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sameas btn-sm ms-2 d-inline-flex entity-modal-link" title="Scheda esterna">
+        <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
       </a>
     {% endif %}
-  </h4>
+  </div>
 
-  <div class="mb-3" style="font-size:1.1em; color:#4B0010;">
+  <div class="entity-modal-subtitle">
     {% if place.type %}
-      <span><i class="bi bi-tag"></i> {{ type_map.get(place.type, place.type) }}</span>
+      <span><i class="bi bi-tag entity-modal-icon"></i>{{ type_map.get(place.type, place.type) }}</span>
     {% endif %}
     {% if place.location and (place.location.settlement or place.location.country) %}
-        {% if place.type %} · {% endif %}
-        <span><i class="bi bi-geo-alt"></i> 
+        {% if place.type %}<span class="entity-modal-dot">·</span>{% endif %}
+        <span><i class="bi bi-geo-alt entity-modal-icon"></i>
             {% set loc_parts = [] %}
             {% if place.location.settlement %}{% do loc_parts.append(place.location.settlement) %}{% endif %}
             {% if place.location.country %}{% do loc_parts.append(place.location.country) %}{% endif %}
@@ -26,58 +26,55 @@
   </div>
   <hr class="my-2">
 
-  {# Full Address and Coordinates #}
   {% if place.location %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Dettagli posizione</h6>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Dettagli posizione</span>
       {% if place.location.street or place.location.postCode %}
-        <div><span class="meta-label">Indirizzo:</span> <span class="meta-value">{{ place.location.street or '' }}{% if place.location.street and place.location.postCode %}, {% endif %}{{ place.location.postCode or '' }}</span></div>
+        <div><span class="entity-modal-label">Indirizzo:</span><span class="entity-modal-value">{{ place.location.street or '' }}{% if place.location.street and place.location.postCode %}, {% endif %}{{ place.location.postCode or '' }}</span></div>
       {% endif %}
       {% if place.location.settlement %}
-        <div><span class="meta-label">Città:</span> <span class="meta-value">{{ place.location.settlement }}</span></div>
+        <div><span class="entity-modal-label">Città:</span><span class="entity-modal-value">{{ place.location.settlement }}</span></div>
       {% endif %}
       {% if place.location.country %}
-        <div><span class="meta-label">Paese:</span> <span class="meta-value">{{ place.location.country }}</span></div>
+        <div><span class="entity-modal-label">Paese:</span><span class="entity-modal-value">{{ place.location.country }}</span></div>
       {% endif %}
       {% if place.location.geo %}
-        <div><span class="meta-label">Coordinate:</span> <span class="meta-value">{{ place.location.geo }}</span></div>
+        <div><span class="entity-modal-label">Coordinate:</span><span class="entity-modal-value">{{ place.location.geo }}</span></div>
       {% endif %}
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if place.place_names and place.place_names|length > 1 %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Altri nomi</h6>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Altri nomi</span>
       {% for name in place.place_names[1:] %}
-        <div><span class="meta-value">{{ name.name }}{% if name.lang %} <span style="color:#888;font-size:0.95em;">({{ name.lang }})</span>{% endif %}</span></div>
+        <div class="entity-modal-value">{{ name.name }}{% if name.lang %}<span class="text-muted small"> ({{ name.lang }})</span>{% endif %}</div>
       {% endfor %}
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if place.idnos and place.idnos|length > 0 %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Identificatori</h6>
-      <div style="display:flex; flex-direction:column; gap:0.3em;">
-        {% for idno in place.idnos %}
-          {% set label = idno.type %}
-          {% set url = idno.value if idno.value.startswith('http') else (
-            'https://d-nb.info/gnd/' + idno.value if idno.type|lower == 'gnd' else
-            'https://viaf.org/viaf/' + idno.value if idno.type|lower == 'viaf' else
-            'https://www.wikidata.org/wiki/' + idno.value if idno.type|lower == 'wikidata' else
-            'https://isni.org/isni/' + idno.value if idno.type|lower == 'isni' else
-            'https://www.geonames.org/' + idno.value if idno.type|lower == 'geonames' else
-            'https://www.google.com/search?q=' + idno.type|lower + '+' + idno.value
-          ) %}
-          <div>
-            <span class="meta-label">{{ label }}:</span>
-            <a href="{{ url }}" target="_blank" class="meta-value">
-              {{ idno.value }} <i class="bi bi-box-arrow-up-right" style="font-size:0.95em;color:#800020;"></i>
-            </a>
-          </div>
-        {% endfor %}
-      </div>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Identificatori</span>
+      {% for idno in place.idnos %}
+        {% set label = idno.type %}
+        {% set url = idno.value if idno.value.startswith('http') else (
+          'https://d-nb.info/gnd/' + idno.value if idno.type|lower == 'gnd' else
+          'https://viaf.org/viaf/' + idno.value if idno.type|lower == 'viaf' else
+          'https://www.wikidata.org/wiki/' + idno.value if idno.type|lower == 'wikidata' else
+          'https://isni.org/isni/' + idno.value if idno.type|lower == 'isni' else
+          'https://www.geonames.org/' + idno.value if idno.type|lower == 'geonames' else
+          'https://www.google.com/search?q=' + idno.type|lower + '+' + idno.value
+        ) %}
+        <div>
+          <span class="entity-modal-label">{{ label }}:</span>
+          <a href="{{ url }}" target="_blank" class="entity-modal-link entity-modal-value">
+            {{ idno.value }} <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
+          </a>
+        </div>
+      {% endfor %}
     </div>
   {% endif %}
 </div> 

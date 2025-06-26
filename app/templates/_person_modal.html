@@ -1,64 +1,52 @@
-<div class="org-modal-content b612-font">
+<div class="entity-modal">
   <div class="small text-muted mb-1">ID interno: {{ person.id }}</div>
-  
-  <h4 class="fw-bold mb-1 baskervville-regular d-flex align-items-center" style="color:#800020;">
+
+  <div class="entity-modal-title">
     <span>
-    {% for part in person.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}
-      {{ part.text }}
-    {% endfor %}
-    {% for part in person.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}
-      <em>{{ part.text }}</em>
-    {% endfor %}
+      {% for part in person.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}{{ part.text }} {% endfor %}
+      {% for part in person.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}<em>{{ part.text }}</em> {% endfor %}
     </span>
     {% if person.sameAs %}
-      <a href="{{ person.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2 btn-sameas" style="white-space:nowrap;">
-        <i class="bi bi-box-arrow-up-right"></i>
+      <a href="{{ person.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sameas btn-sm ms-2 d-inline-flex entity-modal-link" title="Scheda esterna">
+        <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
       </a>
     {% endif %}
-  </h4>
+  </div>
 
-  <div class="mb-3 pt-2">
-    <div class="row">
-      {% if person.birth %}
-      <div class="col-md-4">
-        <h6 class="fw-bold" style="color:#800020;">Nascita</h6>
-        <p class="mb-1"><i class="bi bi-calendar-event"></i> {{ person.birth | format_date }}</p>
-        {% if person.birth_place %}<p><i class="bi bi-geo-alt"></i> {{ person.birth_place }}</p>{% endif %}
-      </div>
-      {% endif %}
-      {% if person.death %}
-       <div class="col-md-4">
-        <h6 class="fw-bold" style="color:#800020;">Morte</h6>
-        <p class="mb-1"><i class="bi bi-calendar-event"></i> {{ person.death | format_date }}</p>
-        {% if person.death_place %}<p><i class="bi bi-geo-alt"></i> {{ person.death_place }}</p>{% endif %}
-      </div>
-      {% endif %}
+  <div class="mb-3 pt-2 row">
+    {% if person.birth %}
+    <div class="col-md-6 entity-modal-section">
+      <span class="entity-modal-section-title">Nascita</span>
+      <div class="entity-modal-value"><i class="bi bi-calendar-event entity-modal-icon"></i>{{ person.birth | format_date }}</div>
+      {% if person.birth_place %}<div class="entity-modal-value"><i class="bi bi-geo-alt entity-modal-icon"></i>{{ person.birth_place }}</div>{% endif %}
     </div>
+    {% endif %}
+    {% if person.death %}
+     <div class="col-md-6 entity-modal-section">
+      <span class="entity-modal-section-title">Morte</span>
+      <div class="entity-modal-value"><i class="bi bi-calendar-event entity-modal-icon"></i>{{ person.death | format_date }}</div>
+      {% if person.death_place %}<div class="entity-modal-value"><i class="bi bi-geo-alt entity-modal-icon"></i>{{ person.death_place }}</div>{% endif %}
+    </div>
+    {% endif %}
   </div>
   <hr class="my-2">
 
   {% if person.note %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Nota</h6>
-      <p>{{ person.note }}</p>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Nota</span>
+      <p class="entity-modal-value">{{ person.note }}</p>
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if person.pers_names and person.pers_names|length > 1 %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Altri nomi</h6>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Altri nomi</span>
       {% for name in person.pers_names[1:] %}
-        <div>
-          <span class="meta-value">
-            {% for part in name.parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}
-              {{ part.text }}
-            {% endfor %}
-             {% for part in name.parts if part.type in ['nickname', 'pseudonym'] %}
-              <em>{{ part.text }}</em>
-            {% endfor %}
-            {% if name.lang %}<span style="color:#888;font-size:0.95em;"> ({{ name.lang }})</span>{% endif %}
-          </span>
+        <div class="entity-modal-value">
+            {% for part in name.parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}{{ part.text }} {% endfor %}
+            {% for part in name.parts if part.type in ['nickname', 'pseudonym'] %}<em>{{ part.text }}</em> {% endfor %}
+            {% if name.lang %}<span class="text-muted small"> ({{ name.lang }})</span>{% endif %}
         </div>
       {% endfor %}
     </div>
@@ -68,11 +56,11 @@
   {% set alternative_types = ['translation', 'nickname', 'pseudonym'] %}
   {% set all_alternative_forms = person.pers_names | map(attribute='parts') | sum(start=[]) | selectattr('type', 'in', alternative_types) | list %}
   {% if all_alternative_forms %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Traduzioni / Forme alternative</h6>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Traduzioni / Forme alternative</span>
       <ul class="ps-3">
         {% for part in all_alternative_forms %}
-          <li>{{ part.text }}{% if part.type %} ({{ part.type }}){% endif %}</li>
+          <li class="entity-modal-value">{{ part.text }}{% if part.type %} ({{ part.type }}){% endif %}</li>
         {% endfor %}
       </ul>
     </div>
@@ -80,57 +68,54 @@
   {% endif %}
 
   {% if person.idnos and person.idnos|length > 0 %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Identificatori</h6>
-      <div style="display:flex; flex-direction:column; gap:0.3em;">
-        {% for idno in person.idnos %}
-          {% set typ = idno.type|lower %}
-          {% set label = 'GeoNames' if typ == 'geonames' else idno.type|upper %}
-          {% set url = idno.value if idno.value.startswith('http') else (
-            'https://d-nb.info/gnd/' + idno.value if typ == 'gnd' else
-            'https://viaf.org/viaf/' + idno.value if typ == 'viaf' else
-            'https://www.wikidata.org/wiki/' + idno.value if typ == 'wikidata' else
-            'https://isni.org/isni/' + idno.value if typ == 'isni' else
-            'https://www.google.com/search?q=' + typ + '+' + idno.value
-          ) %}
-          <div>
-            <span class="meta-label">{{ label }}:</span>
-            <a href="{{ url }}" target="_blank" class="meta-value">
-              {{ idno.value }} <i class="bi bi-box-arrow-up-right" style="font-size:0.95em;color:#800020;"></i>
-            </a>
-          </div>
-        {% endfor %}
-      </div>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Identificatori</span>
+      {% for idno in person.idnos %}
+        {% set typ = idno.type|lower %}
+        {% set label = 'GeoNames' if typ == 'geonames' else idno.type|upper %}
+        {% set url = idno.value if idno.value.startswith('http') else (
+          'https://d-nb.info/gnd/' + idno.value if typ == 'gnd' else
+          'https://viaf.org/viaf/' + idno.value if typ == 'viaf' else
+          'https://www.wikidata.org/wiki/' + idno.value if typ == 'wikidata' else
+          'https://isni.org/isni/' + idno.value if typ == 'isni' else
+          'https://www.google.com/search?q=' + typ + '+' + idno.value
+        ) %}
+        <div>
+          <span class="entity-modal-label">{{ label }}:</span>
+          <a href="{{ url }}" target="_blank" class="entity-modal-link entity-modal-value">
+            {{ idno.value }} <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
+          </a>
+        </div>
+      {% endfor %}
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if person.occupations %}
-    <div class="mb-3">
-        <h6 class="fw-bold" style="color:#800020;">Occupazione</h6>
-        <p>{{ person.occupations|join(', ') }}</p>
+    <div class="entity-modal-section">
+        <span class="entity-modal-section-title">Occupazione</span>
+        <p class="entity-modal-value">{{ person.occupations|join(', ') }}</p>
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if person.affiliations %}
-    <div class="mb-3">
-        <h6 class="fw-bold" style="color:#800020;">Affiliazione</h6>
-        <p>{{ person.affiliations|join(', ') }}</p>
+    <div class="entity-modal-section">
+        <span class="entity-modal-section-title">Affiliazione</span>
+        <p class="entity-modal-value">{{ person.affiliations|join(', ') }}</p>
     </div>
     <hr class="my-2">
   {% endif %}
 
   {% if person.sex %}
-    <div class="mb-3">
-      <h6 class="fw-bold" style="color:#800020;">Genere</h6>
-      <p>
+    <div class="entity-modal-section">
+      <span class="entity-modal-section-title">Genere</span>
+      <p class="entity-modal-value">
         {% if person.sex == 'm' %}Maschile
         {% elif person.sex == 'f' %}Femminile
         {% else %}{{ person.sex }}
         {% endif %}
       </p>
     </div>
-    <hr class="my-2">
   {% endif %}
 </div> 

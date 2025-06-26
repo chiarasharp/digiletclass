@@ -291,14 +291,49 @@ html, body {
     font-family: 'B612', sans-serif !important;
 }
 
-.btn-sameas, .btn-sameas:visited {
-  border-color: var(--primary-color) !important;
-  color: var(--primary-color) !important;
+.btn-sameas {
+  width: 2em;
+  height: 2em;
+  min-width: 2em;
+  min-height: 2em;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4em;
+  border: 1.5px solid #800020 !important;
+  background: #fff !important;
+  color: #800020 !important;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  vertical-align: middle;
+  line-height: 1;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
-
-.btn-sameas:hover {
-  background-color: var(--primary-color) !important;
-  color: var(--text-on-primary) !important;
+.btn-sameas:hover, .btn-sameas:focus {
+  border-color: #800020 !important;
+  background: #800020 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.btn-sameas .entity-modal-icon {
+  color: inherit !important;
+  font-size: 1.15em;
+  transition: color 0.2s;
+  display: block;
+  margin: 0 auto;
+}
+.btn-sameas:hover .entity-modal-icon, .btn-sameas:focus .entity-modal-icon {
+  color: #fff !important;
+}
+/* Prevent .entity-modal-link from affecting .btn-sameas */
+.btn-sameas.entity-modal-link, .btn-sameas.entity-modal-link:visited {
+  color: #800020 !important;
+}
+.btn-sameas:hover.entity-modal-link, .btn-sameas:focus.entity-modal-link {
+  color: #fff !important;
 }
 
 /* Pagination */
@@ -343,4 +378,116 @@ html, body {
 
 .org-modal-content a.meta-value:hover {
     color: var(--primary-color-dark);
+}
+
+.org-type-select {
+  background: var(--accent-color-light);
+  color: var(--primary-color-dark);
+  border: 2px solid var(--primary-color);
+  border-radius: 0.7em;
+  font-family: 'B612', Arial, sans-serif;
+  font-size: 1.08em;
+  font-weight: 500;
+  padding: 0.45em 1.2em 0.45em 0.7em;
+  box-shadow: 0 2px 8px rgba(128,0,32,0.07);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.org-type-select:focus, .org-type-select:hover {
+  border-color: var(--primary-color-dark);
+  box-shadow: 0 4px 16px rgba(128,0,32,0.13);
+  outline: none;
+}
+
+/* === Entity Modal General Styles === */
+.entity-modal {
+  font-family: 'B612', Arial, sans-serif;
+  color: #222;
+}
+.entity-modal-title {
+  color: #800020;
+  font-family: 'Baskervville', serif;
+  font-weight: 700;
+  font-size: 1.6em;
+  margin-bottom: 0.3em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.entity-modal-section-title {
+  color: #800020;
+  font-family: 'B612', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  display: block;
+}
+.entity-modal-label {
+  color: #800020;
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.1em;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+.entity-modal-value {
+  color: #222;
+  font-weight: 400;
+  font-size: 1em;
+  display: inline;
+  word-break: break-word;
+  margin: 0;
+}
+.entity-modal-link, .entity-modal-link:visited {
+  color: #222 !important;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.entity-modal-link:hover, .entity-modal-link:focus {
+  color: #222 !important;
+  text-decoration: underline;
+}
+.entity-modal-icon {
+  color: #800020;
+  margin-right: 0.3em;
+  font-size: 1.1em;
+  vertical-align: middle;
+  font-weight: bold;
+}
+.entity-modal-subtitle {
+  color: #4B0010;
+  font-size: 1.08em;
+  font-weight: 500;
+  margin-bottom: 0.7em;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.entity-modal-dot {
+  color: #bfa5b8;
+  font-size: 1.2em;
+  margin: 0 0.4em;
+}
+.entity-modal-section {
+  margin-bottom: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+/* Remove badge backgrounds in modals */
+.entity-modal .badge, .entity-modal .badge-type, .entity-modal .badge-unknown {
+  background: none !important;
+  color: inherit !important;
+  font-variant: inherit;
+  letter-spacing: inherit;
+  font-weight: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+.btn-sameas.ms-2 {
+  margin-left: 0.2em !important;
+  vertical-align: middle !important;
+  position: static;
 }

@@ -1,21 +1,3 @@
-function filterByType() {
-    if (typeof window.orgsData === 'undefined') {
-        return;
-    }
-    var selected = document.getElementById('typeFilter').value;
-    var cards = document.querySelectorAll('.card[data-entity-type="orgs"]');
-    cards.forEach(function(card) {
-        var orgIdx = card.getAttribute('data-org-index');
-        // The index is based on the paginated list, which is in window.orgsData
-        var org = window.orgsData[orgIdx]; 
-        if (org && (!selected || org.type === selected)) {
-            card.style.display = 'flex';
-        } else if (org) {
-            card.style.display = 'none';
-        }
-    });
-}
-
 function fetchAndShowModal(entityType, entityId) {
     if (!entityType || !entityId) return;
     fetch(`/modal/${entityType}/${entityId}`)

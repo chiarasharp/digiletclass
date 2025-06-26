@@ -27,14 +27,24 @@
         
         {# Type Filter for Orgs #}
         {% if item_type == 'orgs' %}
-        <div class="mb-4">
-            <label for="typeFilter" class="form-label fw-bold"><i class="bi bi-filter"></i> Filtra per tipo:</label>
-            <select id="typeFilter" class="form-select w-auto d-inline-block" onchange="filterByType()">
-                <option value="">Tutti i tipi</option>
-                {# The filter needs the full list of organizations, not just the paginated one. #}
-                {% for t in all_items | map(attribute='type') | unique | sort %}
-                    {% if t %}
-                    <option value="{{ t }}">{{ type_map.get(t, t) }}</option>
+        <div class="mb-4 d-flex align-items-center">
+            <label for="typeFilter" class="form-label fw-bold me-2 mb-0"><i class="bi bi-filter"></i> Filtra per tipo:</label>
+            <select id="typeFilter" class="form-select org-type-select w-auto" onchange="location = this.value;">
+                <option value="{{ url_for('entities_list', entity_type='orgs', type='all', page=1) }}">Tutti i tipi</option>
+                
+                {# Special handling to show 'Sconosciuto' (none) right after 'All' #}
+                {% if 'none' in org_types %}
+                    <option value="{{ url_for('entities_list', entity_type='orgs', type='none', page=1) }}" {% if selected_type == 'none' %}selected{% endif %}>
+                        Sconosciuto
+                    </option>
+                {% endif %}
+
+                {# Sort and display other types #}
+                {% for org_type in org_types | sort %}
+                    {% if org_type != 'none' %}
+                        <option value="{{ url_for('entities_list', entity_type='orgs', type=org_type, page=1) }}" {% if org_type == selected_type %}selected{% endif %}>
+                            {{ type_map.get(org_type, org_type) | capitalize }}
+                        </option>
                     {% endif %}
                 {% endfor %}
             </select>
@@ -53,21 +63,21 @@
                 {% set total_pages = (total / per_page)|round(0, 'ceil')|int %}
                 
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page-1) if page > 1 else '#'}}">Precedente</a>
+                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page-1, type=selected_type) if page > 1 else '#' }}">Precedente</a>
                 </li>
                 
                 {% for p in pagination_window %}
                     {% if p %}
                         <li class="page-item {% if p == page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=p) }}">{{ p }}</a>
+                            <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=p, type=selected_type) }}">{{ p }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
                     {% endif %}
                 {% endfor %}
                 
-                <li class="page-item {% if page >= (total / per_page)|round(0, 'ceil')|int %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page+1) if page < (total / per_page)|round(0, 'ceil')|int else '#'}}">Successivo</a>
+                <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page+1, type=selected_type) if page < total_pages else '#' }}">Successivo</a>
                 </li>
             </ul>
         </nav>

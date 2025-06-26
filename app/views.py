@@ -4,6 +4,7 @@ from datetime import datetime
 from .utils import parse_orgs, parse_people, parse_places
 from . import app
 from flask import redirect, url_for
+from flask_paginate import Pagination, get_page_parameter
 
 ENTITY_CONFIG = {
     'orgs': {
@@ -112,31 +113,57 @@ def entities_list(entity_type):
         abort(404)
     
     config = ENTITY_CONFIG[entity_type]
-    
-    page = request.args.get('page', 1, type=int)
-    per_page = 20
-    
     all_data = config['parser']()
     
+    # Normalize 'type' for orgs
     if entity_type == 'orgs':
-        for org in all_data:
-            if not org.get('type'):
-                org['type'] = 'none'
-    
-    total = len(all_data)
+        for item in all_data:
+            if not item.get('type'):
+                item['type'] = 'none'
+
+    all_data = sorted(all_data, key=lambda x: x.get('name', '').lower())
+
+    selected_type = request.args.get('type', 'all')
+    filtered_data = all_data
+
+    # Always define org_types and place_types
+    org_types = []
+    place_types = []
+
+    if entity_type == 'orgs':
+        org_types = sorted(list(set(org.get('type', 'none') for org in all_data)))
+        if selected_type != 'all':
+            filtered_data = [org for org in all_data if org.get('type', 'none') == selected_type]
+    elif entity_type == 'places':
+        place_types = sorted(list(set(p.get('type', 'none') for p in all_data)))
+        if selected_type != 'all':
+            filtered_data = [p for p in all_data if p.get('type', 'none') == selected_type]
+
+    # Pagination for all entity types (old logic)
+    page = request.args.get('page', 1, type=int)
+    per_page = 12
+    total = len(filtered_data)
+    total_pages = int((total + per_page - 1) / per_page)
     start = (page - 1) * per_page
     end = start + per_page
-    paginated_data = all_data[start:end]
-    total_pages = int((total + per_page - 1) / per_page)
+    paginated_items = filtered_data[start:end]
     pagination_window = get_pagination_window(page, total_pages)
+
+    type_map_for_template = {}
+    if entity_type == 'orgs':
+        type_map_for_template = TYPE_MAP
+    elif entity_type == 'places':
+        type_map_for_template = TYPE_MAP.get('places', {})
     
     return render_template(
         'entities_list.html',
-        items=paginated_data,
-        all_items=all_data,
+        items=paginated_items,
         item_type=entity_type,
         title=config['title'],
-        type_map=TYPE_MAP if entity_type == 'orgs' else {},
+        org_types=org_types,
+        place_types=place_types,
+        selected_type=selected_type,
+        type_map=type_map_for_template,
         page=page,
         per_page=per_page,
         total=total,
@@ -165,7 +192,7 @@ def place_modal(entity_id):
     item = next((p for p in data if p['id'] == entity_id), None)
     if not item:
         return '', 404
-    return render_template('_place_modal.html', place=item)
+    return render_template('_place_modal.html', place=item, type_map=TYPE_MAP.get('places', {}))
 
 @app.route('/modal/<entity_type>/<entity_id>')
 def modal(entity_type, entity_id):
