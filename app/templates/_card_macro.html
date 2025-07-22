@@ -1,9 +1,21 @@
+{#
+    _card_macro.html
+    Contains the 'render_card' macro for rendering entity cards (orgs, people, places).
+    Parameters:
+      - item: The entity data dict
+      - index: The index of the item in the list
+      - item_type: 'orgs', 'people', or 'places'
+      - type_map: Mapping of type keys to display labels (optional)
+    Usage:
+      {% from '_card_macro.html' import render_card %}
+      {{ render_card(item, index, item_type, type_map) }}
+#}
 {% macro render_card(item, index, item_type, type_map={}) %}
 <div class="card org-card mb-4" 
      data-entity-id="{{ item.id }}" 
      data-entity-type="{{ item_type }}" 
      {% if item_type == 'orgs' %}data-org-index="{{ index }}"{% endif %}
-     style="cursor:pointer;">
+     style="cursor:pointer;" tabindex="0" role="button" aria-label="Dettagli {{ item_type }}: {{ item['org_names'][0]['name'] if item_type == 'orgs' and item['org_names'] and item['org_names'][0]['name'] else item['id'] }}">
     <div class="card-body d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-start mb-3">
             <!-- DEBUG: {{ item.type }} / {{ type_map[item.type] if item.type in type_map else 'NO MAP' }} -->
@@ -81,4 +93,4 @@
         </div>
     </div>
 </div>
-{% endmacro %} 
+{% endmacro %}

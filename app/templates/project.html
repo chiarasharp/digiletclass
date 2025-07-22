@@ -1,0 +1,28 @@
+{#
+  project.html
+  Project page template for DigiLetClass.
+  Extends layout.html. Shows project introduction, objectives, and team sections.
+#}
+{% extends 'layout.html' %}
+{% macro section(title, content) %}
+  <section>
+    <h3>{{ title }}</h3>
+    <p>{{ content }}</p>
+  </section>
+{% endmacro %}
+{% block content %}
+<div class="main-content-compact py-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb align-items-center">
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('main.home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Il Progetto</li>
+        </ol>
+    </nav>
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Il Progetto</h2>
+    {{ section('Introduzione', 'Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
+    {{ section('Obiettivi del Progetto', 'Descrizione del processo metodologico seguito. (Sostituisci questo testo con il contenuto reale.)') }}
+    {{ section('Team', 'Descrizione dei risultati attesi dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
+</div>
+{% endblock %}

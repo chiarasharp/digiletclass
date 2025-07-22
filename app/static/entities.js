@@ -1,5 +1,16 @@
+/*
+  entities.js
+  Main JavaScript for DigiLetClass entity UI logic.
+  - Handles modal loading and display for entities
+  - Initializes Bootstrap tooltips
+  - Handles card click events to open modals
+  - Toggles between card and table views
+  - Handles details button logic in tables
+*/
 function fetchAndShowModal(entityType, entityId) {
     if (!entityType || !entityId) return;
+    // Show spinner while loading
+    document.getElementById('entityModalBody').innerHTML = '<div class="d-flex justify-content-center align-items-center" style="height:150px;"><div class="spinner-border text-primary" role="status" aria-label="Caricamento..."><span class="visually-hidden">Caricamento...</span></div></div>';
     fetch(`/modal/${entityType}/${entityId}`)
         .then(response => {
             if (!response.ok) throw new Error('Not found');
@@ -66,4 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchAndShowModal('org', org.id);
         });
     });
-}); 
+});

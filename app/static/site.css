@@ -1,3 +1,10 @@
+/*
+  site.css
+  Main stylesheet for the DigiLetClass project.
+  - Defines color variables, fonts, and global styles
+  - Styles for layout, navbar, cards, badges, modals, pagination, buttons, and responsive design
+  - Organized by component/section for maintainability
+*/
 :root {
   --primary-color: #800020;
   --primary-color-dark: #4B0010;
@@ -532,6 +539,10 @@ html, body {
 .entity-search-filter-bar .btn-primary:hover {
   background: var(--primary-color-dark);
 }
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--primary-color-dark) !important;
+  border-color: var(--primary-color-dark) !important;
+}
 @media (max-width: 600px) {
   .entity-search-filter-bar {
     flex-direction: column;
@@ -551,4 +562,209 @@ html, body {
 .card .bi-geo-alt {
   color: #800020;
   margin-right: 0.3em;
+}
+
+/* === DigiLetClass Buttons: Modern Accessible Redesign === */
+.btn-digiletclass-main {
+  background: #800020;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  font-weight: 700;
+  padding: 0.7em 2em;
+  font-size: 1.08em;
+  box-shadow: 0 2px 8px rgba(128,0,32,0.10);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.08s;
+  outline: none;
+}
+.btn-digiletclass-main:hover, .btn-digiletclass-main:focus {
+  background: #4B0010;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(128,0,32,0.16);
+}
+.btn-digiletclass-main:active {
+  transform: scale(0.97);
+  background: #800020;
+}
+.btn-digiletclass-main:focus-visible {
+  outline: 3px solid #f3e9e1;
+  outline-offset: 2px;
+}
+
+.btn-digiletclass-outline {
+  background: #fff;
+  color: #800020;
+  border: 2px solid #800020;
+  border-radius: 0.7rem;
+  font-weight: 700;
+  padding: 0.7em 2em;
+  font-size: 1.08em;
+  box-shadow: none;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.08s;
+  outline: none;
+}
+.btn-digiletclass-outline:hover, .btn-digiletclass-outline:focus {
+  background: #f3e9e1;
+  color: #800020;
+  border-color: #4B0010;
+  box-shadow: 0 2px 12px rgba(128,0,32,0.10);
+}
+.btn-digiletclass-outline:active {
+  transform: scale(0.97);
+  border-color: #800020;
+}
+.btn-digiletclass-outline:focus-visible {
+  outline: 3px solid #f3e9e1;
+  outline-offset: 2px;
+}
+.home-root {
+  overflow-x: hidden;
+}
+
+.hero-section {
+  background: var(--primary-color-dark) !important;
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+}
+.hero-bg-img {
+  object-fit: cover;
+  opacity: 0.13;
+  z-index: 1;
+}
+.hero-overlay {
+  background: transparent;
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 1;
+}
+.hero-overlay-strong {
+  background: rgba(75,0,16,0.7);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 2;
+}
+.hero-section .hero-title, .hero-section .hero-lead {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+}
+
+.edizione-section {
+  background: var(--accent-color-light);
+  border-radius: 2rem;
+}
+.edizione-img {
+  max-width: 320px;
+  border-radius: 10px;
+  background: var(--bg-color);
+  padding: 0.7rem;
+}
+.edizione-title {
+  color: #800020;
+  font-size: 1.8rem;
+}
+
+.recap-section {
+  background: #f3e9e1 !important;
+  border-radius: 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+}
+.bg-white {
+  background: #fff !important;
+}
+
+.recap-card {
+  border-radius: 1.2rem;
+  background: #fff;
+  transition: box-shadow 0.2s, transform 0.2s;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+.recap-card-entities { background: #f3e9e1; }
+.recap-card-project { background: #fdfaf6; }
+.recap-card-methodology { background: #f3e9e1; }
+.recap-card-contact { background: #fdfaf6; }
+.recap-card:hover {
+  box-shadow: 0 8px 32px rgba(128,0,32,0.10);
+  transform: translateY(-4px) scale(1.02);
+  background: var(--accent-color-medium);
+}
+.recap-icon {
+  font-size: 2.7rem;
+  color: #800020;
+  background: #fff;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(128,0,32,0.07);
+}
+.recap-card-title {
+  color: #800020;
+}
+.recap-btn {
+  margin-top: auto;
+  font-size: 1.08em;
+  padding: 0.5em 1.5em;
+}
+
+@media (max-width: 991px) {
+  .recap-card { min-height: 260px; }
+}
+@media (max-width: 767px) {
+  .recap-section { border-radius: 1rem; }
+  .edizione-section { border-radius: 1rem; }
+  .recap-card { min-height: 0; }
+}
+section, .container-xl {
+  margin-bottom: 2.5rem !important;
+}
+
+.navbar-modern {
+  background: #f9f6f2;
+  box-shadow: 0 2px 16px rgba(128,0,32,0.07);
+  border-bottom: 1.5px solid #eaddd7;
+  min-height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+}
+.navbar-bg-img {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.28;
+  left: 0;
+  right: auto;
+  z-index: 0;
+  width: 320px;
+  min-width: 180px;
+  max-width: 40vw;
+  height: 100%;
+  background: url('../static/lettera-1.png') left center/cover no-repeat;
+}
+.navbar-modern .navbar-brand {
+  font-size: 2rem;
+  color: #800020 !important;
+  letter-spacing: 0.01em;
+  padding-right: 1.5rem;
+}
+.navbar-modern .navbar-nav .nav-link {
+  color: #4B0010 !important;
+  font-weight: 600;
+  font-family: 'B612', Arial, sans-serif;
+  font-size: 1.08em;
+  margin-left: 1.2rem;
+  transition: color 0.18s;
+}
+.navbar-modern .navbar-nav .nav-link.active, .navbar-modern .navbar-nav .nav-link:hover, .navbar-modern .navbar-nav .nav-link:focus {
+  color: #800020 !important;
+  text-decoration: underline;
+}
+
+.entity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
 }

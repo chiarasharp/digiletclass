@@ -1,3 +1,7 @@
 # Entry point for the application
-from . import app    # For application discovery by the 'flask' command.
-from . import views  # For import side-effects of setting up routes.
+from app import create_app  # Import the app factory
+
+app = create_app()  # For application discovery by the 'flask' command.
+
+if __name__ == "__main__":
+    app.run(debug=True)

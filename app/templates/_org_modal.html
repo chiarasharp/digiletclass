@@ -1,3 +1,9 @@
+{#
+  _org_modal.html
+  Modal template for displaying organization details in DigiLetClass.
+  Sections: main name, alternative names, identifiers, location details.
+  Used by the /modal/orgs/<id> endpoint and JS modal loader.
+#}
 {% set sections = [] %}
 {% if org.org_names and org.org_names|length > 1 %}
   {% set _ = sections.append({

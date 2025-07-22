@@ -6,10 +6,10 @@
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
             <li class="breadcrumb-item d-flex align-items-center">
-                <a href="{{ url_for('home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+                <a href="{{ url_for('main.home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
             </li>
             <li class="breadcrumb-item d-flex align-items-center">
-                <a href="{{ url_for('entities') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;">
+                <a href="{{ url_for('main.entities') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;">
                     <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
                 </a>
             </li>
@@ -25,7 +25,7 @@
     </h2>
     <div class="container-inner">
         <!-- Unified Search & Filter Bar -->
-        <form method="get" class="entity-search-filter-bar mb-4 d-flex flex-wrap align-items-center p-3" style="gap:1em; background:var(--accent-color-light); border-radius:1rem; box-shadow:0 2px 8px #e0e0e0;" aria-label="Filtri e ricerca">
+        <form method="get" class="entity-search-filter-bar mb-4 d-flex flex-wrap align-items-center p-3 responsive-filter-bar" style="gap:1em; background:var(--accent-color-light); border-radius:1rem; box-shadow:0 2px 8px #e0e0e0;" aria-label="Filtri e ricerca" role="search">
             {% if item_type == 'orgs' %}
                 <label for="typeFilter" class="form-label fw-bold mb-0 me-2" style="color:var(--primary-color);"><i class="bi bi-filter" aria-hidden="true"></i> <span>Tipo:</span></label>
                 <select id="typeFilter" name="type" class="form-select org-type-select w-auto me-2" style="min-width:160px;" onchange="this.form.submit()" aria-label="Filtra per tipo">
@@ -55,24 +55,23 @@
                 </select>
             {% endif %}
             <label for="searchInput" class="visually-hidden">Cerca</label>
-            <input type="text" id="searchInput" name="search" class="form-control" placeholder="Cerca..." value="{{ request.args.get('search', '') }}" style="max-width:300px; border-radius:0.5em; border:1px solid var(--primary-color);" aria-label="Cerca">
-            <button type="submit" class="btn btn-primary" style="background:var(--primary-color); border:none; border-radius:0.5em;" aria-label="Cerca">Cerca</button>
-            <a href="{{ url_for('entities_list', entity_type=item_type) }}" class="btn btn-outline-secondary ms-2" style="border-radius:0.5em;" aria-label="Reset filtri e ricerca">Reset</a>
-            <button class="btn btn-link ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters" style="color:var(--primary-color); font-weight:600; text-decoration:underline;" aria-label="Mostra filtri avanzati">Filtri avanzati</button>
-        
+            <input type="text" id="searchInput" name="search" class="form-control flex-grow-1 min-w-0" placeholder="Cerca..." value="{{ request.args.get('search', '') }}" style="max-width:300px; border-radius:0.5em; border:1px solid var(--primary-color);" aria-label="Cerca">
+            <button type="submit" class="btn btn-primary flex-shrink-0" style="background:var(--primary-color); border:none; border-radius:0.5em;" aria-label="Cerca">Cerca</button>
+            <a href="{{ url_for('main.entities_list', entity_type=item_type) }}" class="btn btn-outline-secondary ms-2 flex-shrink-0" style="border-radius:0.5em;" aria-label="Reset filtri e ricerca">Reset</a>
+            <button class="btn btn-link ms-2 flex-shrink-0" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters" style="color:var(--primary-color); font-weight:600; text-decoration:underline;" aria-label="Mostra filtri avanzati">Filtri avanzati</button>
             <div class="collapse w-100 mt-3" id="advancedFilters">
                 <div class="row w-100 g-2">
                     {% if item_type == 'orgs' %}
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-12">
                             <label for="orgCountry" class="form-label">Nazione</label>
                             <input type="text" name="country" id="orgCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-12">
                             <label for="orgSettlement" class="form-label">Città/Località</label>
                             <input type="text" name="settlement" id="orgSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
                         </div>
                     {% elif item_type == 'people' %}
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-12">
                             <label for="sex" class="form-label">Sesso</label>
                             <select name="sex" id="sex" class="form-select" aria-label="Filtra per sesso">
                                 <option value="">Tutti</option>
@@ -80,20 +79,20 @@
                                 <option value="f" {% if request.args.get('sex') == 'f' %}selected{% endif %}>Femmina</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-12">
                             <label for="birth_from" class="form-label">Nato dopo (anno)</label>
                             <input type="number" name="birth_from" id="birth_from" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_from', '') }}" aria-label="Nato dopo l'anno">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-12">
                             <label for="birth_to" class="form-label">Nato prima (anno)</label>
                             <input type="number" name="birth_to" id="birth_to" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_to', '') }}" aria-label="Nato prima dell'anno">
                         </div>
                     {% elif item_type == 'places' %}
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-12">
                             <label for="placeCountry" class="form-label">Nazione</label>
                             <input type="text" name="country" id="placeCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-12">
                             <label for="placeSettlement" class="form-label">Città/Località</label>
                             <input type="text" name="settlement" id="placeSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
                         </div>
@@ -110,33 +109,30 @@
         </div>
         {% endif %}
 
-        <div class="card-container">
+        <div class="card-container" role="list" aria-label="Elenco entità">
             {% for item in items %}
             {{ render_card(item, loop.index0, item_type, type_map) }}
             {% endfor %}
         </div>
 
         {# Pagination Controls #}
-        <nav aria-label="Page navigation" class="mt-5">
-            <ul class="pagination justify-content-center">
+        <nav aria-label="Navigazione pagine" class="mt-5">
+            <ul class="pagination justify-content-center" role="navigation" aria-label="Paginazione">
                 {% set total_pages = (total / per_page)|round(0, 'ceil')|int %}
-                
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page-1, type=selected_type) if page > 1 else '#' }}">Precedente</a>
+                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page-1, type=selected_type) if page > 1 else '#' }}">Precedente</a>
                 </li>
-                
                 {% for p in pagination_window %}
                     {% if p %}
                         <li class="page-item {% if p == page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=p, type=selected_type) }}">{{ p }}</a>
+                            <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=p, type=selected_type) }}">{{ p }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
                     {% endif %}
                 {% endfor %}
-                
                 <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('entities_list', entity_type=item_type, page=page+1, type=selected_type) if page < total_pages else '#' }}">Successivo</a>
+                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page+1, type=selected_type) if page < total_pages else '#' }}">Successivo</a>
                 </li>
             </ul>
         </nav>
@@ -159,11 +155,7 @@
 </div>
 
 <script type="text/javascript">
-  window.itemsData = {{ items|tojson|safe }};
-  {% if item_type == 'orgs' %}
-    window.orgsData = window.itemsData;
-  {% endif %}
+window.itemsData = {{ items|tojson|safe }};
 </script>
-
 <script src="{{ url_for('static', filename='entities.js') }}"></script>
-{% endblock %} 
+{% endblock %}

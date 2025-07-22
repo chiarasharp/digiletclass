@@ -1,10 +1,27 @@
+{#
+  entities.html
+  Entities landing page for DigiLetClass.
+  Extends layout.html. Shows cards for each entity type (orgs, people, places).
+#}
 {% extends 'layout.html' %}
+{% macro entity_card(icon, title, description, url) %}
+  <div class="col-md-4 mb-4">
+      <div class="card h-100 entity-card">
+          <div class="card-body text-center d-flex flex-column">
+              <i class="bi {{ icon }}" style="font-size: 3rem; color: var(--primary-color);"></i>
+              <h5 class="card-title mt-3">{{ title }}</h5>
+              <p class="card-text text-muted small">{{ description }}</p>
+              <a href="{{ url }}" class="btn btn-sm btn-primary mt-auto stretched-link" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Consulta l'indice</a>
+          </div>
+      </div>
+  </div>
+{% endmacro %}
 {% block content %}
 <div class="main-content-compact py-5">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
             <li class="breadcrumb-item d-flex align-items-center">
-                <a href="{{ url_for('home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+                <a href="{{ url_for('main.home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
             </li>
             <li class="breadcrumb-item active d-flex align-items-center" aria-current="page">
                 <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
@@ -14,43 +31,9 @@
     <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Indici</h2>
 
 <div class="row justify-content-center">
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center d-flex flex-column">
-                <i class="bi bi-diagram-3" style="font-size: 3rem; color: var(--primary-color);"></i>
-                <h5 class="card-title mt-3">Organizzazioni</h5>
-                <p class="card-text text-muted small">Enti ecclesiastici e culturali, famiglie, e altre istituzioni storiche.</p>
-                <a href="{{ url_for('entities_list', entity_type='orgs') }}" class="btn btn-sm btn-primary mt-auto stretched-link" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Consulta l'indice</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center d-flex flex-column">
-                <i class="bi bi-people" style="font-size: 3rem; color: var(--primary-color);"></i>
-                <h5 class="card-title mt-3">Persone</h5>
-                <p class="card-text text-muted small">Esplora l'indice delle persone citate nei documenti.</p>
-                <a href="{{ url_for('entities_list', entity_type='people') }}" class="btn btn-sm btn-primary mt-auto stretched-link" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Consulta l'indice</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center d-flex flex-column">
-                <i class="bi bi-geo-alt" style="font-size: 3rem; color: var(--primary-color);"></i>
-                <h5 class="card-title mt-3">Luoghi</h5>
-                <p class="card-text text-muted small">Esplora l'indice dei luoghi menzionati.</p>
-                <a href="{{ url_for('entities_list', entity_type='places') }}" class="btn btn-sm btn-primary mt-auto stretched-link" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Consulta l'indice</a>
-            </div>
-        </div>
-    </div>
+    {{ entity_card('bi-diagram-3', 'Organizzazioni', "Enti ecclesiastici e culturali, famiglie, e altre istituzioni storiche.", url_for('main.entities_list', entity_type='orgs')) }}
+    {{ entity_card('bi-people', 'Persone', "Esplora l'indice delle persone citate nei documenti.", url_for('main.entities_list', entity_type='people')) }}
+    {{ entity_card('bi-geo-alt', 'Luoghi', "Esplora l'indice dei luoghi menzionati.", url_for('main.entities_list', entity_type='places')) }}
 </div>
 </div>
-
-<style>
-.entity-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
-}
-</style>
-{% endblock %} 
+{% endblock %}
