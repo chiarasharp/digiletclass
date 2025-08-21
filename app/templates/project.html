@@ -4,6 +4,7 @@
   Extends layout.html. Shows project introduction, objectives, and team sections.
 #}
 {% extends 'layout.html' %}
+{% block title %}DigiLetClass — Il Progetto{% endblock %}
 {% macro section(title, content) %}
   <section>
     <h3>{{ title }}</h3>
@@ -24,5 +25,6 @@
     {{ section('Introduzione', 'Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
     {{ section('Obiettivi del Progetto', 'Descrizione del processo metodologico seguito. (Sostituisci questo testo con il contenuto reale.)') }}
     {{ section('Team', 'Descrizione dei risultati attesi dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
+    {{ section('Bibliografia', 'Sezione dedicata alla bibliografia specifica del progetto. (Sostituisci questo testo con la bibliografia reale.)') }}
 </div>
 {% endblock %}

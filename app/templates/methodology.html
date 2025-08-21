@@ -4,6 +4,7 @@
   Extends layout.html. Shows methodology introduction, process, and expected results sections.
 #}
 {% extends 'layout.html' %}
+{% block title %}DigiLetClass — Metodologia{% endblock %}
 {% macro section(title, content) %}
   <section>
     <h3>{{ title }}</h3>
@@ -20,9 +21,22 @@
             <li class="breadcrumb-item active" aria-current="page">Metodologia</li>
         </ol>
     </nav>
-    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Metodologia</h2>
-    {{ section('Introduzione', 'Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
-    {{ section('Processo', 'Descrizione del processo metodologico seguito. (Sostituisci questo testo con il contenuto reale.)') }}
-    {{ section('Risultati Attesi', 'Descrizione dei risultati attesi dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">La Metodologia</h2>
+    <section id="introduzione">
+      <h3>Introduzione</h3>
+      <p>Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)</p>
+    </section>
+    <section id="trascrizione">
+      <h3>La trascrizione</h3>
+      <p>Descrizione della metodologia per la trascrizione. (Sostituisci questo testo con il contenuto reale.)</p>
+    </section>
+    <section id="individuazione">
+      <h3>L’individuazione delle entità</h3>
+      <p>Descrizione della metodologia per l’individuazione delle entità. (Sostituisci questo testo con il contenuto reale.)</p>
+    </section>
+    <section id="marcatura">
+      <h3>La marcatura TEI</h3>
+      <p>Descrizione della metodologia per la marcatura. (Sostituisci questo testo con il contenuto reale.)</p>
+    </section>
 </div>
 {% endblock %}

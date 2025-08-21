@@ -7,6 +7,7 @@ Utility functions for parsing XML data, formatting dates, filtering entities, an
 - Modal context construction
 """
 import os
+import json
 from lxml import etree
 from functools import reduce
 
@@ -28,6 +29,18 @@ def parse_xml(file_name):
         print(f"Invalid XML format in {file_path}: {e}")
     except Exception as e:
         print(f"Error parsing file {file_path}: {e}")
+    
+def load_json(file_name):
+    """
+    Load a JSON file from the data folder and return its parsed content.
+    """
+    file_path = os.path.join(os.path.dirname(__file__), DATA_FOLDER, file_name)
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading JSON file {file_path}: {e}")
+        return []
 
 def parse_idnos(element):
     """

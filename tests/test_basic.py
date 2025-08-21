@@ -34,9 +34,11 @@ def test_entities_places(client):
     assert b"Luoghi" in response.data or b"place" in response.data
 
 def test_modal_orgs(client):
-    # This test assumes at least one org exists with id '1'. Adjust as needed.
-    response = client.get('/modal/orgs/1')
-    assert response.status_code in (200, 404)  # 404 if not found, 200 if found
+    org_id = get_first_entity_id(client, "orgs")
+    if not org_id:
+        pytest.skip("No orgs found to test modal.")
+    response = client.get(f"/modal/orgs/{org_id}")
+    assert response.status_code in (200, 404)
 
 def test_modal_people(client):
     response = client.get('/modal/people/1')
@@ -132,26 +134,72 @@ def test_entities_orgs_type_filter_content(client):
     match = re.search(rb'data-entity-id="[^"]+".*?badge-type.*?>([^<]+)<', resp.data, re.DOTALL)
     if not match:
         pytest.skip("No org type found to test filter.")
-    org_type = match.group(1).decode().strip()
-    # Map Italian label back to type key if possible (skip if not found)
-    # For now, just use the label as is
-    resp = client.get(f"/entities/orgs?type={org_type}")
+    org_type_label = match.group(1).decode().strip()
+    # Note: Ideally, we would map the label to the type key, but if not possible, we use the label as is.
+    resp = client.get(f"/entities/orgs?type={org_type_label}")
     assert resp.status_code == 200
     # All cards should have the same type label
     for m in re.finditer(rb'badge-type.*?>([^<]+)<', resp.data):
-        assert m.group(1).decode().strip() == org_type
+        assert m.group(1).decode().strip() == org_type_label
 
 def test_entities_people_sex_filter_content(client):
-    for sex in ["male", "female"]:
+    for sex, label in [("m", "maschile"), ("f", "femminile")]:
         resp = client.get(f"/entities/people?sex={sex}")
         assert resp.status_code == 200
-        # All cards should mention the correct sex if present
-        # (This is a weak check, as sex is not always shown in the card)
+        html = resp.data.decode()
+        # Find all entity ids in the filtered list
+        matches = list(re.finditer(r'data-entity-id="([^"]+)"', html))
+        if not matches:
+            pytest.skip(f"No people cards with sex '{sex}' found to check.")
+        for m in matches:
+            person_id = m.group(1)
+            modal_resp = client.get(f"/modal/people/{person_id}")
+            assert modal_resp.status_code == 200
+            modal_html = modal_resp.data.decode().lower()
+            assert label in modal_html
 
 def test_entities_places_country_filter_content(client):
-    # Use a known country from the data
     country = "IT"
     resp = client.get(f"/entities/places?country={country}")
     assert resp.status_code == 200
     # All cards should mention the country
     assert country in resp.data.decode()
+
+
+# === News & Events ===
+def test_news_index_page(client):
+    resp = client.get('/news')
+    assert resp.status_code == 200
+    html = resp.data.decode()
+    assert ('Notizie ed Eventi' in html) or ('Le Notizie ed Eventi' in html)
+
+
+def test_news_detail_page_existing(client):
+    # Uses sample data id from app/data/news.json
+    resp = client.get('/news/2025-01-kickoff')
+    assert resp.status_code == 200
+    assert 'Avvio del progetto DigiLetClass' in resp.data.decode()
+
+
+def test_news_detail_page_missing(client):
+    resp = client.get('/news/nonexistent-id')
+    assert resp.status_code == 404
+
+
+def test_home_has_news_preview(client):
+    resp = client.get('/')
+    assert resp.status_code == 200
+    html = resp.data.decode()
+    # Check presence of section heading or known news title
+    assert ('Notizie ed Eventi' in html) or ('Avvio del progetto DigiLetClass' in html)
+
+
+def test_page_titles_include_brand(client):
+    endpoints = ['/', '/project', '/methodology', '/entities/orgs', '/news']
+    for ep in endpoints:
+        resp = client.get(ep)
+        assert resp.status_code == 200
+        m = re.search(r'<title>(.*?)</title>', resp.data.decode(), re.IGNORECASE | re.DOTALL)
+        assert m, f"Missing <title> tag on {ep}"
+        title_text = m.group(1)
+        assert 'DigiLetClass' in title_text

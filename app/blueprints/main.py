@@ -1,14 +1,20 @@
 from flask import Blueprint, render_template, request, abort
 from datetime import datetime
 from app.config.entities import ENTITY_CONFIG, TYPE_MAP
-from app.utils import get_pagination_window, get_entity_modal_context, filter_entities_by_search, filter_and_paginate_entities
+from app.utils import get_pagination_window, get_entity_modal_context, filter_entities_by_search, filter_and_paginate_entities, load_json
 
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route("/")
 def home():
     """Render the home page."""
-    return render_template("home.html")
+    recent_news = load_json('news.json') or []
+    try:
+        recent_news.sort(key=lambda e: e.get('date', ''), reverse=True)
+    except Exception:
+        pass
+    recent_news = recent_news[:3]
+    return render_template("home.html", recent_news=recent_news)
 
 @main_bp.route("/about/")
 def about():
@@ -63,3 +69,23 @@ def methodology():
 def project():
     """Render the project page."""
     return render_template('project.html')
+
+@main_bp.route('/news')
+def news():
+    """Render the news and events page."""
+    entries = load_json('news.json') or []
+    # Sort by date desc
+    try:
+        entries.sort(key=lambda e: e.get('date', ''), reverse=True)
+    except Exception:
+        pass
+    return render_template('news.html', entries=entries)
+
+@main_bp.route('/news/<string:news_id>')
+def news_detail(news_id):
+    """Render a single news/event detail page."""
+    entries = load_json('news.json') or []
+    entry = next((e for e in entries if e.get('id') == news_id), None)
+    if not entry:
+        abort(404)
+    return render_template('news_detail.html', item=entry)

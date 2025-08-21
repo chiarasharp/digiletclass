@@ -1,0 +1,16 @@
+[
+  {
+    "id": "2025-01-kickoff",
+    "date": "2025-01-15",
+    "title": "Avvio del progetto DigiLetClass",
+    "summary": "Inizia ufficialmente il progetto per la digitalizzazione e lo studio del carteggio Canneti–Fiacchi.",
+    "url": null
+  },
+  {
+    "id": "2025-03-workshop",
+    "date": "2025-03-10",
+    "title": "Workshop: Metodologie TEI per epistolari",
+    "summary": "Laboratorio aperto sulle pratiche di trascrizione, marcatura e normalizzazione dei dati.",
+    "url": "https://example.org/workshop-tei"
+  }
+]

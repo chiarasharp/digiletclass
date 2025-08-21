@@ -4,6 +4,7 @@
   Extends layout.html. Shows cards for each entity type (orgs, people, places).
 #}
 {% extends 'layout.html' %}
+{% block title %}DigiLetClass — Entità{% endblock %}
 {% macro entity_card(icon, title, description, url) %}
   <div class="col-md-4 mb-4">
       <div class="card h-100 entity-card">
@@ -24,16 +25,16 @@
                 <a href="{{ url_for('main.home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
             </li>
             <li class="breadcrumb-item active d-flex align-items-center" aria-current="page">
-                <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
+                <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici delle Entità
             </li>
         </ol>
     </nav>
-    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Indici</h2>
+    <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Gli Indici delle Entità</h2>
 
 <div class="row justify-content-center">
     {{ entity_card('bi-diagram-3', 'Organizzazioni', "Enti ecclesiastici e culturali, famiglie, e altre istituzioni storiche.", url_for('main.entities_list', entity_type='orgs')) }}
-    {{ entity_card('bi-people', 'Persone', "Esplora l'indice delle persone citate nei documenti.", url_for('main.entities_list', entity_type='people')) }}
-    {{ entity_card('bi-geo-alt', 'Luoghi', "Esplora l'indice dei luoghi menzionati.", url_for('main.entities_list', entity_type='places')) }}
+    {{ entity_card('bi-people', 'Persone', "Religiosi, letterati, studiosi, artisti, nobili e altre figure della società.", url_for('main.entities_list', entity_type='people')) }}
+    {{ entity_card('bi-geo-alt', 'Luoghi', "Città, paesi, territori e località di rilievo storico e geografico.", url_for('main.entities_list', entity_type='places')) }}
 </div>
 </div>
 {% endblock %}

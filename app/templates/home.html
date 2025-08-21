@@ -4,7 +4,7 @@
   Extends layout.html. Contains hero, digital edition, and recap sections.
 #}
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}DigiLetClass — Home{% endblock %}
 {% block content %}
 <div class="home-root">
     <!-- HERO SECTION WITH SIMPLE OVERLAY -->
@@ -14,7 +14,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-12 col-lg-8 text-center">
                     <h1 class="display-1 baskervville-regular fw-bold mb-3 text-white hero-title">DigiLetClass</h1>
-                    <p class="lead fs-2 mb-4 text-white hero-lead">Digitalizzazione e studio delle lettere classiche: esplora dati, connessioni e persone.</p>
+                    <p class="lead fs-2 mb-4 text-white hero-lead">DigiLet Class è il progetto di ricerca che dal 2022 lavora sul carteggio di Pietro Canneti e Mariangelo Fiacchi: oltre seicento lettere che raccontano la costruzione della Biblioteca Classense e che oggi, grazie a un’edizione scientifica digitale, diventano patrimonio condiviso.</p>
                     <a href="#explore" class="btn btn-sm btn-primary px-5 py-3 fw-bold mt-3" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Scopri di più</a>
                 </div>
             </div>
@@ -24,14 +24,15 @@
     <section class="container-xl px-4 px-md-5 py-5 mb-5 edizione-section bg-white">
         <div class="row align-items-center g-4">
             <div class="col-12 col-md-5 text-center mb-4 mb-md-0">
-                <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" rel="noopener" aria-label="Vai all'Edizione Digitale Canneti-Fiacchi">
+                <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" rel="noopener" aria-label="Vai all'Edizione Digitale Canneti-Fiacchi" class="edizione-link">
                     <img src="{{ url_for('static', filename='edizione-digitale.png') }}" alt="Schermata Edizione Digitale Canneti-Fiacchi" class="img-fluid shadow edizione-img" style="max-width:480px; width:100%; border-radius: 14px; border: 2px solid #eaddd7; background: #fff;">
+                    <span class="edizione-hover-cue"><span class="cue-pill"><i class="bi bi-box-arrow-up-right"></i><span>Apri il sito</span></span></span>
                 </a>
             </div>
             <div class="col-12 col-md-7">
                 <div class="card border-0 shadow-sm p-4 h-100 d-flex flex-column justify-content-center" style="background: #f9f6f2;">
                     <h2 class="baskervville-regular fw-bold mb-3 edizione-title">Edizione Digitale del Carteggio Canneti-Fiacchi</h2>
-                    <p class="fs-5 mb-4">Consulta l'edizione digitale delle lettere di Canneti e Fiacchi, a cura dell'Università di Bologna. Clicca sull'immagine per accedere direttamente al sito.</p>
+                    <p class="fs-5 mb-4">Consulta l'edizione digitale delle lettere di Canneti e Fiacchi, a cura del Laboratorio LUDI dell'Università di Bologna.</p>
                     <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" rel="noopener" class="btn btn-sm btn-primary px-4 py-2 fw-bold align-self-start" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai all'Edizione Digitale</a>
                 </div>
             </div>
@@ -49,16 +50,6 @@
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="card h-100 shadow-sm border-0 text-center py-4 recap-card bg-white">
                     <div class="card-body d-flex flex-column align-items-center">
-                        <div class="recap-icon mb-3" style="color:#800020;"><i class="bi bi-search"></i></div>
-                        <h3 class="h5 fw-bold mb-3 baskervville-regular recap-card-title" style="color:#800020;">Entità</h3>
-                        <p>Indici di persone, luoghi e organizzazioni citate nelle lettere.</p>
-                        <a href="{{ url_for('main.entities_list', entity_type='people') }}" class="btn btn-sm btn-primary recap-btn" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai alle Entità</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 shadow-sm border-0 text-center py-4 recap-card bg-white">
-                    <div class="card-body d-flex flex-column align-items-center">
                         <div class="recap-icon mb-3" style="color:#800020;"><i class="bi bi-info-circle"></i></div>
                         <h3 class="h5 fw-bold mb-3 baskervville-regular recap-card-title" style="color:#800020;">Il Progetto</h3>
                         <p>Storia, obiettivi e team dietro DigiLetClass.</p>
@@ -71,12 +62,50 @@
                     <div class="card-body d-flex flex-column align-items-center">
                         <div class="recap-icon mb-3" style="color:#800020;"><i class="bi bi-gear"></i></div>
                         <h3 class="h5 fw-bold mb-3 baskervville-regular recap-card-title" style="color:#800020;">Metodologia</h3>
-                        <p>Approfondisci la metodologia adottata per la digitalizzazione e l'analisi.</p>
+                        <p>La metodologia adottata durante la realizzazione dell'edizione digitale.</p>
                         <a href="{{ url_for('main.methodology') }}" class="btn btn-sm btn-primary recap-btn" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Metodologia</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 text-center py-4 recap-card bg-white">
+                    <div class="card-body d-flex flex-column align-items-center">
+                        <div class="recap-icon mb-3" style="color:#800020;"><i class="bi bi-search"></i></div>
+                        <h3 class="h5 fw-bold mb-3 baskervville-regular recap-card-title" style="color:#800020;">Entità</h3>
+                        <p>Indici di persone, luoghi e organizzazioni citate nelle lettere.</p>
+                        <a href="{{ url_for('main.entities_list', entity_type='people') }}" class="btn btn-sm btn-primary recap-btn" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai alle Entità</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- NOTIZIE ED EVENTI PREVIEW -->
+    {% if recent_news %}
+    <section class="container-xl px-4 px-md-5 py-5 mb-5 bg-white" aria-labelledby="newsPreviewTitle">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mb-4">
+                <h2 id="newsPreviewTitle" class="baskervville-regular fw-bold display-5 recap-title" style="color:#800020;">Notizie ed Eventi</h2>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for item in recent_news %}
+            <div class="col-12 col-md-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="h5 baskervville-regular mb-2">{{ item.title }}</h3>
+                        <small class="text-muted mb-2">{{ item.date }}</small>
+                        <p class="mb-3">{{ item.summary }}</p>
+                        <a href="{{ url_for('main.news_detail', news_id=item.id) }}" class="mt-auto btn btn-sm btn-primary" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Leggi</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('main.news') }}" class="btn btn-sm btn-primary" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai a tutte le Notizie ed Eventi</a>
+        </div>
+    </section>
+    {% endif %}
 </div>
 {% endblock %}

@@ -8,18 +8,18 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}DigiLetClass{% endblock %}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css', v=range(1)|length) }}" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-modern sticky-top mb-4 position-relative">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-modern sticky-top mb-4 position-relative">
             <div class="container-fluid position-relative" style="z-index:1;">
                 <div class="navbar-bg-img position-absolute top-0 end-0 h-100"></div>
                 <a class="navbar-brand fw-bold fs-2 baskervville-regular" href="{{ url_for('main.home') }}">DigiLetClass</a>
@@ -28,10 +28,35 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}" href="{{ url_for('main.home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.project' %}active{% endif %}" href="{{ url_for('main.project') }}">Il Progetto</a></li>
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.methodology' %}active{% endif %}" href="{{ url_for('main.methodology') }}">La Metodologia</a></li>
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.entities' %}active{% endif %}" href="{{ url_for('main.entities') }}">Le Entità</a></li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle {% if request.endpoint == 'main.project' %}active{% endif %}" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Il Progetto</a>
+                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="projectDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Introduzione</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Obiettivi del Progetto</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Team</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Bibliografia</a></li>
+                          </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle {% if request.endpoint == 'main.methodology' %}active{% endif %}" href="#" id="methodologyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">La Metodologia</a>
+                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="methodologyDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.methodology') }}#introduzione">Introduzione</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.methodology') }}#trascrizione">La trascrizione</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.methodology') }}#individuazione">L’individuazione delle entità</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.methodology') }}#marcatura">La marcatura TEI</a></li>
+                          </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle {% if request.endpoint == 'main.entities' %}active{% endif %}" href="#" id="entitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Le Entità</a>
+                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="entitiesDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='people') }}">Persone</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='places') }}">Luoghi</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='orgs') }}">Organizzazioni</a></li>
+                          </ul>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link {% if request.endpoint == 'main.news' %}active{% endif %}" href="{{ url_for('main.news') }}">Le Notizie</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -41,34 +66,27 @@
             {% endblock %}
         </div>
 
-        <footer class="footer-custom bg-light pt-5 pb-4 b612-font">
+        <footer class="footer-custom bg-light pt-4 pb-3 b612-font small">
             <div class="container text-center text-md-start">
-                <div class="row">
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
-                        <h6 class="text-uppercase fw-bold">DigiLetClass</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
-                        <p>
-                            Un progetto per la digitalizzazione e lo studio delle lettere classiche. Esplora i nostri indici per scoprire le connessioni tra persone, luoghi e organizzazioni.
-                        </p>
+                <div class="row g-4 align-items-start">
+                    <div class="col-12 col-md-6 mb-3 text-start">
+                        <h6 class="text-uppercase fw-bold mb-2">Risorse</h6>
+                        <hr class="mb-3 mt-0 d-inline-block mx-0" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
+                        <p class="mb-1"><a href="https://esdcarteggiocannetifiacchi.unibo.it/" class="text-dark text-decoration-none">ESD Carteggio Canneti-Fiacchi</a></p>
+                        <p class="mb-1"><a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-esd" class="text-dark text-decoration-none">Repository GitHub ESD Carteggio Canneti-Fiacchi</a></p>
+                        <p class="mb-1">Dataset TEI Carteggio Canneti-Fiacchi: <a href="https://doi.org/10.5281/zenodo.14234727" class="text-dark text-decoration-none">Zenodo</a>, <a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-data" class="text-dark text-decoration-none">GitHub</a></p>
                     </div>
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-4">
-                        <h6 class="text-uppercase fw-bold">Risorse</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
-                        <p><a href="#!" class="text-dark text-decoration-none">Edizione Digitale Canneti-Fiacchi</a></p>
-                        <p><a href="#!" class="text-dark text-decoration-none">Dati su Zenodo</a></p>
-                        <p><a href="{{ url_for('main.project') }}" class="text-dark text-decoration-none">Il Progetto</a></p>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <h6 class="text-uppercase fw-bold">Finanziamenti</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
-                        <p>Progetto finanziato dal PNRR.</p>
-                        <img src="{{ url_for('static', filename='testata-pnrr.png') }}" alt="Logo PNRR" class="img-fluid" style="max-width: 250px;">
+                    <div class="col-12 col-md-6 mb-md-0 mb-3 text-start">
+                        <h6 class="text-uppercase fw-bold mb-2">Crediti</h6>
+                        <hr class="mb-3 mt-0 d-inline-block mx-0" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
+                        <p class="mb-2">Progetto a cura del Laboratorio LUDI dell’Università di Bologna e dell'Istituzione Biblioteca Classense.</p>
+                        <p class="mb-2">Progetto PE 0000020 CHANGES — CUP J33C22002850006 — PNRR M4C2 I1.3, finanziato dall’Unione europea — NextGenerationEU.</p>
+                        <img src="{{ url_for('static', filename='testata-pnrr.png') }}" alt="Logo PNRR" class="footer-credits-logo img-fluid">
                     </div>
                 </div>
             </div>
-            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-                © 2025 Copyright:
-                <a class="text-dark fw-bold text-decoration-none" href="#">DigiLetClass.it</a>
+            <div class="text-center p-2 small" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2025 DigiLetClass — Contenuti disponibili con licenza <a class="text-dark fw-bold text-decoration-none" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a>
             </div>
         </footer>
 
