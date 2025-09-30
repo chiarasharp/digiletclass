@@ -1,18 +1,26 @@
-{#
-  project.html
-  Project page template for DigiLetClass.
-  Extends layout.html. Shows project introduction, objectives, and team sections.
-#}
 {% extends 'layout.html' %}
 {% block title %}DigiLetClass — Il Progetto{% endblock %}
-{% macro section(title, content) %}
-  <section>
-    <h3>{{ title }}</h3>
-    <p>{{ content }}</p>
-  </section>
-{% endmacro %}
 {% block content %}
 <div class="main-content-compact py-5">
+    <style>
+        .project-content p {
+            text-align: justify;
+        }
+        .project-content strong {
+            color: #800020;
+        }
+        .project-content h4 {
+            color: #800020;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .project-content ul {
+            margin-bottom: 1.5rem;
+        }
+        .project-content section {
+            margin-bottom: 3rem;
+        }
+    </style>
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
             <li class="breadcrumb-item d-flex align-items-center">
@@ -22,9 +30,57 @@
         </ol>
     </nav>
     <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Il Progetto</h2>
-    {{ section('Introduzione', 'Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
-    {{ section('Obiettivi del Progetto', 'Descrizione del processo metodologico seguito. (Sostituisci questo testo con il contenuto reale.)') }}
-    {{ section('Team', 'Descrizione dei risultati attesi dal progetto. (Sostituisci questo testo con il contenuto reale.)') }}
-    {{ section('Bibliografia', 'Sezione dedicata alla bibliografia specifica del progetto. (Sostituisci questo testo con la bibliografia reale.)') }}
+
+    <div class="project-content">
+        <section id="descrizione">
+            <p>Il progetto <strong>DigiLet Class (Digitizing Letters of Classense Library)</strong> si propone di valorizzare uno dei patrimoni epistolari più rilevanti della <strong>Biblioteca Classense di Ravenna</strong>: il carteggio tra i monaci camaldolesi <strong>Pietro Canneti</strong> e <strong>Mariangelo Fiacchi</strong>, intercorso negli anni <strong>1711-1730</strong>. Nato nel 2023 dalla collaborazione tra il <strong>Laboratorio LUDI</strong> del Dipartimento di Beni Culturali dell'Università di Bologna e l'<strong>Istituzione Biblioteca Classense</strong>, il progetto ha come obiettivo la realizzazione di un'<strong>edizione scientifica digitale</strong> di questo corpus epistolare.</p>
+
+            <p>Il carteggio, composto complessivamente da <strong>624 lettere</strong>, rappresenta una fonte documentaria di eccezionale importanza per la storia della Biblioteca Classense, per lo studio delle reti intellettuali settecentesche, per la storia delle biblioteche e del commercio librario italiano del XVIII secolo. Le lettere testimoniano non solo la costituzione della Biblioteca stessa, ma anche i fitti rapporti culturali, bibliografici e personali tra due figure centrali nella vita intellettuale del tempo.</p>
+
+            <p>Attraverso l'applicazione delle metodologie proprie dell'<strong>umanistica digitale</strong> e l'utilizzo dello standard <strong>TEI (Text Encoding Initiative)</strong> per la codifica testuale, il progetto mira a creare uno strumento di ricerca innovativo che permetta la consultazione, l'analisi e lo studio approfondito di questo prezioso materiale manoscritto.</p>
+        </section>
+
+        <section id="finanziamento">
+            <h3>Finanziamento</h3>
+            <p>Progetto a cura del <strong>Laboratorio LUDI</strong> del Dipartimento di Beni Culturali dell'Università di Bologna insieme all'<strong>Istituzione Biblioteca Classense</strong>.</p>
+
+            <p>Progetto <strong>PE 0000020 CHANGES</strong> - CUP [J33C22002850006], PNRR Missione 4 Componente 2 Investimento 1.3, finanziato dall'Unione europea – NextGenerationEU.</p>
+        </section>
+
+        <section id="team">
+            <h3>Team</h3>
+            <ul>
+                <li><strong>Responsabile scientifico:</strong> Fiammetta Sabba</li>
+                <li><strong>Referente tecnico-scientifico per lo sviluppo dell'edizione digitale:</strong> Chiara Manca</li>
+                <li><strong>Referenti tecnico-scientifici per trascrizione e controlli bibliografici:</strong> Bianca Sorbara, Silvia Tripodi, Elisa Bianchi</li>
+                <li><strong>Referenti Istituzione Biblioteca Classense:</strong> Silvia Masi, Eloisa Gennaro</li>
+                <li><strong>Referente tecnico-scientifico per controlli bibliografici sui manoscritti:</strong> Floriana Amicucci</li>
+                <li><strong>Referenti tecnici di progetto di digitalizzazione Istituzione Biblioteca Classense:</strong> Giulia Chiechio, Fausto Fiasconaro, Edoardo Massa</li>
+                <li><strong>Collaborazione per trascrizione e controllo bibliografico:</strong> Elisa Bianchi, Vittorio Davide Bionda, Danilo Casiddu, Arianna Collari, Simone Lonati, Maria Chiara Longo, Marco Antonio Lugnan, Francesca Nepori, Francesca Fano</li>
+                <li><strong>Collaborazione per digitalizzazione:</strong> Maria Calini, Martina Zanelli</li>
+            </ul>
+        </section>
+
+        <section id="bibliografia">
+            <h3>Bibliografia</h3>
+
+            <h4>Monografia</h4>
+            <p><em>Epistolari classensi tra edizione e digitalizzazione</em>, a cura di Fiammetta Sabba, con la collaborazione redazionale di Bianca Sorbara, ISBN: 9791256004515, ISBN PDF Open Access: 9791256004539, Ledizioni, Milano, 2025.</p>
+
+            <h4>Articoli in atti di convegno</h4>
+            <p>Manca Chiara, Sabba Fiammetta, Sorbara Bianca, Tripodi Silvia, <em>Verso l'edizione digitale del carteggio Canneti-Fiacchi</em>, in Rebora Simone, Rospocher Marc, Bazzaco Stefano, <em>Diversità, Equità e Inclusione: Sfide e Opportunità per l'Informatica Umanistica nell'Era dell'Intelligenza Artificiale</em>, Proceedings del XIV Convegno Annuale AIUCD2025, Verona, 11-13 giugno 2025, pp. 184-189, ISBN 978-88-942535-9-7, <a href="https://doi.org/10.6092/unibo/amsacta/8380" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.6092/unibo/amsacta/8380</a>, Quaderni di Umanistica Digitale, 2025.</p>
+
+            <h4>Poster in atti di convegno</h4>
+            <p>Sabba Fiammetta, Manca Chiara, <em>Navigare la Storia del Libro con il Digitale: l'Epistolario Canneti-Fiacchi della Biblioteca Classense di Ravenna</em>, Poster presentato a <em>Patrimonio culturale al futuro: sostenibilità sociale, innovazione tecnologica, trasformazione digitale</em>, Roma, 23-24 gennaio 2025, <a href="https://doi.org/10.5281/zenodo.15044058" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.5281/zenodo.15044058</a>, 2025.</p>
+
+            <h4>Articoli in rivista</h4>
+            <p>Sabba Fiammetta, <em>Il progetto PNRR 'DigiLetClass - Digitizing letters of Classense Library'</em>, Bibliothecae.it, 2025, <a href="https://doi.org/10.6092/issn.2283-9364/22273" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.6092/issn.2283-9364/22273</a>.</p>
+
+            <h4>Oggetti digitali</h4>
+            <p>Manca Chiara, Sabba Fiammetta, Sorbara Bianca, Tripodi Silvia, <em>Carteggio Canneti-Fiacchi</em> (v1.0.0) [Data set] In <em>Epistolari classensi tra edizione e digitalizzazione</em>, Ravenna, 9 dicembre 2024, <a href="https://doi.org/10.5281/zenodo.14234728" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.5281/zenodo.14234728</a>.</p>
+
+            <p>Manca Chiara, <em>chiarasharp/carteggio-canneti-fiacchi-esd: Versione 1 Software dell'Edizione Digitale del Carteggio Canneti - Fiacchi</em> (v1.0.0), 2025, <a href="https://doi.org/10.5281/zenodo.15683920" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.5281/zenodo.15683920</a>.</p>
+        </section>
+    </div>
 </div>
 {% endblock %}

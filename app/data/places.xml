@@ -43,13 +43,12 @@
       <idno type="GND">4091999-7</idno>
       <idno type="geonames">3177300</idno>
    </place>
-   <place xml:id="DLCL_CF_L0006" type="settlement" sameAs="https://www.geonames.org/3179933">
-      <placeName>Case di Ribano</placeName>
+   <place xml:id="DLCL_CF_L0006" type="hill">
+      <placeName>Ribano</placeName>
       <location>
          <country key="IT"/>
-         <geo>44.38333, 11.48333</geo>
+         <geo>44.06987, 12.38385</geo>
       </location>
-      <idno type="geonames">3179933</idno>
    </place>
    <place xml:id="DLCL_CF_L0007" type="settlement" sameAs="https://www.geonames.org/3181928">
       <placeName>Bologna</placeName>

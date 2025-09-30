@@ -175,10 +175,10 @@ def test_news_index_page(client):
 
 
 def test_news_detail_page_existing(client):
-    # Uses sample data id from app/data/news.json
-    resp = client.get('/news/2025-01-kickoff')
+    # Uses sample data id from get_news_data()
+    resp = client.get('/news/notte-ricercatori-2025')
     assert resp.status_code == 200
-    assert 'Avvio del progetto DigiLetClass' in resp.data.decode()
+    assert 'Notte dei Ricercatori 2025' in resp.data.decode()
 
 
 def test_news_detail_page_missing(client):

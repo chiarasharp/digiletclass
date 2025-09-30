@@ -13,6 +13,58 @@
 {% endmacro %}
 {% block content %}
 <div class="main-content-compact py-5">
+    <style>
+        .methodology-content p {
+            text-align: justify;
+        }
+        .methodology-content strong {
+            color: #800020;
+        }
+        .methodology-toc {
+            background: #f8f9fa;
+            border-left: 4px solid #800020;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+        }
+        .methodology-toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .methodology-toc li {
+            margin-bottom: 0.5rem;
+        }
+        .methodology-toc a {
+            color: #800020;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .methodology-toc a:hover {
+            text-decoration: underline;
+        }
+        .abbreviations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .abbreviations-table th,
+        .abbreviations-table td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .abbreviations-table th {
+            background-color: #800020;
+            color: white;
+            font-weight: bold;
+        }
+        .abbreviations-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .abbreviations-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
             <li class="breadcrumb-item d-flex align-items-center">
@@ -22,21 +74,257 @@
         </ol>
     </nav>
     <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">La Metodologia</h2>
-    <section id="introduzione">
+    
+    <!-- Indice navigabile -->
+    <div class="methodology-toc">
+        <h4 class="mb-3" style="color: #800020;"><i class="bi bi-list-ul me-2"></i>Indice</h4>
+        <ul>
+            <li><a href="#introduzione">Introduzione</a></li>
+            <li><a href="#trascrizione">La trascrizione</a></li>
+            <li><a href="#individuazione">L'individuazione delle entità</a></li>
+            <li><a href="#marcatura">La marcatura TEI</a></li>
+        </ul>
+    </div>
+    
+    <div class="methodology-content">
+        <section id="introduzione">
       <h3>Introduzione</h3>
-      <p>Questa sezione introduce la metodologia adottata dal progetto. (Sostituisci questo testo con il contenuto reale.)</p>
-    </section>
-    <section id="trascrizione">
+      <p>Le tappe costitutive <strong>indispensabili</strong> per la creazione dell'edizione digitale hanno riguardato la <strong>digitalizzazione</strong>, la <strong>metadatazione</strong>, la <strong>trascrizione</strong> e la <strong>marcatura</strong> del carteggio.</p>
+      
+      <p>La <strong>prima fase</strong> ha previsto la riproduzione digitale e la relativa metadatazione delle missive da parte dell'Istituzione Biblioteca Classense, con la collaborazione di tirocinanti del Corso di Laurea Magistrale in Scienze del libro e del documento dell'Università di Bologna.</p>
+      
+      <p>A questa è seguita una <strong>riflessione metodologica</strong> del gruppo di ricerca sulle scelte da applicare alla seconda fase del progetto, costituita dalla trascrizione diplomatico-interpretativa del testo delle lettere e dall'individuazione delle tipologie di entità considerate significative per l'analisi del contenuto.</p>
+      
+      <p>La <strong>terza fase</strong>, di carattere tecnico-informatico, ha riguardato la <strong>codifica semantica</strong> del carteggio, ovvero la base dell'edizione digitale destinata a essere successivamente pubblicata su una piattaforma web. In questa prospettiva, si è scelto di utilizzare lo schema <strong>TEI</strong> (Text Encoding Initiative), considerato lo standard di riferimento per la codifica e la descrizione di testi digitali e strumento fondamentale per la creazione di edizioni digitali di alta qualità scientifica.</p>
+        </section>
+        <section id="trascrizione">
       <h3>La trascrizione</h3>
-      <p>Descrizione della metodologia per la trascrizione. (Sostituisci questo testo con il contenuto reale.)</p>
-    </section>
-    <section id="individuazione">
-      <h3>L’individuazione delle entità</h3>
-      <p>Descrizione della metodologia per l’individuazione delle entità. (Sostituisci questo testo con il contenuto reale.)</p>
-    </section>
-    <section id="marcatura">
+      <p>La trascrizione del testo delle lettere ha rappresentato una fase <strong>fondamentale e imprescindibile</strong> nella realizzazione dell'edizione scientifica digitale, poiché ha costituito il punto di partenza per l'analisi del contenuto e per la marcatura in XML. Questa fase ha implicato riflessioni critiche e filologiche, che si sono tradotte nella scelta di una <strong>trascrizione diplomatico-interpretativa</strong> del testo. Da un lato, si è infatti voluto restituire con precisione l'usus scribendi dell'epoca, garantendo l'autenticità delle lettere, dall'altro si è scelto di apportare interventi minimi per facilitarne la leggibilità e la comprensione.</p>
+      
+      <p>Ogni lettera è quindi stata trascritta fedelmente senza eccezioni mantenendo la suddivisione in paragrafi e abitudini e usi scrittori, anche se non più correnti, in particolare nell'utilizzo di apostrofi, accenti e consonanti doppie. È stato rispettato e mantenuto l'uso delle lettere maiuscole per quanto riguarda i nomi propri ed alcuni nomi comuni, le lettere dopo il punto fermo e per i titoli di dignità; i segni di punteggiatura, come anche l'utilizzo del punto fermo dopo le cifre; le <strong>sottolineature e le cancellature</strong> di mano dei due autori.</p>
+      
+      <p>Nel processo di trascrizione si è scelto di intervenire sul testo con l'aggiunta di elementi minimi se strettamente necessario per garantire maggiore leggibilità e coerenza sintattica, senza tuttavia rimuovere o modificare alcun elemento effettivamente presente negli originali di <strong>Canneti e Fiacchi</strong>. Nel dettaglio, sono stati aggiunti gli accenti nei casi in cui risultavano mancanti e ricostruite alcune parole danneggiate, ma solamente quando il contesto sintattico consentiva di ipotizzare con buona sicurezza quale fosse la forma originaria, evitando qualsiasi intervento arbitrario.</p>
+      
+      <p>Si è scelto l'uso di <strong>parentesi quadre</strong> per indicare le lacune materiali determinate da perdita del supporto o del testo causata da macchie di varia natura o abrasioni, le stesse parentesi sono state utilizzate per racchiudere il testo eventualmente integrato. Anche le porzioni di testo collocate ai margini delle missive sono state trascritte all'interno di parentesi quadre e poste in calce alla lettera, rispettando l'ordine di lettura originale.</p>
+      
+      <p>L'intervento maggiore ha riguardato lo <strong>scioglimento delle abbreviazioni</strong> di non ovvia risoluzione, senza adottare l'uso di parentesi basandosi sulle forme piene corrispondenti nei casi di parole abbreviate per troncamento, contrazione o per i segni abbreviativi di significato proprio. In seguito a uno studio accurato sulla tematica, è stato possibile sciogliere con sicurezza la maggior parte delle sigle, ma è bene tenere presente che alcune abbreviazioni possono assumere un significato diverso a seconda del contesto.</p>
+      
+      <p>Si fornisce qui un elenco specifico:</p>
+      <table class="abbreviations-table">
+        <thead>
+          <tr>
+            <th>Abbreviazione</th>
+            <th>Significato</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ab.te</td><td>Abate</td></tr>
+          <tr><td>car.</td><td>carta; carte; cartaceo</td></tr>
+          <tr><td>Cav.</td><td>Cavaliere</td></tr>
+          <tr><td>Co</td><td>Conte; Canonico</td></tr>
+          <tr><td>D.</td><td>Don</td></tr>
+          <tr><td>F.</td><td>Frate (Fra; Fratello)</td></tr>
+          <tr><td>Mrò</td><td>Maestro (Mastro; Magistro); oppure Monastero</td></tr>
+          <tr><td>MS.</td><td>Manoscritto</td></tr>
+          <tr><td>MSS.</td><td>Manoscritti</td></tr>
+          <tr><td>oc.ne</td><td>occasione</td></tr>
+          <tr><td>Oss.mo</td><td>Osservandissimo</td></tr>
+          <tr><td>P.</td><td>Padre</td></tr>
+          <tr><td>Pre'.</td><td>Padre (Prete)</td></tr>
+          <tr><td>Rev.do</td><td>Reverendo</td></tr>
+          <tr><td>S.</td><td>San; Santo; Santa</td></tr>
+          <tr><td>S.r</td><td>Signore</td></tr>
+          <tr><td>S.to</td><td>Santo</td></tr>
+          <tr><td>Sig.</td><td>Signore</td></tr>
+          <tr><td>Sig.e</td><td>Signore</td></tr>
+          <tr><td>Sig. Co.</td><td>Signor Conte</td></tr>
+          <tr><td>VP</td><td>Vostra Paternità</td></tr>
+        </tbody>
+      </table>
+      
+      <p>Inoltre, si è scelto di non sciogliere:</p>
+      <table class="abbreviations-table">
+        <thead>
+          <tr>
+            <th>Abbreviazione</th>
+            <th>Significato</th>
+            <th>Categoria</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>DVP</td><td>Di Vostra Paternità</td><td>Formule di saluto</td></tr>
+          <tr><td>VPMR</td><td>Vostra Paternità Molto Reverendissima</td><td>Formule di saluto</td></tr>
+          <tr><td>DVPMR</td><td>Di Vostra Paternità Molto Reverendissima</td><td>Formule di saluto</td></tr>
+          <tr><td>Parz.mo</td><td>Parzialissimo</td><td>Formule di saluto</td></tr>
+          <tr><td>fol.</td><td>folio</td><td>Formati</td></tr>
+          <tr><td>fogl.</td><td>foglio</td><td>Formati</td></tr>
+          <tr><td>in 8.</td><td>in ottavo</td><td>Formati</td></tr>
+          <tr><td>in 4.</td><td>in quarto</td><td>Formati</td></tr>
+        </tbody>
+      </table>
+      
+      <p>Le abbreviazioni non sono state sciolte laddove non è stato possibile risalire con sicurezza al significato.</p>
+      
+      <p>Dal momento che all'interno del testo delle lettere sono presenti molteplici informazioni relative al <strong>commercio librario</strong>, alla vendita e all'acquisto di volumi, figurano anche riferimenti alla monetazione dell'epoca. Essi sono espressi tramite simboli, parole intere o abbreviate, e anche in questo caso si è scelto di indicare la parola estesa, qualora possibile. Le valute che si incontrano nel testo sono:</p>
+      <table class="abbreviations-table">
+        <thead>
+          <tr>
+            <th>Valuta</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>scudo pontificio</td><td>Moneta principale dello Stato Pontificio</td></tr>
+          <tr><td>bai (Baiocchi)</td><td>Moneta minore, suddivisione dello scudo</td></tr>
+          <tr><td>paolo / paoli</td><td>Moneta d'argento dello Stato Pontificio</td></tr>
+          <tr><td>doppie</td><td>Monete d'oro di vario taglio</td></tr>
+          <tr><td>lire veneziane</td><td>Moneta della Repubblica di Venezia</td></tr>
+        </tbody>
+      </table>
+      
+      <p>In alcuni casi sono presenti ulteriori simboli per indicare l'aggiunta di parole, la preposizione "per" e per sancire la fine del rigo.</p>
+      
+      <p>Le scelte metodologiche indicate rispondono quindi all'esigenza di rispettare il più possibile le modalità linguistiche e stilistiche degli autori del carteggio, anche quando esse si discostano dagli usi contemporanei, ma nel rispetto della leggibilità del testo e garantendo <strong>affidabilità scientifica</strong>.</p>
+      
+      <p>Inoltre, la scelta di affiancare l'immagine digitale della lettera originale alla trascrizione ha consentito di restituire visivamente le convenzioni degli scriventi anche in termini di resa grafica.</p>
+        </section>
+        <section id="individuazione">
+      <h3>L'individuazione delle entità</h3>
+      <p>L'individuazione delle entità nel carteggio Canneti-Fiacchi ha seguito un approccio sistematico basato sulla lettura integrale delle trascrizioni delle lettere della Busta 10 (133 lettere scritte da Pietro Canneti a Paolo Fiacchi tra il 1711 e il 1720).</p>
+
+      <p>Le entità sono state classificate in categorie e per ciascuna è stata predisposta una tabella Excel con metadati specifici:</p>
+
+      <table class="abbreviations-table">
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Elemento TEI</th>
+            <th>Codice Identificativo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Persone</strong></td><td><code>&lt;persName&gt;</code></td><td><code>DLCL_CF_<br>PC0000</code></td></tr>
+          <tr><td><strong>Persone indirette</strong></td><td><code>&lt;rs type="person"&gt;</code></td><td><code>DLCL_CF_<br>PC0000</code></td></tr>
+          <tr><td><strong>Luoghi</strong></td><td><code>&lt;placeName&gt;</code></td><td><code>DLCL_CF_<br>L0000</code></td></tr>
+          <tr><td><strong>Organizzazioni</strong></td><td><code>&lt;orgName&gt;</code></td><td><code>DLCL_CF_<br>O0000</code></td></tr>
+          <tr><td><strong>Manoscritti</strong></td><td><code>&lt;bibl type="manuscript"&gt;</code></td><td><code>DLCL_CF_<br>BM0000</code></td></tr>
+          <tr><td><strong>Opere a stampa</strong></td><td><code>&lt;bibl type="print"&gt;</code></td><td><code>DLCL_CF_<br>BS0000</code></td></tr>
+        </tbody>
+      </table>
+
+      <p>Per ciascuna categoria di entità sono stati raccolti metadati specifici strutturati in file Excel:</p>
+
+      <p><strong>Persone:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>Nome completo con varianti (<code>forename</code>, <code>surname</code>)</li>
+        <li>Ruolo (<code>roleName</code>)</li>
+        <li>Date e luoghi di nascita e morte</li>
+        <li>Sesso e occupazione</li>
+        <li>Identificativi esterni: VIAF, ISNI, GND</li>
+      </ul>
+
+      <p><strong>Luoghi:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>Nome con varianti storiche (<code>placeName</code>)</li>
+        <li>Tipologia del luogo (<code>type</code>: hill, city, etc.)</li>
+        <li>Paese (<code>country</code>)</li>
+        <li>Coordinate geografiche (<code>geo</code>)</li>
+      </ul>
+
+      <p><strong>Organizzazioni:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>Nome (<code>orgName</code>)</li>
+        <li>Tipologia (<code>type</code>: church, monastery, etc.)</li>
+        <li>Localizzazione (<code>settlement</code>, <code>country</code>)</li>
+        <li>Identificativi esterni: VIAF</li>
+        <li>Link a fonti esterne (<code>source</code>, <code>sameAs</code>)</li>
+      </ul>
+
+      <p><strong>Manoscritti:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>Identificazione: <code>settlement</code>, <code>repository</code>, <code>idno</code> (segnatura)</li>
+        <li>Autore e titolo con varianti (<code>type="uniform"</code>)</li>
+        <li>Data di origine (<code>origDate</code>)</li>
+        <li>Copista (<code>persName type="copist"</code>)</li>
+        <li>Provenienza (<code>provenance</code>: <code>orgName</code>, <code>placeName</code>)</li>
+      </ul>
+
+      <p><strong>Opere a stampa:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>Autore (<code>persName</code> con <code>forename</code>/<code>surname</code>)</li>
+        <li>Titolo completo (<code>title level="m"</code>)</li>
+        <li>Luogo di pubblicazione (<code>pubPlace</code>)</li>
+        <li>Data di pubblicazione (<code>date</code>)</li>
+        <li>Editore/Stampatore (<code>publisher</code>/<code>persName</code>)</li>
+        <li>Identificativi bibliografici: SBN, Edit16, ISTC</li>
+        <li>Link esterni (<code>sameAs</code>)</li>
+      </ul>
+
+      <p>A ciascuna entità è stato assegnato un codice univoco del carteggio strutturato come segue:</p>
+
+      <pre style="background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; font-family: monospace; line-height: 1.6;"><code>DLCL _ CF _ X _ 0000
+  |     |   |     |
+  |     |   |     └─ numero progressivo a quattro cifre
+  |     |   └─ tipologia di entità:
+  |     |      • PC = Persona Citata
+  |     |      • L  = Luogo
+  |     |      • O  = Organizzazione
+  |     |      • BM = Manoscritto
+  |     |      • BS = Stampa
+  |     └─ carteggio Canneti-Fiacchi
+  └─ progetto DigiLet Class</code></pre>
+
+      <p>Questo sistema permette di referenziare in modo univoco ogni entità e collegare tutte le sue occorrenze nelle diverse lettere.</p>
+        </section>
+        <section id="marcatura">
       <h3>La marcatura TEI</h3>
-      <p>Descrizione della metodologia per la marcatura. (Sostituisci questo testo con il contenuto reale.)</p>
-    </section>
+      <p>Il progetto adotta lo standard <strong>TEI P5</strong> (Text Encoding Initiative) seguendo le linee guida ufficiali del TEI Consortium. La selezione degli elementi TEI è stata esplicitata in uno schema <strong>ODD</strong> (One Document Does-it-all) generato mediante l'editor Roma di TEI, che definisce gli elementi selezionati, le restrizioni sugli attributi, le regole di validazione e la documentazione del modello. A partire da questo schema, tramite Oxygen XML Editor, è stato generato un progetto versionato e pubblicato su GitHub.</p>
+
+      <p>Ogni lettera è codificata in un file XML con codice univoco strutturato come segue:</p>
+
+      <pre style="background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; font-family: monospace; line-height: 1.6;"><code>DLCL _ CF _ E _ XX _ YYY
+  |     |   |   |     |
+  |     |   |   |     └─ numero progressivo lettera
+  |     |   |   └─ numero busta
+  |     |   └─ epistola
+  |     └─ carteggio Canneti-Fiacchi
+  └─ progetto DigiLet Class</code></pre>
+
+      <p>Tutti i documenti sono inclusi tramite <code>&lt;xi:include&gt;</code> in un contenitore principale. Il <code>&lt;teiHeader&gt;</code> contiene i metadati descrittivi: titolo nella forma "(Mittente a Destinatario, Luogo, Data)", informazioni sulla pubblicazione digitale, descrizione della fonte manoscritta. L'elemento <code>&lt;correspDesc&gt;</code> traccia i metadati epistolari:</p>
+
+      <pre style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #800020; overflow-x: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><code style="color: #2d3748; font-family: 'Courier New', monospace;"><span style="color: #800020; font-weight: bold;">&lt;correspDesc&gt;</span>
+  <span style="color: #800020; font-weight: bold;">&lt;correspAction</span> <span style="color: #4a5568;">type=</span><span style="color: #38a169;">"sent"</span><span style="color: #800020; font-weight: bold;">&gt;</span>
+    <span style="color: #800020; font-weight: bold;">&lt;persName</span> <span style="color: #4a5568;">ref=</span><span style="color: #38a169;">"#DLCL_CF_PC0001"</span> <span style="color: #4a5568;">key=</span><span style="color: #38a169;">"DLCL_CF_PC0001"</span><span style="color: #800020; font-weight: bold;">&gt;</span><span style="color: #2d3748;">Pietro Canneti</span><span style="color: #800020; font-weight: bold;">&lt;/persName&gt;</span>
+    <span style="color: #800020; font-weight: bold;">&lt;date</span> <span style="color: #4a5568;">when-iso=</span><span style="color: #38a169;">"1715-02-26"</span><span style="color: #800020; font-weight: bold;">/&gt;</span>
+    <span style="color: #800020; font-weight: bold;">&lt;placeName</span> <span style="color: #4a5568;">ref=</span><span style="color: #38a169;">"#DLCL_CF_L0028"</span> <span style="color: #4a5568;">key=</span><span style="color: #38a169;">"DLCL_CF_L0028"</span><span style="color: #800020; font-weight: bold;">&gt;</span><span style="color: #2d3748;">Perugia</span><span style="color: #800020; font-weight: bold;">&lt;/placeName&gt;</span>
+  <span style="color: #800020; font-weight: bold;">&lt;/correspAction&gt;</span>
+  <span style="color: #800020; font-weight: bold;">&lt;correspAction</span> <span style="color: #4a5568;">type=</span><span style="color: #38a169;">"received"</span><span style="color: #800020; font-weight: bold;">&gt;</span>
+    <span style="color: #800020; font-weight: bold;">&lt;persName</span> <span style="color: #4a5568;">ref=</span><span style="color: #38a169;">"#DLCL_CF_PC0002"</span> <span style="color: #4a5568;">key=</span><span style="color: #38a169;">"DLCL_CF_PC0002"</span><span style="color: #800020; font-weight: bold;">&gt;</span><span style="color: #2d3748;">Mariangelo Fiacchi</span><span style="color: #800020; font-weight: bold;">&lt;/persName&gt;</span>
+  <span style="color: #800020; font-weight: bold;">&lt;/correspAction&gt;</span>
+<span style="color: #800020; font-weight: bold;">&lt;/correspDesc&gt;</span></code></pre>
+
+      <p>Il contenuto è organizzato in due <code>&lt;div&gt;</code>: la prima (<code>type="letter"</code>) contiene la trascrizione in paragrafi <code>&lt;p&gt;</code>, la seconda (<code>type="notes"</code>) eventuali annotazioni. Gli elementi <code>&lt;opener&gt;</code> e <code>&lt;closer&gt;</code> raggruppano formule iniziali e conclusive. Il passaggio di pagina è segnalato da <code>&lt;pb&gt;</code> con attributo <code>@facs</code> che contiene il riferimento <strong>IIIF</strong> all'immagine digitalizzata.</p>
+
+      <p>La marcatura delle entità segue il sistema di identificazione univoca descritto nella sezione precedente, utilizzando gli elementi TEI specifici per ciascuna categoria e collegando ogni occorrenza attraverso gli attributi <code>@ref</code> e <code>@key</code> ai metadati strutturati. Il progetto utilizza <strong>Oxygen XML Editor</strong> per la codifica, <strong>Roma TEI Editor</strong> per lo schema ODD, <strong>GitHub</strong> per il versionamento, <strong>Microsoft Excel</strong> per i metadati. Il workflow prevede validazione automatica rispetto allo schema ODD, peer review tra i membri del team, e tracciamento delle modifiche nel <code>&lt;revisionDesc&gt;</code>.</p>
+
+      <p>Il progetto è pubblicato in formato aperto su <a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-data" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020; transition: border-bottom 0.2s ease;" onmouseover="this.style.borderBottom='2px solid #800020';" onmouseout="this.style.borderBottom='1px solid #800020';">GitHub</a>. L'edizione digitale è disponibile <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020; transition: border-bottom 0.2s ease;" onmouseover="this.style.borderBottom='2px solid #800020';" onmouseout="this.style.borderBottom='1px solid #800020';">qui</a> tramite <strong>EVT 2</strong> con: visualizzazione sincronizzata testo-immagine, evidenziazione selettiva delle entità, pannelli informativi con metadati, collegamenti tra occorrenze, ricerca full-text, visualizzazione geografica su mappa.</p>
+        </section>
+    </div>
 </div>
+
+<script>
+// Smooth scrolling per i link dell'indice
+document.querySelectorAll('.methodology-toc a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+</script>
 {% endblock %}

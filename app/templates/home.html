@@ -73,7 +73,7 @@
                         <div class="recap-icon mb-3" style="color:#800020;"><i class="bi bi-search"></i></div>
                         <h3 class="h5 fw-bold mb-3 baskervville-regular recap-card-title" style="color:#800020;">Entità</h3>
                         <p>Indici di persone, luoghi e organizzazioni citate nelle lettere.</p>
-                        <a href="{{ url_for('main.entities_list', entity_type='people') }}" class="btn btn-sm btn-primary recap-btn" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai alle Entità</a>
+                        <a href="{{ url_for('main.entities') }}" class="btn btn-sm btn-primary recap-btn" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Vai alle Entità</a>
                     </div>
                 </div>
             </div>
@@ -92,8 +92,11 @@
             {% for item in recent_news %}
             <div class="col-12 col-md-4">
                 <div class="card h-100 shadow-sm border-0">
+                    {% if item.image %}
+                    <img src="{{ item.image }}" alt="{{ item.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    {% endif %}
                     <div class="card-body d-flex flex-column">
-                        <h3 class="h5 baskervville-regular mb-2">{{ item.title }}</h3>
+                        <h3 class="h4 mb-2" style="font-family: 'B612', sans-serif;">{{ item.title }}</h3>
                         <small class="text-muted mb-2">{{ item.date }}</small>
                         <p class="mb-3">{{ item.summary }}</p>
                         <a href="{{ url_for('main.news_detail', news_id=item.id) }}" class="mt-auto btn btn-sm btn-primary" style="background:var(--primary-color); border-color:var(--primary-color); font-family: 'B612', sans-serif;">Leggi</a>
