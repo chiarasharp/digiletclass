@@ -1,27 +1,55 @@
 import os
+import json
+import logging
 from lxml import etree
 from functools import reduce
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 DATA_FOLDER = 'data/'
 TEI_NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
 XML_NS = '{http://www.w3.org/XML/1998/namespace}'
 
+# Load type mappings from JSON file
+def _load_type_map():
+    """Load TYPE_MAP from JSON configuration file."""
+    config_path = os.path.join(os.path.dirname(__file__), 'config', 'type_labels.json')
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        # Create combined map: org types at root level, places nested
+        type_map = data['orgs'].copy()
+        type_map['places'] = data['places']
+        return type_map
+    except FileNotFoundError:
+        logger.error(f"Configuration file not found: {config_path}")
+        raise
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in configuration file {config_path}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Error loading type map from {config_path}: {e}")
+        raise
+
+TYPE_MAP = _load_type_map()
+
 def parse_xml(file_name):
-    print("Current working directory:", os.getcwd())
-    
     file_path = os.path.join(os.path.dirname(__file__), DATA_FOLDER, file_name)
-    
-    print(f"Attempting to open XML file: {file_path}")  # Debugging output
-    
     parser = etree.XMLParser(resolve_entities=False)
 
     try:
         tree = etree.parse(file_path, parser)
         return tree
     except etree.XMLSyntaxError as e:
-        print(f"Invalid XML format in {file_path}: {e}")
+        logger.error(f"Invalid XML format in {file_path}: {e}")
+        raise
+    except FileNotFoundError:
+        logger.error(f"XML file not found: {file_path}")
+        raise
     except Exception as e:
-        print(f"Error parsing file {file_path}: {e}")
+        logger.error(f"Error parsing file {file_path}: {e}")
+        raise
 
 def parse_idnos(element):
     return list(map(lambda idno: {
@@ -212,3 +240,33 @@ def filter_entities_by_search(entities, entity_type, search_query):
     elif entity_type == 'people':
         return [person for person in entities if any(sq in (part['text'] or '').lower() for name in person.get('pers_names', []) for part in name.get('parts', []))]
     return entities
+
+def get_news_data():
+    """Load and return news data from news.json file, sorted by date descending."""
+    file_path = os.path.join(os.path.dirname(__file__), DATA_FOLDER, 'news.json')
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            news = json.load(f)
+            # Sort by date descending (most recent first)
+            return sorted(news, key=lambda x: x.get('date', ''), reverse=True)
+    except FileNotFoundError:
+        logger.warning(f"News data file not found: {file_path}. Returning empty list.")
+        return []
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in news data file {file_path}: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Error loading news data from {file_path}: {e}")
+        return []
+
+def get_pagination_window(page, total_pages, window=7):
+    """Generate pagination window with ellipsis for large page counts."""
+    if total_pages <= window:
+        return list(range(1, total_pages + 1))
+    half = window // 2
+    if page <= half + 1:
+        return list(range(1, window)) + [None, total_pages]
+    elif page >= total_pages - half:
+        return [1, None] + list(range(total_pages - window + 2, total_pages + 1))
+    else:
+        return [1, None] + list(range(page - half + 1, page + half)) + [None, total_pages]

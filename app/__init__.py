@@ -3,7 +3,10 @@ from .utils import format_iso_date, format_year
 from .blueprints.main import main_bp
 
 def create_app(config_object=None):
+    """Application factory function."""
     app = Flask(__name__)
+
+    # Load configuration if provided
     if config_object:
         app.config.from_object(config_object)
 

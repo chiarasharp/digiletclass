@@ -48,10 +48,11 @@ app/
   templates/          # Jinja2 templates and macros
   utils.py            # Utility functions
 
-tests/                # Test suite
-requirements.txt      # Python dependencies
-README.md             # This file
-LICENSE               # MIT (code) + CC BY 4.0 (content)
+tests/                   # Test suite
+passenger_wsgi.py        # cPanel/Passenger entry point
+requirements.txt         # Python dependencies
+README.md                # This file
+LICENSE                  # MIT (code) + CC BY 4.0 (content)
 ```
 
 ## License
