@@ -67,29 +67,32 @@
             {% endblock %}
         </div>
 
-        <footer class="footer-custom bg-light pt-4 pb-3 b612-font small">
-            <div class="container text-center text-md-start">
-                <div class="row g-4 align-items-start">
-                    <div class="col-12 col-md-6 mb-3 text-start">
-                        <h6 class="text-uppercase fw-bold mb-2">Risorse</h6>
-                        <hr class="mb-3 mt-0 d-inline-block mx-0" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
-                        <p class="mb-1"><a href="https://esdcarteggiocannetifiacchi.unibo.it/" class="text-dark text-decoration-none">ESD Carteggio Canneti-Fiacchi</a></p>
-                        <p class="mb-1"><a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-esd" class="text-dark text-decoration-none">Repository GitHub ESD Carteggio Canneti-Fiacchi</a></p>
-                        <p class="mb-1">Dataset TEI Carteggio Canneti-Fiacchi: <a href="https://doi.org/10.5281/zenodo.14234727" class="text-dark text-decoration-none">Zenodo</a>, <a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-data" class="text-dark text-decoration-none">GitHub</a></p>
+        <footer class="footer-custom bg-light pt-5 pb-3 b612-font small">
+            <div class="container">
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-md-6">
+                        <h6 class="text-uppercase fw-bold mb-3">Risorse</h6>
+                        <p class="mb-2"><a href="https://esdcarteggiocannetifiacchi.unibo.it/" class="text-dark text-decoration-none">ESD Carteggio Canneti-Fiacchi</a></p>
+                        <p class="mb-2"><a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-esd" class="text-dark text-decoration-none">Repository GitHub ESD Carteggio Canneti-Fiacchi</a></p>
+                        <p class="mb-2">Dataset TEI Carteggio Canneti-Fiacchi: <a href="https://doi.org/10.5281/zenodo.14234727" class="text-dark text-decoration-none">Zenodo</a>, <a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-data" class="text-dark text-decoration-none">GitHub</a></p>
                     </div>
-                    <div class="col-12 col-md-6 mb-md-0 mb-3 text-start">
-                        <h6 class="text-uppercase fw-bold mb-2">Crediti</h6>
-                        <hr class="mb-3 mt-0 d-inline-block mx-0" style="width: 60px; background-color: var(--primary-color); height: 2px"/>
-                        <p class="mb-2">Progetto a cura del Laboratorio LUDI dell'Università di Bologna e dell'Istituzione Biblioteca Classense.</p>
-                        <p class="mb-2">Progetto PE 0000020 CHANGES — CUP J33C22002850006 — PNRR M4C2 I1.3, finanziato dall'Unione europea — NextGenerationEU.</p>
-                        <div class="d-flex gap-3 align-items-center flex-wrap">
-                            <img src="{{ url_for('static', filename='ludi.png') }}" alt="Logo LUDI" class="img-fluid" style="max-height: 60px; width: auto; object-fit: contain; max-width: 200px;">
-                            <img src="{{ url_for('static', filename='testata-pnrr.png') }}" alt="Logo PNRR" class="img-fluid" style="max-height: 60px; width: auto; object-fit: contain;">
+                    <div class="col-12 col-md-6">
+                        <h6 class="text-uppercase fw-bold mb-3">Crediti</h6>
+                        <p class="mb-3">Progetto a cura del <a href="https://centri.unibo.it/ludi/it" target="_blank" rel="noopener" class="text-dark" style="text-decoration: underline;">Laboratorio LUDI</a> dell'Università di Bologna e dell'<a href="https://www.classense.ra.it/" target="_blank" rel="noopener" class="text-dark" style="text-decoration: underline;">Istituzione Biblioteca Classense</a>.</p>
+                        <p class="mb-3">Progetto <a href="https://www.fondazionechanges.org/" target="_blank" rel="noopener" class="text-dark" style="text-decoration: underline;">PE 0000020 CHANGES</a> — CUP J33C22002850006 — PNRR M4C2 I1.3, finanziato dall'Unione europea — NextGenerationEU.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex gap-4 align-items-center justify-content-center flex-wrap pt-3 pb-2" style="border-top: 1px solid #dee2e6;">
+                            <img src="{{ url_for('static', filename='ludi.png') }}" alt="Logo LUDI" class="img-fluid" style="max-height: 50px; width: auto; object-fit: contain;">
+                            <img src="{{ url_for('static', filename='classense.png') }}" alt="Logo Biblioteca Classense" class="img-fluid" style="max-height: 50px; width: auto; object-fit: contain;">
+                            <img src="{{ url_for('static', filename='testata-pnrr.png') }}" alt="Logo PNRR" class="img-fluid" style="max-height: 50px; width: auto; object-fit: contain;">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="text-center p-2 small" style="background-color: rgba(0, 0, 0, 0.05);">
+            <div class="text-center p-3 mt-3 small" style="background-color: rgba(0, 0, 0, 0.05);">
                 © 2025 DigiLetClass — Contenuti disponibili con licenza <a class="text-dark fw-bold text-decoration-none" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a>
             </div>
         </footer>

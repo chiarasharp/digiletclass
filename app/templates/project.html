@@ -20,6 +20,40 @@
         .project-content section {
             margin-bottom: 3rem;
         }
+        .project-toc {
+            background: #f8f9fa;
+            border-left: 4px solid #800020;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+        }
+        .project-toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .project-toc li {
+            margin-bottom: 0.75rem;
+        }
+        .project-toc li:last-child {
+            margin-bottom: 0;
+        }
+        .project-toc a {
+            color: #800020;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s ease;
+        }
+        .project-toc a:hover {
+            background-color: rgba(128, 0, 32, 0.1);
+            text-decoration: none;
+        }
+        .project-toc a.active {
+            background-color: rgba(128, 0, 32, 0.15);
+            font-weight: 600;
+        }
     </style>
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
@@ -31,20 +65,36 @@
     </nav>
     <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">Il Progetto</h2>
 
-    <div class="project-content">
-        <section id="descrizione">
-            <p>Il progetto <strong>DigiLet Class (Digitizing Letters of Classense Library)</strong> si propone di valorizzare uno dei patrimoni epistolari più rilevanti della <strong>Biblioteca Classense di Ravenna</strong>: il carteggio tra i monaci camaldolesi <strong>Pietro Canneti</strong> e <strong>Mariangelo Fiacchi</strong>, intercorso negli anni <strong>1711-1730</strong>. Nato nel 2023 dalla collaborazione tra il <strong>Laboratorio LUDI</strong> del Dipartimento di Beni Culturali dell'Università di Bologna e l'<strong>Istituzione Biblioteca Classense</strong>, il progetto ha come obiettivo la realizzazione di un'<strong>edizione scientifica digitale</strong> di questo corpus epistolare.</p>
+    <div class="row">
+        <!-- Sidebar con indice (sempre visibile su desktop) -->
+        <div class="col-lg-3 col-12 mb-4">
+            <div class="project-toc position-sticky" style="top: 80px;">
+                <h5 class="mb-3" style="color: #800020;"><i class="bi bi-list-ul me-2"></i>Indice</h5>
+                <ul>
+                    <li><a href="#descrizione">Descrizione</a></li>
+                    <li><a href="#finanziamento">Finanziamento</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#bibliografia">Bibliografia</a></li>
+                </ul>
+            </div>
+        </div>
 
-            <p>Il carteggio, composto complessivamente da <strong>624 lettere</strong>, rappresenta una fonte documentaria di eccezionale importanza per la storia della Biblioteca Classense, per lo studio delle reti intellettuali settecentesche, per la storia delle biblioteche e del commercio librario italiano del XVIII secolo. Le lettere testimoniano non solo la costituzione della Biblioteca stessa, ma anche i fitti rapporti culturali, bibliografici e personali tra due figure centrali nella vita intellettuale del tempo.</p>
+        <!-- Contenuto principale -->
+        <div class="col-lg-9 col-12">
+            <div class="project-content">
+        <section id="descrizione">
+            <p>Il progetto <strong>DigiLet Class (Digitizing Letters of Classense Library)</strong> si propone di valorizzare uno dei patrimoni epistolari più rilevanti della <strong>Biblioteca Classense di Ravenna</strong>: il carteggio tra i monaci camaldolesi <strong>Pietro Canneti</strong> e <strong>Mariangelo Fiacchi</strong>, intercorso negli anni <strong>1711-1730</strong>. Nato nel 2022 dalla collaborazione tra il <strong>Laboratorio LUDI</strong> del Dipartimento di Beni Culturali dell'Università di Bologna e l'<strong>Istituzione Biblioteca Classense</strong>, il progetto ha come obiettivo la realizzazione di un'<strong>edizione scientifica digitale</strong> di questo corpus epistolare.</p>
+
+            <p>Il carteggio, composto complessivamente da <strong>oltre 600 lettere</strong> (dato in fase di controllo), rappresenta una fonte documentaria di eccezionale importanza per la storia della Biblioteca Classense, per lo studio delle reti intellettuali settecentesche, per la storia delle biblioteche e del commercio librario italiano del XVIII secolo. Le lettere testimoniano non solo la costituzione della Biblioteca stessa, ma anche i fitti rapporti culturali, bibliografici e personali tra due figure centrali nella vita intellettuale del tempo.</p>
 
             <p>Attraverso l'applicazione delle metodologie proprie dell'<strong>umanistica digitale</strong> e l'utilizzo dello standard <strong>TEI (Text Encoding Initiative)</strong> per la codifica testuale, il progetto mira a creare uno strumento di ricerca innovativo che permetta la consultazione, l'analisi e lo studio approfondito di questo prezioso materiale manoscritto.</p>
         </section>
 
         <section id="finanziamento">
             <h3>Finanziamento</h3>
-            <p>Progetto a cura del <strong>Laboratorio LUDI</strong> del Dipartimento di Beni Culturali dell'Università di Bologna insieme all'<strong>Istituzione Biblioteca Classense</strong>.</p>
+            <p>Progetto a cura del <strong><a href="https://centri.unibo.it/ludi/it" target="_blank" rel="noopener" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">Laboratorio LUDI</a></strong> del Dipartimento di Beni Culturali dell'Università di Bologna insieme all'<strong><a href="https://www.classense.ra.it/" target="_blank" rel="noopener" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">Istituzione Biblioteca Classense</a></strong>.</p>
 
-            <p>Progetto <strong>PE 0000020 CHANGES</strong> - CUP [J33C22002850006], PNRR Missione 4 Componente 2 Investimento 1.3, finanziato dall'Unione europea – NextGenerationEU.</p>
+            <p>Il progetto si inserisce nell'ambito dello <strong><a href="https://www.fondazionechanges.org/spoke-3/" target="_blank" rel="noopener" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">Spoke 3 "Digital Libraries, Archives and Philology"</a></strong> del progetto <strong><a href="https://www.fondazionechanges.org/" target="_blank" rel="noopener" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">PE 0000020 CHANGES</a></strong> (Cultural Heritage Active Innovation for Sustainable Society) - CUP [J33C22002850006], PNRR Missione 4 Componente 2 Investimento 1.3, finanziato dall'Unione europea – NextGenerationEU. Lo Spoke 3 è dedicato alla digitalizzazione e all'analisi di fonti archivistiche, bibliografiche e testuali, con l'obiettivo di creare un ambiente digitale per la filologia e le biblioteche digitali.</p>
         </section>
 
         <section id="team">
@@ -81,6 +131,10 @@
 
             <p>Manca Chiara, <em>chiarasharp/carteggio-canneti-fiacchi-esd: Versione 1 Software dell'Edizione Digitale del Carteggio Canneti - Fiacchi</em> (v1.0.0), 2025, <a href="https://doi.org/10.5281/zenodo.15683920" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020;">DOI 10.5281/zenodo.15683920</a>.</p>
         </section>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="{{ url_for('static', filename='sidebar-navigation.js') }}"></script>
 {% endblock %}

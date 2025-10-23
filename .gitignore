@@ -1,17 +1,29 @@
+# Virtual environment
 .venv/
+
+# IDE
 .vscode/
 
+# Python
 *.pyc
 __pycache__/
 
+# Flask
 instance/
 
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
 
+# Build
 dist/
 build/
 *.egg-info/
+
+# macOS
 .DS_Store
-DEPLOYMENT_CPANEL.md
+
+# Deployment files
+*.zip
+docs/DEPLOYMENT_CPANEL.md

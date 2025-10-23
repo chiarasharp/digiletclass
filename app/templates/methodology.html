@@ -23,24 +23,36 @@
         .methodology-toc {
             background: #f8f9fa;
             border-left: 4px solid #800020;
-            padding: 1rem;
-            margin-bottom: 2rem;
+            padding: 1.25rem;
             border-radius: 0.5rem;
         }
         .methodology-toc ul {
             list-style: none;
             padding-left: 0;
+            margin-bottom: 0;
         }
         .methodology-toc li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .methodology-toc li:last-child {
+            margin-bottom: 0;
         }
         .methodology-toc a {
             color: #800020;
             text-decoration: none;
             font-weight: 500;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s ease;
         }
         .methodology-toc a:hover {
-            text-decoration: underline;
+            background-color: rgba(128, 0, 32, 0.1);
+            text-decoration: none;
+        }
+        .methodology-toc a.active {
+            background-color: rgba(128, 0, 32, 0.15);
+            font-weight: 600;
         }
         .abbreviations-table {
             width: 100%;
@@ -74,22 +86,27 @@
         </ol>
     </nav>
     <h2 class="display-5 fw-bold mb-4" style="letter-spacing:-0.01em; color:var(--primary-color);">La Metodologia</h2>
-    
-    <!-- Indice navigabile -->
-    <div class="methodology-toc">
-        <h4 class="mb-3" style="color: #800020;"><i class="bi bi-list-ul me-2"></i>Indice</h4>
-        <ul>
-            <li><a href="#introduzione">Introduzione</a></li>
-            <li><a href="#trascrizione">La trascrizione</a></li>
-            <li><a href="#individuazione">L'individuazione delle entità</a></li>
-            <li><a href="#marcatura">La marcatura TEI</a></li>
-        </ul>
-    </div>
-    
-    <div class="methodology-content">
+
+    <div class="row">
+        <!-- Sidebar con indice (sempre visibile su desktop) -->
+        <div class="col-lg-3 col-12 mb-4">
+            <div class="methodology-toc position-sticky" style="top: 80px;">
+                <h5 class="mb-3" style="color: #800020;"><i class="bi bi-list-ul me-2"></i>Indice</h5>
+                <ul>
+                    <li><a href="#introduzione">Introduzione</a></li>
+                    <li><a href="#trascrizione">La trascrizione</a></li>
+                    <li><a href="#individuazione">L'individuazione delle entità</a></li>
+                    <li><a href="#marcatura">La marcatura TEI</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contenuto principale -->
+        <div class="col-lg-9 col-12">
+            <div class="methodology-content">
         <section id="introduzione">
       <h3>Introduzione</h3>
-      <p>Le tappe costitutive <strong>indispensabili</strong> per la creazione dell'edizione digitale hanno riguardato la <strong>digitalizzazione</strong>, la <strong>metadatazione</strong>, la <strong>trascrizione</strong> e la <strong>marcatura</strong> del carteggio.</p>
+      <p>Le tappe costitutive <strong>indispensabili</strong> per la creazione dell'edizione digitale hanno riguardato la <strong>digitalizzazione</strong>, la <strong>trascrizione</strong>, la <strong>metadatazione</strong> e la <strong>marcatura</strong> del carteggio.</p>
       
       <p>La <strong>prima fase</strong> ha previsto la riproduzione digitale e la relativa metadatazione delle missive da parte dell'Istituzione Biblioteca Classense, con la collaborazione di tirocinanti del Corso di Laurea Magistrale in Scienze del libro e del documento dell'Università di Bologna.</p>
       
@@ -125,6 +142,7 @@
           <tr><td>D.</td><td>Don</td></tr>
           <tr><td>F.</td><td>Frate (Fra; Fratello)</td></tr>
           <tr><td>Mrò</td><td>Maestro (Mastro; Magistro); oppure Monastero</td></tr>
+          <tr><td>nrò</td><td>nostro</td></tr>
           <tr><td>MS.</td><td>Manoscritto</td></tr>
           <tr><td>MSS.</td><td>Manoscritti</td></tr>
           <tr><td>oc.ne</td><td>occasione</td></tr>
@@ -308,23 +326,22 @@
       <p>La marcatura delle entità segue il sistema di identificazione univoca descritto nella sezione precedente, utilizzando gli elementi TEI specifici per ciascuna categoria e collegando ogni occorrenza attraverso gli attributi <code>@ref</code> e <code>@key</code> ai metadati strutturati. Il progetto utilizza <strong>Oxygen XML Editor</strong> per la codifica, <strong>Roma TEI Editor</strong> per lo schema ODD, <strong>GitHub</strong> per il versionamento, <strong>Microsoft Excel</strong> per i metadati. Il workflow prevede validazione automatica rispetto allo schema ODD, peer review tra i membri del team, e tracciamento delle modifiche nel <code>&lt;revisionDesc&gt;</code>.</p>
 
       <p>Il progetto è pubblicato in formato aperto su <a href="https://github.com/chiarasharp/carteggio-canneti-fiacchi-data" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020; transition: border-bottom 0.2s ease;" onmouseover="this.style.borderBottom='2px solid #800020';" onmouseout="this.style.borderBottom='1px solid #800020';">GitHub</a>. L'edizione digitale è disponibile <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" style="color: #800020; text-decoration: none; border-bottom: 1px solid #800020; transition: border-bottom 0.2s ease;" onmouseover="this.style.borderBottom='2px solid #800020';" onmouseout="this.style.borderBottom='1px solid #800020';">qui</a> tramite <strong>EVT 2</strong> con: visualizzazione sincronizzata testo-immagine, evidenziazione selettiva delle entità, pannelli informativi con metadati, collegamenti tra occorrenze, ricerca full-text, visualizzazione geografica su mappa.</p>
+
+      <div class="mt-5 mb-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 2rem; border-radius: 0.75rem; border: 2px solid #eaddd7; box-shadow: 0 4px 12px rgba(128, 0, 32, 0.08);">
+        <h4 class="mb-3" style="color: #800020;"><i class="bi bi-display me-2"></i>L'edizione digitale</h4>
+        <p class="mb-3">L'edizione digitale realizzata con EVT 2 permette di consultare simultaneamente l'immagine del manoscritto originale, la trascrizione e le entità marcate, facilitando la ricerca e l'analisi del carteggio.</p>
+        <div class="text-center">
+          <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" rel="noopener">
+            <img src="{{ url_for('static', filename='edizione-digitale.png') }}" alt="Screenshot dell'edizione digitale EVT 2 che mostra la visualizzazione sincronizzata tra immagine del manoscritto originale e trascrizione con marcatura TEI" class="img-fluid shadow-lg" style="max-width: 100%; border-radius: 8px; border: 2px solid #eaddd7; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+          </a>
+          <p class="mt-3 small text-muted"><em><i class="bi bi-box-arrow-up-right me-1"></i>Clicca sull'immagine per esplorare l'edizione digitale completa</em></p>
+        </div>
+      </div>
         </section>
+            </div>
+        </div>
     </div>
 </div>
 
-<script>
-// Smooth scrolling per i link dell'indice
-document.querySelectorAll('.methodology-toc a').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-</script>
+<script src="{{ url_for('static', filename='sidebar-navigation.js') }}"></script>
 {% endblock %}

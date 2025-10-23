@@ -247,8 +247,8 @@ def get_news_data():
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             news = json.load(f)
-            # Sort by date descending (most recent first)
-            return sorted(news, key=lambda x: x.get('date', ''), reverse=True)
+            # Sort by sort_date descending (most recent first)
+            return sorted(news, key=lambda x: x.get('sort_date', ''), reverse=True)
     except FileNotFoundError:
         logger.warning(f"News data file not found: {file_path}. Returning empty list.")
         return []
