@@ -6,9 +6,10 @@ import subprocess
 import sys
 import os
 
-# Get the directory where this script is located
+# Get the project root directory (parent of scripts/)
 script_dir = os.path.dirname(os.path.abspath(__file__))
-requirements_file = os.path.join(script_dir, 'requirements.txt')
+project_root = os.path.dirname(script_dir)
+requirements_file = os.path.join(project_root, 'requirements.txt')
 
 print(f"Installing dependencies from {requirements_file}...")
 

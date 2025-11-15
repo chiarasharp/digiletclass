@@ -10,3 +10,4 @@ zipp==3.21.0
 lxml
 flask-paginate
 pytest
+gunicorn
