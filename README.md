@@ -1,63 +1,101 @@
 # DigiLetClass
 
-## Quickstart
+Sito web del progetto DigiLetClass — Flask app che presenta il progetto,
+le entità (persone, luoghi, organizzazioni) e le news.
 
-1. Setup (recommended with virtualenv):
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
+Progetto finanziato da PNRR-CHANGES (Spoke 3: Cultural Heritage), Università di Bologna.
 
-2. Run the app:
-   - With Flask CLI (recommended):
-     ```bash
-     export FLASK_APP=app/webapp.py
-     flask run
-     ```
-   - Or directly:
-     ```bash
-     python app/webapp.py
-     ```
+Sito: [digiletclass.unibo.it](https://digiletclass.unibo.it)
+Edizione digitale: [esdcarteggiocannetifiacchi.unibo.it](https://esdcarteggiocannetifiacchi.unibo.it)
 
-3. Run tests:
-   ```bash
-   export PYTHONPATH=.
-   pytest -q
-   ```
+---
 
-## Main Routes
+## Sviluppo locale
 
-- Home: `/`
-- Project: `/project`
-- Methodology: `/methodology`
-- Entities (landing): `/entities`
-- Entities by type: `/entities/<orgs|people|places>`
-- News and Events (list): `/news`
-- News/Event detail: `/news/<news_id>`
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 
-## Project Structure
+export FLASK_APP=app/webapp.py
+flask run
+```
+
+Test:
+```bash
+export PYTHONPATH=.
+pytest -q
+```
+
+---
+
+## Struttura
 
 ```
 app/
-  __init__.py         # App factory
-  webapp.py           # Entry point
-  blueprints/         # Flask blueprints (routes)
-  config/             # Configuration and type maps
-  static/             # CSS, JS, images
-  templates/          # Jinja2 templates and macros
-  utils.py            # Utility functions
-
-tests/                   # Test suite
-passenger_wsgi.py        # cPanel/Passenger entry point
-requirements.txt         # Python dependencies
-README.md                # This file
-LICENSE                  # MIT (code) + CC BY 4.0 (content)
+  blueprints/      # route Flask
+  config/          # configurazione e type maps
+  data/            # dati XML/JSON serviti dall'app
+  static/          # CSS, JS, immagini
+  templates/       # template Jinja2
+  utils.py
+  webapp.py        # entry point
+passenger_wsgi.py  # entry point cPanel/Passenger
+build.sh           # build script per Render
+docs/
+  DEPLOYMENT_CPANEL.md   # guida deploy cPanel
 ```
 
-## License
+### Dati (`app/data/`)
 
-- Code: MIT License. See `LICENSE`.
-- Content (data, text, images unless otherwise noted): Creative Commons Attribution 4.0 International (CC BY 4.0).
+| File | Contenuto |
+|---|---|
+| `cited-people.xml` | Persone citate nel carteggio |
+| `orgs.xml` | Organizzazioni |
+| `places.xml` | Luoghi |
+| `news.json` | News ed eventi del progetto |
 
-You are free to share and adapt the content with attribution. Details: https://creativecommons.org/licenses/by/4.0/
+Questi file sono aggiornati manualmente quando cambiano le entità o le news.
+
+### Route principali
+
+| Route | Descrizione |
+|---|---|
+| `/` | Home |
+| `/project` | Presentazione progetto |
+| `/methodology` | Metodologia |
+| `/entities` | Landing entità |
+| `/entities/<orgs\|people\|places>` | Entità per tipo |
+| `/news` | Lista news ed eventi |
+| `/news/<news_id>` | Dettaglio news |
+
+---
+
+## Deploy
+
+Il sito gira su cPanel (Passenger/WSGI) su server Unibo.
+
+Per la guida completa al deploy: [docs/DEPLOYMENT_CPANEL.md](docs/DEPLOYMENT_CPANEL.md)
+
+Aggiornamento rapido dopo modifiche:
+1. Carica i file modificati via FTP o File Manager cPanel
+2. Restart: cPanel → Setup Python App → Restart
+   (oppure `touch tmp/restart.txt`)
+
+---
+
+## Repo correlati
+
+| Repo | Ruolo |
+|---|---|
+| `carteggio-canneti-fiacchi-data` | Dati TEI/XML del carteggio |
+| `carteggio-canneti-fiacchi-esd` | EVT viewer dell'edizione digitale |
+| `esd-carteggio-canneti-fiacchi-dist` | Dist pubblicata dell'edizione digitale |
+| `scripts_digiletclass` | Script di processing e publish workflow |
+
+---
+
+## Licenza
+
+- Codice: MIT License
+- Contenuti (testi, immagini, dati): CC BY 4.0

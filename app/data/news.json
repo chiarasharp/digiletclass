@@ -1,5 +1,15 @@
 [
   {
+    "id": "dataset-v1-2-0",
+    "title": "Busta 11 online",
+    "date": "22 giugno 2026",
+    "sort_date": "2026-06-22",
+    "summary": "Pubblicata la versione v1.2.0 del dataset TEI/XML del carteggio Canneti-Fiacchi, con l'aggiunta delle 140 lettere della busta 11 (1721–1724).",
+    "image": "/static/news/busta-11.png",
+    "content": "<p>Le lettere della <strong>busta 11</strong> del carteggio Canneti-Fiacchi sono ora consultabili nell'<a href=\"https://esdcarteggiocannetifiacchi.unibo.it/#/imgTxt?d=DLCL_CF_E11001&amp;p=DLCL_CF_E11001_C1R_L\">edizione digitale</a>. La busta raccoglie 140 lettere del periodo 1721–1724, con trascrizione completa e marcatura semantica di persone, luoghi, opere e organizzazioni citate. Il dataset TEI/XML aggiornato (v1.2.0) è disponibile in accesso aperto su <a href=\"https://doi.org/10.5281/zenodo.15683491\">Zenodo</a>.</p>",
+    "url": "https://esdcarteggiocannetifiacchi.unibo.it/#/imgTxt?d=DLCL_CF_E11001&p=DLCL_CF_E11001_C1R_L"
+  },
+  {
     "id": "giornate-change-2025",
     "title": "Giornate DOORS of CHANGE 2025",
     "date": "16-19 ottobre 2025",
