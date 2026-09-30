@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+{% block title %}DigiLetClass — {{ title }}{% endblock %}
+
+{% block content %}
+<div class="main-content-compact py-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb align-items-center">
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('main.home') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;"><i class="bi bi-house-door" style="font-size:1.1em; margin-right:0.3em;"></i>Home</a>
+            </li>
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('main.entities') }}" class="text-decoration-none d-flex align-items-center" style="color:inherit;">
+                    <i class="bi bi-collection" style="font-size:1.1em; margin-right:0.3em;"></i>Indici
+                </a>
+            </li>
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="{{ url_for('main.entities_list', entity_type=item_type) }}" class="text-decoration-none" style="color:inherit;">
+                    {% if item_type == 'people' %}Persone{% elif item_type == 'places' %}Luoghi{% else %}Organizzazioni{% endif %}
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+    <div class="container-inner entity-detail-page">
+        {% set is_detail_page = true %}
+        {% if item_type == 'orgs' %}
+            {% include '_org_modal.html' %}
+        {% elif item_type == 'people' %}
+            {% include '_person_modal.html' %}
+        {% elif item_type == 'places' %}
+            {% include '_place_modal.html' %}
+        {% endif %}
+    </div>
+
+    {% if letters.total %}
+    <div class="container-inner entity-detail-page mt-4 letters-section">
+        <div class="letters-section-header">
+            <h5 class="letters-section-title">
+                <i class="bi bi-envelope-paper"></i>Citato in {{ letters.total }} {{ 'lettere' if letters.total != 1 else 'lettera' }}
+            </h5>
+            <a href="https://esdcarteggiocannetifiacchi.unibo.it/" target="_blank" rel="noopener" class="letters-section-link">
+                Vai all'edizione <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+        </div>
+        <ul class="letters-list">
+            {% for letter in letters.entries %}
+            <li>
+                <a href="{{ letter_evt_url(letter.id, letter.first_pb_id) }}" target="_blank" rel="noopener" class="letters-list-link">
+                    <span class="letters-list-title">{{ letter.title }}</span>
+                    <span class="letters-list-code">{{ letter.id }}</span>
+                    <i class="bi bi-box-arrow-up-right letters-list-icon"></i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% if letters.total_pages > 1 %}
+        <nav aria-label="Navigazione pagine lettere" class="mt-3">
+            <ul class="pagination pagination-sm justify-content-center mb-0">
+                <li class="page-item {% if letters.page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for(request.endpoint, entity_id=entity_id, letters_page=letters.page-1) if letters.page > 1 else '#' }}">Precedente</a>
+                </li>
+                {% for p in letters.pagination_window %}
+                    {% if p %}
+                        <li class="page-item {% if p == letters.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for(request.endpoint, entity_id=entity_id, letters_page=p) }}">{{ p }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                    {% endif %}
+                {% endfor %}
+                <li class="page-item {% if letters.page >= letters.total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for(request.endpoint, entity_id=entity_id, letters_page=letters.page+1) if letters.page < letters.total_pages else '#' }}">Successivo</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

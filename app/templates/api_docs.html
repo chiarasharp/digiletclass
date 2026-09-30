@@ -1,0 +1,489 @@
+{% extends 'layout.html' %}
+{% block title %}DigiLetClass — API{% endblock %}
+{% block content %}
+<style>
+  .api-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    min-height: 80vh;
+    align-items: start;
+  }
+  .api-sidebar {
+    position: sticky;
+    top: 80px;
+    padding: 2rem 1rem 2rem 1.5rem;
+    border-right: 1px solid #e0d6ce;
+    font-size: 0.85rem;
+  }
+  .api-sidebar .nav-section {
+    margin-bottom: 1.5rem;
+  }
+  .api-sidebar .nav-section-title {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 0.5rem;
+  }
+  .api-sidebar a {
+    display: block;
+    padding: 0.2rem 0.5rem;
+    color: var(--text-main);
+    text-decoration: none;
+    border-radius: 4px;
+    font-family: 'B612', sans-serif;
+  }
+  .api-sidebar a:hover, .api-sidebar a.active {
+    background: var(--accent-color-light);
+    color: var(--primary-color);
+  }
+  .api-main {
+    padding: 2rem 2.5rem 4rem 2.5rem;
+    max-width: 960px;
+  }
+  .api-header {
+    padding: 0 2.5rem 2rem 2.5rem;
+    border-bottom: 1px solid #e0d6ce;
+    margin-bottom: 0;
+  }
+  .endpoint-block {
+    margin-bottom: 3rem;
+  }
+  .endpoint-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .endpoint-left {}
+  .endpoint-right {
+    background: #1e1e2e;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    font-size: 0.78rem;
+    color: #cdd6f4;
+    overflow-x: auto;
+  }
+  .endpoint-right pre {
+    margin: 0;
+    color: #cdd6f4;
+    font-size: 0.78rem;
+    white-space: pre;
+  }
+  .endpoint-right .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 0.4rem;
+  }
+  .endpoint-right code.url {
+    display: block;
+    color: #a6e3a1;
+    font-family: monospace;
+    margin-bottom: 0.8rem;
+    font-size: 0.82rem;
+  }
+  .method-path {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+  .method-path code {
+    font-size: 1rem;
+    color: var(--text-main);
+  }
+  .section-divider {
+    border: none;
+    border-top: 1px solid #e0d6ce;
+    margin: 2.5rem 0 2rem 0;
+  }
+  .section-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 2rem;
+    font-size: 0.88rem;
+    margin-bottom: 0;
+  }
+  .info-grid dt {
+    font-weight: 600;
+    color: #555;
+  }
+  .info-grid dd {
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .api-layout { grid-template-columns: 1fr; }
+    .api-sidebar { position: static; border-right: none; border-bottom: 1px solid #e0d6ce; }
+    .endpoint-row { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .api-header, .api-main { padding-left: 1rem; padding-right: 1rem; }
+  }
+</style>
+
+<div class="api-header pt-4 pb-3">
+  <nav aria-label="breadcrumb" class="mb-2">
+    <ol class="breadcrumb align-items-center small mb-1">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}" class="text-decoration-none" style="color:inherit;"><i class="bi bi-house-door me-1"></i>Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('main.entities') }}" class="text-decoration-none" style="color:inherit;"><i class="bi bi-collection me-1"></i>Le Entità</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-code-slash me-1"></i>API</li>
+    </ol>
+  </nav>
+  <h2 class="fw-bold mb-1" style="color:var(--primary-color);">API DigiLetClass</h2>
+  <p class="text-muted mb-0">Accesso programmatico alle entità del Carteggio Canneti-Fiacchi.</p>
+</div>
+
+<div class="api-layout">
+  <!-- Sidebar -->
+  <nav class="api-sidebar">
+    <div class="nav-section">
+      <div class="nav-section-title">Generale</div>
+      <a href="#intro">Informazioni</a>
+      <a href="#pagination">Paginazione</a>
+      <a href="#errors">Errori</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Endpoint</div>
+      <a href="#people"><i class="bi bi-people me-1"></i>Persone</a>
+      <a href="#places"><i class="bi bi-geo-alt me-1"></i>Luoghi</a>
+      <a href="#orgs"><i class="bi bi-diagram-3 me-1"></i>Organizzazioni</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Risorse</div>
+      <a href="#openapi"><i class="bi bi-file-earmark-code me-1"></i>OpenAPI</a>
+      <a href="#cite">Come citare</a>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="api-main">
+
+    <!-- Informazioni generali -->
+    <div id="intro" class="endpoint-block">
+      <div class="section-heading"><i class="bi bi-info-circle"></i>Informazioni generali</div>
+      <dl class="info-grid">
+        <dt>Base URL</dt>
+        <dd><code>https://digiletclass.unibo.it/api/v1</code></dd>
+        <dt>Formato risposta</dt>
+        <dd><code>application/json</code></dd>
+        <dt>Autenticazione</dt>
+        <dd>nessuna</dd>
+        <dt>CORS</dt>
+        <dd>abilitato per tutti i domini</dd>
+        <dt>Licenza dati</dt>
+        <dd><a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></dd>
+      </dl>
+    </div>
+
+    <hr class="section-divider" id="pagination">
+
+    <!-- Paginazione -->
+    <div class="endpoint-block">
+      <div class="section-heading"><i class="bi bi-list-ul"></i>Paginazione</div>
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <p class="small text-muted">Tutti gli endpoint di lista restituiscono 25 risultati per pagina. Usa il parametro <code>page</code> per navigare.</p>
+          <p class="small text-muted">Per scaricare <strong>tutti i risultati in un'unica risposta</strong>, senza paginazione, imposta <code>per_page=all</code>.</p>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Struttura risposta</div>
+          <pre>{
+  "page": 1,
+  "per_page": 25,
+  "total": 1162,
+  "total_pages": 47,
+  "items": [ ... ]
+}</pre>
+          <div class="label">Scaricare tutto (senza paginazione)</div>
+          <code class="url">GET /api/v1/people?per_page=all</code>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="people">
+
+    <!-- Persone -->
+    <div class="section-heading"><i class="bi bi-people"></i>Persone</div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/people</code>
+          </div>
+          <p class="small text-muted mb-3">Lista paginata delle persone citate nel carteggio.</p>
+          <table class="table table-sm small">
+            <thead class="table-light"><tr><th>Parametro</th><th>Tipo</th><th>Descrizione</th></tr></thead>
+            <tbody>
+              <tr><td><code>search</code></td><td>string</td><td>Ricerca sul nome</td></tr>
+              <tr><td><code>sex</code></td><td><code>m</code> | <code>f</code></td><td>Filtra per sesso</td></tr>
+              <tr><td><code>birth_from</code></td><td>integer</td><td>Anno di nascita minimo</td></tr>
+              <tr><td><code>birth_to</code></td><td>integer</td><td>Anno di nascita massimo</td></tr>
+              <tr><td><code>page</code></td><td>integer</td><td>Pagina (default: 1)</td></tr>
+              <tr><td><code>per_page</code></td><td><code>all</code></td><td>Se <code>all</code>, restituisce tutti i risultati senza paginazione</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/people?search=Canneti&amp;sex=m</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "page": 1,
+  "per_page": 25,
+  "total": 1,
+  "total_pages": 1,
+  "items": [ { "id": "DLCL_CF_PC0001", ... } ]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/people/&lt;id&gt;</code>
+          </div>
+          <p class="small text-muted">Dati di una singola persona per ID.</p>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/people/DLCL_CF_PC0001</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "id": "DLCL_CF_PC0001",
+  "sameAs": "http://viaf.org/viaf/88842923",
+  "sex": "m",
+  "pers_names": [
+    { "name": "Pietro Canneti",
+      "lang": "it", "parts": [...] }
+  ],
+  "birth": "1659-11-21",
+  "birth_place": "Cremona",
+  "death": "1730-10-01",
+  "death_place": "Faenza",
+  "occupations": ["bibliotecario", "poeta"],
+  "affiliations": ["Ordine dei Camaldolesi"],
+  "idnos": [
+    { "type": "VIAF", "value": "88842923" },
+    { "type": "GND",  "value": "1057568929" }
+  ],
+  "note": null
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="places">
+
+    <!-- Luoghi -->
+    <div class="section-heading"><i class="bi bi-geo-alt"></i>Luoghi</div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/places</code>
+          </div>
+          <p class="small text-muted mb-3">Lista paginata dei luoghi.</p>
+          <table class="table table-sm small">
+            <thead class="table-light"><tr><th>Parametro</th><th>Tipo</th><th>Descrizione</th></tr></thead>
+            <tbody>
+              <tr><td><code>search</code></td><td>string</td><td>Ricerca sul nome</td></tr>
+              <tr><td><code>type</code></td><td>string</td><td>Tipo (es. <code>settlement</code>)</td></tr>
+              <tr><td><code>country</code></td><td>ISO 3166</td><td>Nazione (es. <code>IT</code>)</td></tr>
+              <tr><td><code>page</code></td><td>integer</td><td>Pagina (default: 1)</td></tr>
+              <tr><td><code>per_page</code></td><td><code>all</code></td><td>Se <code>all</code>, restituisce tutti i risultati senza paginazione</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/places?type=settlement&amp;country=IT</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "page": 1, "per_page": 25,
+  "total": 111, "total_pages": 5,
+  "items": [ { "id": "DLCL_CF_L0002", ... } ]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/places/&lt;id&gt;</code>
+          </div>
+          <p class="small text-muted">Dati di un singolo luogo per ID.</p>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/places/DLCL_CF_L0002</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "id": "DLCL_CF_L0002",
+  "sameAs": "https://www.geonames.org/3169561/",
+  "type": "settlement",
+  "place_names": [{ "name": "Ravenna", "lang": "it" }],
+  "location": {
+    "country": "IT",
+    "geo": "44.41344, 12.20121",
+    "street": null, "postCode": null
+  },
+  "idnos": [
+    { "type": "GND",      "value": "4048629-1" },
+    { "type": "geonames", "value": "3169561" }
+  ]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="orgs">
+
+    <!-- Organizzazioni -->
+    <div class="section-heading"><i class="bi bi-diagram-3"></i>Organizzazioni</div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/orgs</code>
+          </div>
+          <p class="small text-muted mb-3">Lista paginata delle organizzazioni.</p>
+          <table class="table table-sm small">
+            <thead class="table-light"><tr><th>Parametro</th><th>Tipo</th><th>Descrizione</th></tr></thead>
+            <tbody>
+              <tr><td><code>search</code></td><td>string</td><td>Ricerca sul nome</td></tr>
+              <tr><td><code>type</code></td><td>string</td><td>Tipo (es. <code>library</code>)</td></tr>
+              <tr><td><code>country</code></td><td>ISO 3166</td><td>Nazione</td></tr>
+              <tr><td><code>settlement</code></td><td>string</td><td>Città (lowercase)</td></tr>
+              <tr><td><code>page</code></td><td>integer</td><td>Pagina (default: 1)</td></tr>
+              <tr><td><code>per_page</code></td><td><code>all</code></td><td>Se <code>all</code>, restituisce tutti i risultati senza paginazione</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/orgs?type=library&amp;country=IT</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "page": 1, "per_page": 25,
+  "total": 25, "total_pages": 1,
+  "items": [ { "id": "DLCL_CF_O0001", ... } ]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint-block">
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <div class="method-path mb-2">
+            <span class="badge bg-success">GET</span>
+            <code>/api/v1/orgs/&lt;id&gt;</code>
+          </div>
+          <p class="small text-muted">Dati di una singola organizzazione per ID.</p>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Esempio richiesta</div>
+          <code class="url">GET /api/v1/orgs/DLCL_CF_O0001</code>
+          <div class="label">Risposta</div>
+          <pre>{
+  "id": "DLCL_CF_O0001",
+  "sameAs": "http://viaf.org/viaf/122822452",
+  "type": "library",
+  "org_names": [
+    { "name": "Istituzione Biblioteca Classense",
+      "lang": "it" }
+  ],
+  "desc": null,
+  "idnos": [
+    { "type": "GND",  "value": "5007734-X" },
+    { "type": "VIAF", "value": "122822452" }
+  ],
+  "location": {
+    "country": "IT",
+    "geo": "44.41453, 12.19994",
+    "street": "Via Alfredo Baccarini 3",
+    "postCode": "48121",
+    "settlement": "Ravenna"
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="openapi">
+
+    <!-- OpenAPI -->
+    <div class="endpoint-block">
+      <div class="section-heading"><i class="bi bi-file-earmark-code"></i>Specifica OpenAPI</div>
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <p class="small text-muted mb-3">La specifica completa è disponibile in formato <strong>OpenAPI 3.1</strong> (YAML). Puoi usarla per esplorare l'API interattivamente, generare client automatici in qualsiasi linguaggio, o integrare i dati in portali come Sampo-UI.</p>
+          <a href="{{ url_for('main.openapi_spec') }}" class="btn btn-sm btn-outline-secondary font-monospace">openapi.yaml <i class="bi bi-download ms-1"></i></a>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">Importa in Swagger Editor</div>
+          <pre>File → Import URL:
+https://digiletclass.unibo.it
+  /api/openapi.yaml</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="errors">
+
+    <!-- Errori -->
+    <div class="endpoint-block">
+      <div class="section-heading"><i class="bi bi-exclamation-triangle"></i>Errori</div>
+      <div class="endpoint-row">
+        <div class="endpoint-left">
+          <table class="table table-sm small mb-0">
+            <thead class="table-light"><tr><th>Codice</th><th>Significato</th></tr></thead>
+            <tbody>
+              <tr><td><code>200</code></td><td>Successo</td></tr>
+              <tr><td><code>404</code></td><td>Entità non trovata</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="endpoint-right">
+          <div class="label">404 risposta</div>
+          <pre>{ "error": "Not found" }</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider" id="cite">
+
+    <!-- Citazione -->
+    <div class="endpoint-block">
+      <div class="section-heading"><i class="bi bi-quote"></i>Come citare</div>
+      <p class="small text-muted mb-2">Se utilizzi questa API in una pubblicazione o progetto, cita il dataset TEI di origine:</p>
+      <p class="small font-monospace mb-0" style="background:var(--accent-color-light); padding:0.8rem 1rem; border-radius:6px;">Manca, Chiara. <em>Carteggio Canneti-Fiacchi: Digital Edition Dataset</em>. Zenodo. <a href="https://doi.org/10.5281/zenodo.14234727" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.14234727</a>.</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

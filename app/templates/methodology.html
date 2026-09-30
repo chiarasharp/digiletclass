@@ -5,78 +5,8 @@
 #}
 {% extends 'layout.html' %}
 {% block title %}DigiLetClass — Metodologia{% endblock %}
-{% macro section(title, content) %}
-  <section>
-    <h3>{{ title }}</h3>
-    <p>{{ content }}</p>
-  </section>
-{% endmacro %}
 {% block content %}
 <div class="main-content-compact py-5">
-    <style>
-        .methodology-content p {
-            text-align: justify;
-        }
-        .methodology-content strong {
-            color: #800020;
-        }
-        .methodology-toc {
-            background: #f8f9fa;
-            border-left: 4px solid #800020;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
-        }
-        .methodology-toc ul {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 0;
-        }
-        .methodology-toc li {
-            margin-bottom: 0.75rem;
-        }
-        .methodology-toc li:last-child {
-            margin-bottom: 0;
-        }
-        .methodology-toc a {
-            color: #800020;
-            text-decoration: none;
-            font-weight: 500;
-            display: block;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.25rem;
-            transition: background-color 0.2s ease;
-        }
-        .methodology-toc a:hover {
-            background-color: rgba(128, 0, 32, 0.1);
-            text-decoration: none;
-        }
-        .methodology-toc a.active {
-            background-color: rgba(128, 0, 32, 0.15);
-            font-weight: 600;
-        }
-        .abbreviations-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-        .abbreviations-table th,
-        .abbreviations-table td {
-            border: 1px solid #ddd;
-            padding: 0.75rem;
-            text-align: left;
-        }
-        .abbreviations-table th {
-            background-color: #800020;
-            color: white;
-            font-weight: bold;
-        }
-        .abbreviations-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .abbreviations-table tr:hover {
-            background-color: #f5f5f5;
-        }
-    </style>
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb align-items-center">
             <li class="breadcrumb-item d-flex align-items-center">
@@ -90,7 +20,7 @@
     <div class="row">
         <!-- Sidebar con indice (sempre visibile su desktop) -->
         <div class="col-lg-3 col-12 mb-4">
-            <div class="methodology-toc position-sticky" style="top: 80px;">
+            <div class="doc-toc position-sticky" style="top: 80px;">
                 <h5 class="mb-3" style="color: #800020;"><i class="bi bi-list-ul me-2"></i>Indice</h5>
                 <ul>
                     <li><a href="#introduzione">Introduzione</a></li>
@@ -103,7 +33,7 @@
 
         <!-- Contenuto principale -->
         <div class="col-lg-9 col-12">
-            <div class="methodology-content">
+            <div class="doc-content">
         <section id="introduzione">
       <h3>Introduzione</h3>
       <p>Le tappe costitutive <strong>indispensabili</strong> per la creazione dell'edizione digitale hanno riguardato la <strong>digitalizzazione</strong>, la <strong>trascrizione</strong>, la <strong>metadatazione</strong> e la <strong>marcatura</strong> del carteggio.</p>
@@ -127,7 +57,7 @@
       <p>L'intervento maggiore ha riguardato lo <strong>scioglimento delle abbreviazioni</strong> di non ovvia risoluzione, senza adottare l'uso di parentesi basandosi sulle forme piene corrispondenti nei casi di parole abbreviate per troncamento, contrazione o per i segni abbreviativi di significato proprio. In seguito a uno studio accurato sulla tematica, è stato possibile sciogliere con sicurezza la maggior parte delle sigle, ma è bene tenere presente che alcune abbreviazioni possono assumere un significato diverso a seconda del contesto.</p>
       
       <p>Si fornisce qui un elenco specifico:</p>
-      <table class="abbreviations-table">
+      <table class="doc-abbreviations-table">
         <thead>
           <tr>
             <th>Abbreviazione</th>
@@ -161,7 +91,7 @@
       </table>
       
       <p>Inoltre, si è scelto di non sciogliere:</p>
-      <table class="abbreviations-table">
+      <table class="doc-abbreviations-table">
         <thead>
           <tr>
             <th>Abbreviazione</th>
@@ -184,7 +114,7 @@
       <p>Le abbreviazioni non sono state sciolte laddove non è stato possibile risalire con sicurezza al significato.</p>
       
       <p>Dal momento che all'interno del testo delle lettere sono presenti molteplici informazioni relative al <strong>commercio librario</strong>, alla vendita e all'acquisto di volumi, figurano anche riferimenti alla monetazione dell'epoca. Essi sono espressi tramite simboli, parole intere o abbreviate, e anche in questo caso si è scelto di indicare la parola estesa, qualora possibile. Le valute che si incontrano nel testo sono:</p>
-      <table class="abbreviations-table">
+      <table class="doc-abbreviations-table">
         <thead>
           <tr>
             <th>Valuta</th>
@@ -212,7 +142,7 @@
 
       <p>Le entità sono state classificate in categorie e per ciascuna è stata predisposta una tabella Excel con metadati specifici:</p>
 
-      <table class="abbreviations-table">
+      <table class="doc-abbreviations-table">
         <thead>
           <tr>
             <th>Categoria</th>

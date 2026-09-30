@@ -5,16 +5,27 @@
   Used by the /modal/people/<id> endpoint and JS modal loader.
 #}
 <div class="entity-modal">
-  <div class="small text-muted mb-1">ID interno: {{ person.id }}</div>
-
   <div class="entity-modal-title">
     <span>
       {% for part in person.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}{{ part.text }} {% endfor %}
       {% for part in person.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}<em>{{ part.text }}</em> {% endfor %}
     </span>
+  </div>
+  <div class="entity-modal-linkrow">
+    {% if not is_detail_page %}
+      <a href="{{ url_for('main.person_detail', entity_id=person.id) }}" class="btn-entity-link btn-entity-link-permalink" title="Permalink DigiLetClass">
+        <i class="bi bi-link-45deg"></i> Permalink
+      </a>
+    {% endif %}
     {% if person.sameAs %}
-      <a href="{{ person.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sameas btn-sm ms-2 d-inline-flex entity-modal-link" title="Scheda esterna">
-        <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
+      {% set service = 'VIAF' if 'viaf.org' in person.sameAs else ('GND' if ('d-nb.info' in person.sameAs or 'gnd.network' in person.sameAs) else ('Wikidata' if 'wikidata.org' in person.sameAs else 'Scheda esterna')) %}
+      <a href="{{ person.sameAs }}" target="_blank" class="btn-entity-link btn-entity-link-external" title="Vedi su {{ service }}">
+        <i class="bi bi-box-arrow-up-right"></i> {{ service }}
+      </a>
+    {% endif %}
+    {% if is_detail_page %}
+      <a href="{{ url_for('api.people_detail', entity_id=person.id) }}" class="btn-entity-link btn-entity-link-json" title="Dati JSON">
+        <i class="bi bi-filetype-json"></i> JSON
       </a>
     {% endif %}
   </div>
@@ -35,6 +46,18 @@
     </div>
     {% endif %}
   </div>
+
+  {% if person.sex %}
+    <div class="entity-modal-section mb-3">
+      <span class="entity-modal-section-title">Sesso</span>
+      <p class="entity-modal-value mb-0">
+        {% if person.sex == 'm' %}Maschile
+        {% elif person.sex == 'f' %}Femminile
+        {% else %}{{ person.sex }}
+        {% endif %}
+      </p>
+    </div>
+  {% endif %}
   <hr class="my-2">
 
   {% if person.note %}
@@ -110,18 +133,7 @@
         <span class="entity-modal-section-title">Affiliazione</span>
         <p class="entity-modal-value">{{ person.affiliations|join(', ') }}</p>
     </div>
-    <hr class="my-2">
   {% endif %}
 
-  {% if person.sex %}
-    <div class="entity-modal-section">
-      <span class="entity-modal-section-title">Genere</span>
-      <p class="entity-modal-value">
-        {% if person.sex == 'm' %}Maschile
-        {% elif person.sex == 'f' %}Femminile
-        {% else %}{{ person.sex }}
-        {% endif %}
-      </p>
-    </div>
-  {% endif %}
-</div> 
+  <div class="entity-modal-id-footer">ID interno: {{ person.id }}</div>
+</div>

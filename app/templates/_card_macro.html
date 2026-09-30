@@ -17,78 +17,71 @@
      {% if item_type == 'orgs' %}data-org-index="{{ index }}"{% endif %}
      style="cursor:pointer;" tabindex="0" role="button" aria-label="Dettagli {{ item_type }}: {{ item['org_names'][0]['name'] if item_type == 'orgs' and item['org_names'] and item['org_names'][0]['name'] else item['id'] }}">
     <div class="card-body d-flex flex-column h-100">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-            <!-- DEBUG: {{ item.type }} / {{ type_map[item.type] if item.type in type_map else 'NO MAP' }} -->
-            <span class="badge badge-id" data-bs-toggle="tooltip" title="ID">{{ item.id }}</span>
-            
-            {% if item_type == 'orgs' %}
-                <span class="badge {{ 'badge-unknown' if item.type == 'none' else 'badge-type' }} text-end">
-                    <i class="bi bi-tag" style="margin-right: 0.3em;"></i>{{ type_map[item.type] if item.type in type_map else item.type }}
-                </span>
-            {% elif item_type == 'places' and item.type %}
-                 <span class="badge badge-type text-end">
-                    <i class="bi bi-tag" style="margin-right: 0.3em;"></i>{{ type_map.get(item.type, item.type)|title }}
-                 </span>
-            {% endif %}
+
+        {# ID (left) + Type badge (right) #}
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="badge badge-id" style="font-size:0.7em;">{{ item.id }}</span>
+          {% if item_type == 'orgs' %}
+            <span class="badge {{ 'badge-unknown' if item.type == 'none' else 'badge-type' }}">
+              <i class="bi bi-tag" style="margin-right:0.3em;"></i>{{ type_map[item.type] if item.type in type_map else item.type }}
+            </span>
+          {% elif item_type == 'places' and item.type %}
+            <span class="badge badge-type">
+              <i class="bi bi-tag" style="margin-right:0.3em;"></i>{{ type_map.get(item.type, item.type)|title }}
+            </span>
+          {% else %}
+            <span></span>
+          {% endif %}
         </div>
 
-        <h5 class="card-title mb-3">
+        <h5 class="card-title mb-2">
             {% if item_type == 'orgs' %}
                 {{ item['org_names'][0]['name'] if item['org_names'] and item['org_names'][0]['name'] else item['id'] }}
             {% elif item_type == 'people' %}
-                {# Main name parts first #}
-                {% for part in item.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}
-                    {{ part.text }}
-                {% endfor %}
-                {# Nicknames and pseudonyms at the end, in italics #}
-                {% for part in item.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}
-                    <em>{{ part.text }}</em>
-                {% endfor %}
+                {% for part in item.pers_names[0].parts if part.type not in ['nickname', 'pseudonym', 'translation'] %}{{ part.text }} {% endfor %}
+                {% for part in item.pers_names[0].parts if part.type in ['nickname', 'pseudonym'] %}<em>{{ part.text }}</em>{% endfor %}
             {% elif item_type == 'places' %}
-                 {{ item['place_names'][0]['name'] if item['place_names'] and item['place_names'][0]['name'] else item['id'] }}
+                {{ item['place_names'][0]['name'] if item['place_names'] and item['place_names'][0]['name'] else item['id'] }}
             {% endif %}
         </h5>
 
-        {% if item.idnos %}
-            <div class="mb-3">
-                <div class="d-flex flex-wrap" style="gap: 0.5em;">
+        {# Details #}
+        <div class="card-details">
+            {% if item_type == 'orgs' and item.location and item.location.settlement %}
+                <p class="card-text mb-1 small"><i class="bi bi-geo-alt"></i> {{ item.location.settlement }}</p>
+            {% elif item_type == 'people' %}
+                {% if item.birth or item.death %}
+                    <p class="card-text mb-1 small"><i class="bi bi-clock-history" style="color:#800020; margin-right:0.3em;"></i>{{ item.birth | year }} &ndash; {{ item.death | year }}</p>
+                {% endif %}
+                {% if item.occupations %}
+                    <p class="card-text mb-1 small text-muted">{{ item.occupations | join(', ') }}</p>
+                {% endif %}
+            {% elif item_type == 'places' and item.location %}
+                {% if item.location.country %}
+                    <p class="card-text mb-1 small"><i class="bi bi-geo-alt"></i> {{ item.location.country }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {# Authority IDs and entity ID at the bottom #}
+        <div class="mt-auto pt-2" style="border-top: 1px solid #f0e8e0;">
+            {% if item.idnos %}
+                <div class="d-flex flex-wrap mb-1" style="gap:0.4em;">
                 {% for idno in item.idnos %}
                     {% set val = idno['value'] %}
                     {% set typ = idno['type']|lower %}
                     {% set label = 'GeoNames' if typ == 'geonames' else idno['type']|upper %}
-                    {% set tooltip = label ~ ': ' ~ val %}
                     {% set base_url_map = {'gnd': 'https://d-nb.info/gnd/', 'viaf': 'https://viaf.org/viaf/', 'wikidata': 'https://www.wikidata.org/wiki/', 'isni': 'https://isni.org/isni/', 'sudoc': 'https://www.idref.fr/', 'lccn': 'https://lccn.loc.gov/', 'orcid': 'https://orcid.org/', 'geonames': 'https://www.geonames.org/'} %}
                     {% set base_url = base_url_map.get(typ) %}
                     {% if val.startswith('http') %}
-                        <a href="{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ label }}</a>
+                        <a href="{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ label }}: {{ val }}">{{ label }}</a>
                     {% elif base_url %}
-                        <a href="{{ base_url ~ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ label }}</a>
+                        <a href="{{ base_url ~ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ label }}: {{ val }}">{{ label }}</a>
                     {% else %}
-                        <a href="https://www.google.com/search?q={{ typ }}+{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ tooltip }}">{{ label }}</a>
+                        <a href="https://www.google.com/search?q={{ typ }}+{{ val }}" target="_blank" class="badge badge-extid" data-bs-toggle="tooltip" title="{{ label }}: {{ val }}">{{ label }}</a>
                     {% endif %}
                 {% endfor %}
                 </div>
-            </div>
-        {% endif %}
-
-        {# --- Card Body Details --- #}
-        <div class="card-details mt-auto">
-            {% if item_type == 'orgs' and item.location and item.location.settlement %}
-                <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.settlement }}</p>
-            {% elif item_type == 'people' %}
-                {% if item.birth or item.death %}
-                    <p class="card-text mb-1">
-                        <i class="bi bi-clock-history" style="color:#800020; margin-right: 0.3em;"></i>
-                        {{ item.birth | year }} &ndash; {{ item.death | year }}
-                    </p>
-                {% endif %}
-            {% elif item_type == 'places' and item.location %}
-                {% if item.location.settlement %}
-                    <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.settlement }}</p>
-                {% endif %}
-                {% if item.location.country %}
-                    <p class="card-text mb-1"><i class="bi bi-geo-alt"></i> {{ item.location.country }}</p>
-                {% endif %}
             {% endif %}
         </div>
     </div>

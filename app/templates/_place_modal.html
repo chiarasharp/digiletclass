@@ -5,13 +5,24 @@
   Used by the /modal/places/<id> endpoint and JS modal loader.
 #}
 <div class="entity-modal">
-  <div class="small text-muted mb-1">ID interno: {{ place.id }}</div>
-
   <div class="entity-modal-title">
     <span>{{ place.place_names[0].name if place.place_names else place.id }}</span>
+  </div>
+  <div class="entity-modal-linkrow">
+    {% if not is_detail_page %}
+      <a href="{{ url_for('main.place_detail', entity_id=place.id) }}" class="btn-entity-link btn-entity-link-permalink" title="Permalink DigiLetClass">
+        <i class="bi bi-link-45deg"></i> Permalink
+      </a>
+    {% endif %}
     {% if place.sameAs %}
-      <a href="{{ place.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sameas btn-sm ms-2 d-inline-flex entity-modal-link" title="Scheda esterna">
-        <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
+      {% set service = 'GeoNames' if 'geonames.org' in place.sameAs else ('Wikidata' if 'wikidata.org' in place.sameAs else 'Scheda esterna') %}
+      <a href="{{ place.sameAs }}" target="_blank" class="btn-entity-link btn-entity-link-external" title="Vedi su {{ service }}">
+        <i class="bi bi-box-arrow-up-right"></i> {{ service }}
+      </a>
+    {% endif %}
+    {% if is_detail_page %}
+      <a href="{{ url_for('api.places_detail', entity_id=place.id) }}" class="btn-entity-link btn-entity-link-json" title="Dati JSON">
+        <i class="bi bi-filetype-json"></i> JSON
       </a>
     {% endif %}
   </div>
@@ -83,4 +94,6 @@
       {% endfor %}
     </div>
   {% endif %}
-</div> 
+
+  <div class="entity-modal-id-footer">ID interno: {{ place.id }}</div>
+</div>

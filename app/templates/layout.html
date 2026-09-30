@@ -32,10 +32,10 @@
                         <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle {% if request.endpoint == 'main.project' %}active{% endif %}" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Il Progetto</a>
                           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="projectDropdown">
-                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Introduzione</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Obiettivi del Progetto</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Team</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}">Bibliografia</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}#descrizione">Introduzione</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}#finanziamento">Finanziamento</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}#team">Team</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.project') }}#bibliografia">Bibliografia</a></li>
                           </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -48,11 +48,15 @@
                           </ul>
                         </li>
                         <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle {% if request.endpoint == 'main.entities' %}active{% endif %}" href="#" id="entitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Le Entità</a>
+                          <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.entities', 'main.entities_list', 'main.api_docs'] %}active{% endif %}" href="#" id="entitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Le Entità</a>
                           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="entitiesDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.entities') }}">Tutte le entità</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='people') }}">Persone</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='places') }}">Luoghi</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.entities_list', entity_type='orgs') }}">Organizzazioni</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.api_docs') }}"><i class="bi bi-code-slash me-1"></i>API</a></li>
                           </ul>
                         </li>
                         <li class="nav-item">

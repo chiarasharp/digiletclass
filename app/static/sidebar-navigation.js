@@ -1,8 +1,7 @@
 // Sidebar navigation - Reusable for any page with sidebar TOC
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Trova tutte le sidebar TOC (sia .methodology-toc che .project-toc)
-    const tocContainers = document.querySelectorAll('.methodology-toc, .project-toc');
+    const tocContainers = document.querySelectorAll('.doc-toc');
 
     tocContainers.forEach(tocContainer => {
         const tocLinks = tocContainer.querySelectorAll('a');

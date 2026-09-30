@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from .utils import format_iso_date, format_year
 from .blueprints.main import main_bp
+from .blueprints.api import api_bp
 
 def create_app(config_object=None):
     """Application factory function."""
@@ -15,6 +16,7 @@ def create_app(config_object=None):
     app.jinja_env.filters['year'] = format_year
 
     app.register_blueprint(main_bp)
+    app.register_blueprint(api_bp)
 
     # Error handlers
     def render_error(error, template, code):

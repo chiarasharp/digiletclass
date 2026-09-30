@@ -1,0 +1,495 @@
+openapi: 3.1.0
+info:
+  title: DigiLetClass API
+  description: |
+    REST API for the entities of the **Carteggio Canneti-Fiacchi** digital edition,
+    developed as part of the [DigiLetClass](https://digiletclass.unibo.it) project
+    (PNRR-CHANGES Spoke 3, University of Bologna).
+
+    ## About the corpus
+
+    The Carteggio Canneti-Fiacchi is an 18th-century epistolary corpus comprising
+    the correspondence between **Pietro Canneti** (1659–1730), Camaldolese monk,
+    abbot and librarian, and **Mariangelo Fiacchi** (1688–1777), his fellow monk
+    at the Biblioteca Classense in Ravenna. The letters span the years 1711–1730
+    and are preserved at the Istituzione Biblioteca Classense (Ravenna, Italy).
+
+    The full corpus consists of over 600 letters distributed across multiple
+    archival bundles (*buste*). The digital edition currently covers:
+
+    - **Busta 10** (1711–1717): 133 letters
+    - **Busta 11** (1721–1724): 140 letters
+
+    ## About the data
+
+    Entities (persons, places, organisations) were identified and encoded in
+    TEI/XML during the production of the digital edition. Each entity is assigned
+    a stable project identifier (e.g. `DLCL_CF_PC0001`) and linked where possible
+    to external authority files (VIAF, GND, ISNI, GeoNames).
+
+    The API exposes these entities as structured JSON. The underlying TEI/XML
+    dataset is published on Zenodo under CC BY 4.0:
+    https://doi.org/10.5281/zenodo.14234727
+
+    ## Technical notes
+
+    - No authentication required
+    - CORS enabled for all origins
+    - All list endpoints return 25 results per page; use the `page` parameter to paginate
+    - Pass `per_page=all` to a list endpoint to retrieve every matching result in a single response
+    - Dates follow ISO 8601 (full or partial: `YYYY`, `YYYY-MM`, `YYYY-MM-DD`)
+    - Country codes follow ISO 3166-1 alpha-2
+
+  version: "1"
+  contact:
+    name: DigiLetClass — LUDI Lab, University of Bologna
+    url: https://digiletclass.unibo.it
+  license:
+    name: CC BY 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+
+externalDocs:
+  description: TEI/XML dataset on Zenodo
+  url: https://doi.org/10.5281/zenodo.14234727
+
+servers:
+  - url: https://digiletclass.unibo.it/api/v1
+    description: Production
+
+tags:
+  - name: people
+    description: Persons cited in the correspondence
+  - name: places
+    description: Places mentioned in the correspondence
+  - name: orgs
+    description: Organisations mentioned in the correspondence
+
+paths:
+
+  /people:
+    get:
+      tags: [people]
+      summary: List persons
+      description: Returns a paginated list of persons cited in the Canneti-Fiacchi correspondence.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - name: sex
+          in: query
+          description: Filter by sex
+          schema:
+            type: string
+            enum: [m, f]
+        - name: birth_from
+          in: query
+          description: Minimum birth year (ISO year, e.g. 1650)
+          schema:
+            type: integer
+        - name: birth_to
+          in: query
+          description: Maximum birth year (ISO year, e.g. 1750)
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      responses:
+        '200':
+          description: Paginated list of persons
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeoplePage'
+
+  /people/{id}:
+    get:
+      tags: [people]
+      summary: Get a person by ID
+      parameters:
+        - $ref: '#/components/parameters/entityId'
+      responses:
+        '200':
+          description: Person record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /places:
+    get:
+      tags: [places]
+      summary: List places
+      description: Returns a paginated list of places mentioned in the correspondence.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - name: type
+          in: query
+          description: Place type (e.g. settlement, region, country, hill)
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: ISO 3166-1 alpha-2 country code (e.g. IT)
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      responses:
+        '200':
+          description: Paginated list of places
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlacesPage'
+
+  /places/{id}:
+    get:
+      tags: [places]
+      summary: Get a place by ID
+      parameters:
+        - $ref: '#/components/parameters/entityId'
+      responses:
+        '200':
+          description: Place record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /orgs:
+    get:
+      tags: [orgs]
+      summary: List organisations
+      description: Returns a paginated list of organisations mentioned in the correspondence.
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - name: type
+          in: query
+          description: Organisation type (e.g. library, abbey, archdiocese)
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: ISO 3166-1 alpha-2 country code (e.g. IT)
+          schema:
+            type: string
+        - name: settlement
+          in: query
+          description: City name, lowercase (e.g. ravenna)
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/perPage'
+      responses:
+        '200':
+          description: Paginated list of organisations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgsPage'
+
+  /orgs/{id}:
+    get:
+      tags: [orgs]
+      summary: Get an organisation by ID
+      parameters:
+        - $ref: '#/components/parameters/entityId'
+      responses:
+        '200':
+          description: Organisation record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+
+  parameters:
+    entityId:
+      name: id
+      in: path
+      required: true
+      description: Entity identifier (e.g. DLCL_CF_PC0001, DLCL_CF_L0002, DLCL_CF_O0001)
+      schema:
+        type: string
+    search:
+      name: search
+      in: query
+      description: Free-text search on entity name
+      schema:
+        type: string
+    page:
+      name: page
+      in: query
+      description: Page number (default 1, 25 results per page)
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    perPage:
+      name: per_page
+      in: query
+      description: Set to `all` to return every matching result on a single page, bypassing pagination
+      schema:
+        type: string
+        enum: [all]
+
+  responses:
+    NotFound:
+      description: Entity not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not found
+
+  schemas:
+
+    Idno:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Authority type (VIAF, GND, ISNI, geonames, …)
+          example: VIAF
+        value:
+          type: string
+          example: "88842923"
+
+    Location:
+      type: object
+      properties:
+        country:
+          type: string
+          nullable: true
+          description: ISO 3166-1 alpha-2 country code
+          example: IT
+        geo:
+          type: string
+          nullable: true
+          description: Latitude and longitude (WGS84), comma-separated
+          example: "44.41344, 12.20121"
+        street:
+          type: string
+          nullable: true
+        postCode:
+          type: string
+          nullable: true
+        settlement:
+          type: string
+          nullable: true
+
+    NamePart:
+      type: object
+      properties:
+        tag:
+          type: string
+          description: TEI element name (forename, surname, roleName, genName)
+          example: forename
+        text:
+          type: string
+          nullable: true
+          example: Pietro
+        type:
+          type: string
+          nullable: true
+          description: TEI type attribute (e.g. religious)
+        ref:
+          type: string
+          nullable: true
+
+    PersName:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full reconstructed name
+          example: Pietro Giambattista Canneti
+        lang:
+          type: string
+          nullable: true
+          example: it
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamePart'
+
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+          example: DLCL_CF_PC0001
+        sameAs:
+          type: string
+          nullable: true
+          description: URI of the authority record (VIAF, Wikidata, …)
+          example: http://viaf.org/viaf/88842923
+        sex:
+          type: string
+          nullable: true
+          enum: [m, f]
+        pers_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersName'
+        birth:
+          type: string
+          nullable: true
+          description: ISO 8601 date (full or partial)
+          example: "1659-11-21"
+        birth_place:
+          type: string
+          nullable: true
+          example: Cremona
+        death:
+          type: string
+          nullable: true
+          example: "1730-10-01"
+        death_place:
+          type: string
+          nullable: true
+        occupations:
+          type: array
+          items:
+            type: string
+          example: [bibliotecario, poeta]
+        affiliations:
+          type: array
+          items:
+            type: string
+        idnos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idno'
+        note:
+          type: string
+          nullable: true
+
+    PlaceName:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ravenna
+        lang:
+          type: string
+          nullable: true
+          example: it
+
+    Place:
+      type: object
+      properties:
+        id:
+          type: string
+          example: DLCL_CF_L0002
+        sameAs:
+          type: string
+          nullable: true
+          example: https://www.geonames.org/3169561/
+        type:
+          type: string
+          nullable: true
+          example: settlement
+        place_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceName'
+        location:
+          $ref: '#/components/schemas/Location'
+        idnos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idno'
+
+    OrgName:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Istituzione Biblioteca Classense
+        lang:
+          type: string
+          nullable: true
+          example: it
+
+    Org:
+      type: object
+      properties:
+        id:
+          type: string
+          example: DLCL_CF_O0001
+        sameAs:
+          type: string
+          nullable: true
+          example: http://viaf.org/viaf/122822452
+        type:
+          type: string
+          nullable: true
+          example: library
+        org_names:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrgName'
+        desc:
+          type: string
+          nullable: true
+        idnos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idno'
+        location:
+          $ref: '#/components/schemas/Location'
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 25
+        total:
+          type: integer
+          example: 1162
+        total_pages:
+          type: integer
+          example: 47
+
+    PeoplePage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Person'
+
+    PlacesPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Place'
+
+    OrgsPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Org'

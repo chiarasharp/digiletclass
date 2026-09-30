@@ -19,12 +19,24 @@
 {% endif %}
 
 <div class="entity-modal">
-  <div class="small text-muted mb-1">ID interno: {{ org.id }}</div>
   <div class="entity-modal-title">
     {{ org.org_names[0].name if org.org_names and org.org_names[0].name else org.id }}
+  </div>
+  <div class="entity-modal-linkrow">
+    {% if not is_detail_page %}
+      <a href="{{ url_for('main.org_detail', entity_id=org.id) }}" class="btn-entity-link btn-entity-link-permalink" title="Permalink DigiLetClass">
+        <i class="bi bi-link-45deg"></i> Permalink
+      </a>
+    {% endif %}
     {% if org.sameAs %}
-      <a href="{{ org.sameAs }}" target="_blank" class="btn btn-outline-primary btn-sameas btn-sm ms-2 d-inline-flex entity-modal-link" title="Scheda esterna">
-        <i class="bi bi-box-arrow-up-right entity-modal-icon"></i>
+      {% set service = 'VIAF' if 'viaf.org' in org.sameAs else ('GND' if ('d-nb.info' in org.sameAs or 'gnd.network' in org.sameAs) else ('Wikidata' if 'wikidata.org' in org.sameAs else 'Scheda esterna')) %}
+      <a href="{{ org.sameAs }}" target="_blank" class="btn-entity-link btn-entity-link-external" title="Vedi su {{ service }}">
+        <i class="bi bi-box-arrow-up-right"></i> {{ service }}
+      </a>
+    {% endif %}
+    {% if is_detail_page %}
+      <a href="{{ url_for('api.orgs_detail', entity_id=org.id) }}" class="btn-entity-link btn-entity-link-json" title="Dati JSON">
+        <i class="bi bi-filetype-json"></i> JSON
       </a>
     {% endif %}
   </div>
@@ -110,4 +122,6 @@
       {% endif %}
     </div>
   {% endif %}
-</div> 
+
+  <div class="entity-modal-id-footer">ID interno: {{ org.id }}</div>
+</div>

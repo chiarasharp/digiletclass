@@ -25,115 +25,268 @@
       {% endif %}
     </h2>
     <div class="container-inner">
-        <!-- Unified Search & Filter Bar -->
-        <form method="get" class="entity-search-filter-bar mb-4 d-flex flex-wrap align-items-center p-3 responsive-filter-bar" style="gap:1em; background:var(--accent-color-light); border-radius:1rem; box-shadow:0 2px 8px #e0e0e0;" aria-label="Filtri e ricerca" role="search">
-            {% if item_type == 'orgs' %}
-                <label for="typeFilter" class="form-label fw-bold mb-0 me-2" style="color:var(--primary-color);"><i class="bi bi-filter" aria-hidden="true"></i> <span>Tipo:</span></label>
-                <select id="typeFilter" name="type" class="form-select org-type-select w-auto me-2" style="min-width:160px;" onchange="this.form.submit()" aria-label="Filtra per tipo">
-                    <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
-                    {% if 'none' in org_types %}
-                        <option value="none" {% if selected_type == 'none' %}selected{% endif %}>Sconosciuto</option>
-                    {% endif %}
-                    {% for org_type in org_types | sort %}
-                        {% if org_type != 'none' %}
-                            <option value="{{ org_type }}" {% if org_type == selected_type %}selected{% endif %}>{{ type_map.get(org_type, org_type) | capitalize }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            {% elif item_type == 'places' %}
-                <label for="placeTypeFilter" class="form-label fw-bold mb-0 me-2" style="color:var(--primary-color);"><i class="bi bi-filter" aria-hidden="true"></i> <span>Tipo:</span></label>
-                <select id="placeTypeFilter" name="type" class="form-select w-auto me-2" style="min-width:160px;" onchange="this.form.submit()" aria-label="Filtra per tipo">
-                    <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
-                    {% for place_type in place_types|sort %}
-                        <option value="{{ place_type }}" {% if place_type == selected_type %}selected{% endif %}>
-                            {% if type_map.get(place_type) %}
-                                {{ type_map.get(place_type, place_type) | capitalize }}
-                            {% else %}
-                                <em>{{ place_type }}</em>
+        {# Filter bar #}
+        <form method="get" class="entity-filters-bar mb-4" aria-label="Filtri e ricerca" role="search">
+            <div class="d-flex flex-wrap align-items-end" style="gap:0.9rem;">
+                <div class="flex-grow-1" style="min-width:200px; max-width:320px;">
+                    <label for="searchInput" class="form-label small fw-bold mb-1">Cerca</label>
+                    <input type="text" id="searchInput" name="search" class="form-control" placeholder="Cerca..." value="{{ request.args.get('search', '') }}" aria-label="Cerca">
+                </div>
+
+                {% if item_type == 'orgs' %}
+                    <div style="min-width:160px;">
+                        <label for="typeFilter" class="form-label small fw-bold mb-1">Tipo</label>
+                        <select id="typeFilter" name="type" class="form-select org-type-select" aria-label="Filtra per tipo">
+                            <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
+                            {% if 'none' in org_types %}
+                                <option value="none" {% if selected_type == 'none' %}selected{% endif %}>Sconosciuto</option>
                             {% endif %}
-                        </option>
-                    {% endfor %}
-                </select>
-            {% endif %}
-            <label for="searchInput" class="visually-hidden">Cerca</label>
-            <input type="text" id="searchInput" name="search" class="form-control flex-grow-1 min-w-0" placeholder="Cerca..." value="{{ request.args.get('search', '') }}" style="max-width:300px; border-radius:0.5em; border:1px solid var(--primary-color);" aria-label="Cerca">
-            <button type="submit" class="btn btn-primary flex-shrink-0" style="background:var(--primary-color); border:none; border-radius:0.5em;" aria-label="Cerca">Cerca</button>
-            <a href="{{ url_for('main.entities_list', entity_type=item_type) }}" class="btn btn-outline-secondary ms-2 flex-shrink-0" style="border-radius:0.5em;" aria-label="Reset filtri e ricerca">Reset</a>
-            <button class="btn btn-link ms-2 flex-shrink-0" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters" style="color:var(--primary-color); font-weight:600; text-decoration:underline;" aria-label="Mostra filtri avanzati">Filtri avanzati</button>
-            <div class="collapse w-100 mt-3" id="advancedFilters">
-                <div class="row w-100 g-2">
-                    {% if item_type == 'orgs' %}
-                        <div class="col-md-4 col-12">
-                            <label for="orgCountry" class="form-label">Nazione</label>
-                            <input type="text" name="country" id="orgCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
+                            {% for org_type in org_types | sort %}
+                                {% if org_type != 'none' %}
+                                    <option value="{{ org_type }}" {% if org_type == selected_type %}selected{% endif %}>{{ type_map.get(org_type, org_type) | capitalize }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div style="min-width:140px;">
+                        <label for="orgCountry" class="form-label small fw-bold mb-1">Nazione</label>
+                        <input type="text" name="country" id="orgCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
+                    </div>
+                    <div style="min-width:160px;">
+                        <label for="orgSettlement" class="form-label small fw-bold mb-1">Città/Località</label>
+                        <input type="text" name="settlement" id="orgSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
+                    </div>
+                {% elif item_type == 'people' %}
+                    <div style="min-width:130px;">
+                        <label for="sex" class="form-label small fw-bold mb-1">Sesso</label>
+                        <select name="sex" id="sex" class="form-select" aria-label="Filtra per sesso">
+                            <option value="">Tutti</option>
+                            <option value="m" {% if request.args.get('sex') == 'm' %}selected{% endif %}>Maschio</option>
+                            <option value="f" {% if request.args.get('sex') == 'f' %}selected{% endif %}>Femmina</option>
+                        </select>
+                    </div>
+                    <div style="min-width:180px;">
+                        <label for="occupation" class="form-label small fw-bold mb-1">Occupazione</label>
+                        <input type="text" name="occupation" id="occupation" class="form-control" placeholder="Es. bibliotecario, poeta" value="{{ request.args.get('occupation', '') }}" aria-label="Filtra per occupazione">
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold mb-1" title="Per gli anni a.C. usa un numero negativo, es. -106">Anno di nascita</label>
+                        <div class="d-flex align-items-center" style="gap:0.4em;">
+                            <input type="number" name="birth_from" id="birth_from" class="form-control" placeholder="Da (es. -106 = 106 a.C.)" value="{{ request.args.get('birth_from', '') }}" style="width:150px;" aria-label="Nato dopo l'anno (usa un numero negativo per gli anni a.C.)">
+                            <span class="text-muted">–</span>
+                            <input type="number" name="birth_to" id="birth_to" class="form-control" placeholder="A" value="{{ request.args.get('birth_to', '') }}" style="width:90px;" aria-label="Nato prima dell'anno (usa un numero negativo per gli anni a.C.)">
                         </div>
-                        <div class="col-md-4 col-12">
-                            <label for="orgSettlement" class="form-label">Città/Località</label>
-                            <input type="text" name="settlement" id="orgSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
-                        </div>
-                    {% elif item_type == 'people' %}
-                        <div class="col-md-3 col-12">
-                            <label for="sex" class="form-label">Sesso</label>
-                            <select name="sex" id="sex" class="form-select" aria-label="Filtra per sesso">
-                                <option value="">Tutti</option>
-                                <option value="m" {% if request.args.get('sex') == 'm' %}selected{% endif %}>Maschio</option>
-                                <option value="f" {% if request.args.get('sex') == 'f' %}selected{% endif %}>Femmina</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-12">
-                            <label for="birth_from" class="form-label">Nato dopo (anno)</label>
-                            <input type="number" name="birth_from" id="birth_from" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_from', '') }}" aria-label="Nato dopo l'anno">
-                        </div>
-                        <div class="col-md-3 col-12">
-                            <label for="birth_to" class="form-label">Nato prima (anno)</label>
-                            <input type="number" name="birth_to" id="birth_to" class="form-control" placeholder="Anno" value="{{ request.args.get('birth_to', '') }}" aria-label="Nato prima dell'anno">
-                        </div>
-                    {% elif item_type == 'places' %}
-                        <div class="col-md-4 col-12">
-                            <label for="placeCountry" class="form-label">Nazione</label>
-                            <input type="text" name="country" id="placeCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <label for="placeSettlement" class="form-label">Città/Località</label>
-                            <input type="text" name="settlement" id="placeSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
-                        </div>
-                    {% endif %}
+                    </div>
+                {% elif item_type == 'places' %}
+                    <div style="min-width:160px;">
+                        <label for="placeTypeFilter" class="form-label small fw-bold mb-1">Tipo</label>
+                        <select id="placeTypeFilter" name="type" class="form-select" aria-label="Filtra per tipo">
+                            <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tutti i tipi</option>
+                            {% for place_type in place_types|sort %}
+                                <option value="{{ place_type }}" {% if place_type == selected_type %}selected{% endif %}>
+                                    {% if type_map.get(place_type) %}{{ type_map.get(place_type, place_type) | capitalize }}{% else %}{{ place_type }}{% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div style="min-width:140px;">
+                        <label for="placeCountry" class="form-label small fw-bold mb-1">Nazione</label>
+                        <input type="text" name="country" id="placeCountry" class="form-control" placeholder="Es. IT, FR, DE" value="{{ request.args.get('country', '') }}" aria-label="Filtra per nazione">
+                    </div>
+                    <div style="min-width:160px;">
+                        <label for="placeSettlement" class="form-label small fw-bold mb-1">Città/Località</label>
+                        <input type="text" name="settlement" id="placeSettlement" class="form-control" placeholder="Es. Roma, Milano" value="{{ request.args.get('settlement', '') }}" aria-label="Filtra per città o località">
+                    </div>
+                {% endif %}
+
+                <div class="d-flex" style="gap:0.5em;">
+                    <button type="submit" class="btn btn-primary" style="background:var(--primary-color); border:none; border-radius:0.5em;">Applica</button>
+                    <a href="{{ url_for('main.entities_list', entity_type=item_type) }}" class="btn btn-reset-filters" aria-label="Reset filtri e ricerca">Reset</a>
                 </div>
             </div>
         </form>
 
-        {# Show number of results only if a filter or search is active #}
-        {% set has_filter = request.args.get('search') or request.args.get('type', 'all') != 'all' or request.args.get('country') or request.args.get('settlement') or request.args.get('sex') or request.args.get('birth_from') or request.args.get('birth_to') %}
+        {% set has_filter = request.args.get('search') or request.args.get('type', 'all') != 'all' or request.args.get('country') or request.args.get('settlement') or request.args.get('sex') or request.args.get('occupation') or request.args.get('birth_from') or request.args.get('birth_to') %}
+
         {% if has_filter %}
-        <div class="mb-3" aria-live="polite">
-            <span class="fw-bold">{{ total }}</span> risultati trovati
+        <div class="d-flex flex-wrap align-items-center mb-3" style="gap:0.4em;">
+            {% if request.args.get('search') %}
+                {% set qs = request.args.to_dict(flat=True) %}
+                {% set _ = qs.pop('search', None) %}
+                <span class="badge active-filter-badge">Ricerca: “{{ request.args.get('search') }}”<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs) }}" aria-label="Rimuovi filtro ricerca"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if selected_type != 'all' %}
+                {% set qs2 = request.args.to_dict(flat=True) %}
+                {% set _ = qs2.pop('type', None) %}
+                <span class="badge active-filter-badge">Tipo: {{ type_map.get(selected_type, selected_type) }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs2) }}" aria-label="Rimuovi filtro tipo"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('country') %}
+                {% set qs3 = request.args.to_dict(flat=True) %}
+                {% set _ = qs3.pop('country', None) %}
+                <span class="badge active-filter-badge">Nazione: {{ request.args.get('country') }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs3) }}" aria-label="Rimuovi filtro nazione"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('settlement') %}
+                {% set qs4 = request.args.to_dict(flat=True) %}
+                {% set _ = qs4.pop('settlement', None) %}
+                <span class="badge active-filter-badge">Città: {{ request.args.get('settlement') }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs4) }}" aria-label="Rimuovi filtro città"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('sex') %}
+                {% set qs5 = request.args.to_dict(flat=True) %}
+                {% set _ = qs5.pop('sex', None) %}
+                <span class="badge active-filter-badge">Sesso: {{ 'Maschio' if request.args.get('sex') == 'm' else 'Femmina' }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs5) }}" aria-label="Rimuovi filtro sesso"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('occupation') %}
+                {% set qs8 = request.args.to_dict(flat=True) %}
+                {% set _ = qs8.pop('occupation', None) %}
+                <span class="badge active-filter-badge">Occupazione: {{ request.args.get('occupation') }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs8) }}" aria-label="Rimuovi filtro occupazione"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('birth_from') %}
+                {% set qs6 = request.args.to_dict(flat=True) %}
+                {% set _ = qs6.pop('birth_from', None) %}
+                {% set bf = request.args.get('birth_from') %}
+                <span class="badge active-filter-badge">Nato dopo: {{ bf[1:] ~ ' a.C.' if bf.startswith('-') else bf }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs6) }}" aria-label="Rimuovi filtro nato dopo"><i class="bi bi-x"></i></a></span>
+            {% endif %}
+            {% if request.args.get('birth_to') %}
+                {% set qs7 = request.args.to_dict(flat=True) %}
+                {% set _ = qs7.pop('birth_to', None) %}
+                {% set bt = request.args.get('birth_to') %}
+                <span class="badge active-filter-badge">Nato prima: {{ bt[1:] ~ ' a.C.' if bt.startswith('-') else bt }}<a href="{{ url_for('main.entities_list', entity_type=item_type, **qs7) }}" aria-label="Rimuovi filtro nato prima"><i class="bi bi-x"></i></a></span>
+            {% endif %}
         </div>
         {% endif %}
 
-        <div class="card-container" role="list" aria-label="Elenco entità">
-            {% for item in items %}
-            {{ render_card(item, loop.index0, item_type, type_map) }}
-            {% endfor %}
+        {# Results count + view toggle #}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div aria-live="polite" class="text-muted small d-flex align-items-center" style="gap:0.6em;">
+                {% if has_filter %}
+                    <span><span class="fw-bold text-dark">{{ total }}</span> risultati trovati</span>
+                {% else %}
+                    <span><span class="fw-bold text-dark">{{ total }}</span> entità totali</span>
+                {% endif %}
+                {% set api_qs = request.args.to_dict(flat=True) %}
+                {% set _ = api_qs.pop('page', None) %}
+                {% if item_type == 'people' %}
+                    {% set api_endpoint = 'api.people_list' %}
+                {% elif item_type == 'places' %}
+                    {% set api_endpoint = 'api.places_list' %}
+                {% else %}
+                    {% set api_endpoint = 'api.orgs_list' %}
+                {% endif %}
+                <a href="{{ url_for(api_endpoint, **api_qs) }}" class="btn-entity-link btn-entity-link-json" title="Dati JSON di questi risultati">
+                    <i class="bi bi-filetype-json"></i> JSON
+                </a>
+            </div>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Cambia vista">
+                <button id="btnViewList" type="button" class="btn btn-outline-secondary active" title="Vista lista"><i class="bi bi-list-ul"></i></button>
+                <button id="btnViewCard" type="button" class="btn btn-outline-secondary" title="Vista card"><i class="bi bi-grid"></i></button>
+                {% if item_type == 'places' %}
+                    <button id="btnViewMap" type="button" class="btn btn-outline-secondary" title="Vista mappa"><i class="bi bi-map"></i></button>
+                {% endif %}
+            </div>
         </div>
+
+        {# List view #}
+        <div id="entityListView">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:1%">ID</th>
+                        <th>Nome</th>
+                        {% if item_type == 'people' %}<th>Date</th><th>Occupazioni</th>
+                        {% elif item_type == 'places' %}<th>Tipo</th><th>Paese</th>
+                        {% elif item_type == 'orgs' %}<th>Tipo</th><th>Sede</th>
+                        {% endif %}
+                        <th>Authority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                <tr style="cursor:pointer;" data-entity-id="{{ item.id }}" data-entity-type="{{ item_type }}">
+                    <td><span class="badge badge-id entity-id-text">{{ item.id }}</span></td>
+                    <td class="fw-semibold" style="font-family:'Baskervville',serif;">
+                        {% if item_type == 'orgs' %}
+                            {{ item['org_names'][0]['name'] if item['org_names'] and item['org_names'][0]['name'] else item['id'] }}
+                        {% elif item_type == 'people' %}
+                            {% for part in item.pers_names[0].parts if part.type not in ['nickname','pseudonym','translation'] %}{{ part.text }} {% endfor %}
+                        {% elif item_type == 'places' %}
+                            {{ item['place_names'][0]['name'] if item['place_names'] and item['place_names'][0]['name'] else item['id'] }}
+                        {% endif %}
+                    </td>
+                    {% if item_type == 'people' %}
+                        <td class="text-muted">{% if item.birth or item.death %}{{ item.birth | year }} – {{ item.death | year }}{% endif %}</td>
+                        <td class="text-muted">{{ item.occupations | join(', ') if item.occupations else '' }}</td>
+                    {% elif item_type == 'places' %}
+                        <td>{% if item.type %}<span class="badge badge-type" style="font-size:0.75em;">{{ type_map.get(item.type, item.type)|title }}</span>{% endif %}</td>
+                        <td class="text-muted">{{ item.location.country if item.location and item.location.country else '' }}</td>
+                    {% elif item_type == 'orgs' %}
+                        <td>{% if item.type %}<span class="badge {{ 'badge-unknown' if item.type == 'none' else 'badge-type' }}" style="font-size:0.75em;">{{ type_map.get(item.type, item.type) }}</span>{% endif %}</td>
+                        <td class="text-muted">{{ item.location.settlement if item.location and item.location.settlement else '' }}</td>
+                    {% endif %}
+                    <td>
+                        <div class="d-flex flex-wrap" style="gap:0.3em;">
+                        {% for idno in item.idnos %}
+                            {% set typ = idno['type']|lower %}
+                            {% set label = 'GeoNames' if typ == 'geonames' else idno['type']|upper %}
+                            {% set base_url_map = {'gnd': 'https://d-nb.info/gnd/', 'viaf': 'https://viaf.org/viaf/', 'wikidata': 'https://www.wikidata.org/wiki/', 'isni': 'https://isni.org/isni/', 'geonames': 'https://www.geonames.org/'} %}
+                            {% set base_url = base_url_map.get(typ) %}
+                            {% set val = idno['value'] %}
+                            <a href="{{ val if val.startswith('http') else (base_url ~ val if base_url else '#') }}" target="_blank" class="badge badge-extid" onclick="event.stopPropagation()">{{ label }}</a>
+                        {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Card view (hidden by default) #}
+        <div id="entityCardView" style="display:none;">
+            <div class="card-container" role="list" aria-label="Elenco entità">
+                {% for item in items %}
+                {{ render_card(item, loop.index0, item_type, type_map) }}
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Map view (places only, hidden by default) #}
+        {% if item_type == 'places' %}
+        <div id="entityMapView" style="display:none;">
+            {% if map_items %}
+                <div id="placesMap" class="places-map"></div>
+                <p class="text-muted small mt-2 mb-0">
+                    <i class="bi bi-info-circle"></i>
+                    {{ map_items|length }} luoghi geolocalizzati su {{ total }} risultati mostrati sulla mappa.
+                </p>
+            {% else %}
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-map" style="font-size:2em;"></i>
+                    <p class="mt-2 mb-0">Nessun luogo geolocalizzato tra i risultati attuali.</p>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
 
         {# Pagination Controls #}
         <nav aria-label="Navigazione pagine" class="mt-5">
             <ul class="pagination justify-content-center" role="navigation" aria-label="Paginazione">
                 {% set total_pages = (total / per_page)|round(0, 'ceil')|int %}
+                {% set pq = request.args.to_dict(flat=True) %}
+                {% set _ = pq.pop('page', None) %}
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page-1, type=selected_type) if page > 1 else '#' }}">Precedente</a>
+                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page-1, **pq) if page > 1 else '#' }}">Precedente</a>
                 </li>
                 {% for p in pagination_window %}
                     {% if p %}
                         <li class="page-item {% if p == page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=p, type=selected_type) }}">{{ p }}</a>
+                            <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=p, **pq) }}">{{ p }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
                     {% endif %}
                 {% endfor %}
                 <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
-                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page+1, type=selected_type) if page < total_pages else '#' }}">Successivo</a>
+                    <a class="page-link" href="{{ url_for('main.entities_list', entity_type=item_type, page=page+1, **pq) if page < total_pages else '#' }}">Successivo</a>
                 </li>
             </ul>
         </nav>
@@ -157,6 +310,14 @@
 
 <script type="text/javascript">
 window.itemsData = {{ items|tojson|safe }};
+{% if item_type == 'places' %}
+window.mapItemsData = {{ map_items|tojson|safe }};
+{% endif %}
 </script>
 <script src="{{ url_for('static', filename='entities.js') }}"></script>
+{% if item_type == 'places' and map_items %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='places-map.js') }}"></script>
+{% endif %}
 {% endblock %}

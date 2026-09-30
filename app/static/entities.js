@@ -48,33 +48,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // View toggle logic
-    var toggleBtn = document.getElementById('toggleViewBtn');
-    var cardView = document.getElementById('orgsCardView');
-    var tableView = document.getElementById('orgsTableView');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function() {
-            if (cardView.style.display === 'none') {
-                cardView.style.display = '';
-                tableView.style.display = 'none';
-                toggleBtn.textContent = 'Vista Tabella';
-            } else {
-                cardView.style.display = 'none';
-                tableView.style.display = '';
-                toggleBtn.textContent = 'Vista Card';
+    // View toggle logic (list / card / map)
+    var viewButtons = [
+        { btn: document.getElementById('btnViewList'), view: document.getElementById('entityListView') },
+        { btn: document.getElementById('btnViewCard'), view: document.getElementById('entityCardView') },
+        { btn: document.getElementById('btnViewMap'), view: document.getElementById('entityMapView') }
+    ].filter(function(entry) { return entry.btn && entry.view; });
+
+    viewButtons.forEach(function(entry) {
+        entry.btn.addEventListener('click', function() {
+            viewButtons.forEach(function(other) {
+                other.view.style.display = other === entry ? '' : 'none';
+                other.btn.classList.toggle('active', other === entry);
+            });
+            if (entry.btn.id === 'btnViewMap' && window.initPlacesMap) {
+                window.initPlacesMap();
             }
         });
-    }
+    });
 
-    // Attach click listeners to table details buttons
-    var detailsBtns = document.querySelectorAll('#orgsTableView .details-btn');
-    detailsBtns.forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            var row = btn.closest('tr');
-            var idx = row.getAttribute('data-org-index');
-            var org = window.sData[idx];
-            fetchAndShowModal('org', org.id);
+    // Click on table rows opens modal
+    var tableRows = document.querySelectorAll('#entityListView tbody tr[data-entity-id]');
+    tableRows.forEach(function(row) {
+        row.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') return;
+            fetchAndShowModal(row.getAttribute('data-entity-type'), row.getAttribute('data-entity-id'));
         });
     });
 });
